@@ -8,9 +8,9 @@ export function reorderArray<T>(
 }
 
 export function moveUp<T>(array: T[], i: number) {
-  return reorderArray(array, i, Math.min(0, i - 1));
+  return reorderArray(array, i, Math.max(0, i - 1));
 }
 
 export function moveDown<T>(array: T[], i: number) {
-  return reorderArray(array, i, Math.max(array.length - 1, i + 1));
+  return reorderArray(array, i, Math.min(array.length - 1, i + 1));
 }

@@ -8,11 +8,16 @@ import { DataCompareList } from "./components/views/DataCompareList";
 import { GroupView } from "./components/views/GroupView";
 import { StoreProvider } from "./data/provider";
 import { GroupEdit } from "./components/views/GroupEdit";
+import { GroupEditList } from "./components/views/GroupEditList";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Home />,
+  },
+  {
+    path: "/edit-groups",
+    element: <GroupEditList />,
   },
   {
     path: "/add-group",

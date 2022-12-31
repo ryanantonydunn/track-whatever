@@ -1,9 +1,12 @@
 import { TDataView, TGroup, TStore, TTracker } from "../types";
+import { moveDown, moveUp } from "../utils/reorder-array";
 
 export enum Actions {
   CREATE_GROUP = "CREATE_GROUP",
   UPDATE_GROUP = "UPDATE_GROUP",
   DELETE_GROUP = "DELETE_GROUP",
+  MOVE_GROUP_UP = "MOVE_GROUP_UP",
+  MOVE_GROUP_DOWN = "MOVE_GROUP_DOWN",
   UPDATE_CREATE_GROUP = "UPDATE_CREATE_GROUP",
   CREATE_TRACKER = "CREATE_TRACKER",
   UPDATE_TRACKER = "UPDATE_TRACKER",
@@ -27,6 +30,16 @@ type TUpdateGroup = {
 type TDeleteGroup = {
   type: Actions.DELETE_GROUP;
   payload: string;
+};
+
+type TMoveGroupUp = {
+  type: Actions.MOVE_GROUP_UP;
+  payload: number;
+};
+
+type TMoveGroupDown = {
+  type: Actions.MOVE_GROUP_DOWN;
+  payload: number;
 };
 
 type TUpdateCreateGroup = {
@@ -73,6 +86,8 @@ export type TAction =
   | TCreateGroup
   | TUpdateGroup
   | TDeleteGroup
+  | TMoveGroupUp
+  | TMoveGroupDown
   | TUpdateCreateGroup
   | TCreateTracker
   | TUpdateTracker
@@ -111,6 +126,16 @@ export const reducer = (state: TStore, action: TAction): TStore => {
         groups.splice(groupIndex, 1);
       }
       return { ...state, groups };
+    case Actions.MOVE_GROUP_UP:
+      return {
+        ...state,
+        groups: moveUp([...state.groups], action.payload),
+      };
+    case Actions.MOVE_GROUP_DOWN:
+      return {
+        ...state,
+        groups: moveDown([...state.groups], action.payload),
+      };
     case Actions.CREATE_TRACKER:
       return {
         ...state,
