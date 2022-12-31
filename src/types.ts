@@ -1,10 +1,13 @@
-export type TInputKey =
-  | "slider"
-  | "number"
-  | "checklist"
-  | "checklistItem"
-  | "boolean"
-  | "text";
+export const inputKeys = [
+  "slider",
+  "number",
+  "checklist",
+  "checklistItem",
+  "boolean",
+  "text",
+] as const;
+
+export type TInputKey = typeof inputKeys[number];
 
 export type TTracker = {
   id: string;

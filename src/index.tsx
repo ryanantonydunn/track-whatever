@@ -9,6 +9,8 @@ import { GroupView } from "./components/views/GroupView";
 import { StoreProvider } from "./data/provider";
 import { GroupEdit } from "./components/views/GroupEdit";
 import { GroupEditList } from "./components/views/GroupEditList";
+import { TrackerAdd } from "./components/views/TrackerAdd";
+import { TrackerEdit } from "./components/views/TrackerEdit";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +32,14 @@ const router = createBrowserRouter([
   {
     path: "/group/:groupId",
     element: <GroupView />,
+  },
+  {
+    path: "/add-tracker",
+    element: <TrackerAdd />,
+  },
+  {
+    path: "/edit-tracker/:trackerId",
+    element: <TrackerEdit />,
   },
   {
     path: "/compare-data",
