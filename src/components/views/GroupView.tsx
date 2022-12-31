@@ -18,12 +18,9 @@ export const GroupView: React.FC = () => {
   }
 
   return (
-    <Layout title="Track">
+    <Layout title={group.title}>
       <Container maxWidth="sm">
         <Box display="flex" justifyContent="flex-end" sx={{ p: 2 }}>
-          <Typography variant="h5" component="h2" sx={{ flexGrow: 1 }}>
-            {group.title}
-          </Typography>
           <IconButton
             size="large"
             edge="start"

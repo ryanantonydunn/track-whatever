@@ -38,12 +38,16 @@ export const Home: React.FC = () => {
         </Box>
         <Box display="flex" justifyContent="flex-end" sx={{ p: 2 }}>
           <Button
-            variant="contained"
-            size="large"
+            variant="text"
+            size="small"
             component={Link}
-            to="/add-group"
+            to="/edit-groups"
+            sx={{ mr: 1 }}
           >
-            Add Group
+            Edit Groups
+          </Button>
+          <Button variant="text" size="small" component={Link} to="/add-group">
+            Add New Group
           </Button>
         </Box>
       </Container>

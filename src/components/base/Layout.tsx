@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { Container } from "@mui/system";
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 type TLayout = {
   children: React.ReactNode;
@@ -47,6 +47,7 @@ export const Layout: React.FC<TLayout> = ({ children, title, back = true }) => {
             </Typography>
             <IconButton
               id="menu-button"
+              color="inherit"
               aria-controls={isMenuOpen ? "menu" : undefined}
               aria-haspopup="true"
               aria-expanded={isMenuOpen ? "true" : undefined}
@@ -66,10 +67,10 @@ export const Layout: React.FC<TLayout> = ({ children, title, back = true }) => {
                 "aria-labelledby": "menu-button",
               }}
             >
-              <MenuItem onClick={closeMenu} component="a" href="/">
+              <MenuItem onClick={closeMenu} component={Link} to="/">
                 Track
               </MenuItem>
-              <MenuItem onClick={closeMenu} component="a" href="/compare-data">
+              <MenuItem onClick={closeMenu} component={Link} to="/compare-data">
                 Compare Data
               </MenuItem>
             </Menu>
