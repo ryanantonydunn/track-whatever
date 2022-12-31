@@ -41,7 +41,7 @@ export function useConfirmDialog(): TConfirmDialog {
           {args?.description || ""}
         </DialogContentText>
       </DialogContent>
-      <DialogActions>
+      <DialogActions sx={{ p: 2 }}>
         <Button onClick={() => setIsOpen(false)} variant="outlined">
           Cancel
         </Button>

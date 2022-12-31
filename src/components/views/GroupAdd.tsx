@@ -3,36 +3,52 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "../../data/provider";
 import { Actions } from "../../data/reducer";
-import { TGroup } from "../../types";
 import { Layout } from "../base/Layout";
 import { GroupAddEditForm } from "./GroupAddEditForm";
-import { v4 as uuidv4 } from "uuid";
+import { TGroup } from "../../types";
+import { createBlankGroup } from "../../data/helpers";
 
 export const GroupAdd: React.FC = () => {
   const navigate = useNavigate();
-  const { dispatch } = useStore();
-  const [group, setGroup] = React.useState<TGroup>({
-    id: uuidv4(),
-    title: "New Group",
-    trackers: [],
-  });
+  const { state, dispatch } = useStore();
+  const group = state.create.group;
+
+  const setGroup = React.useCallback(
+    (newGroup: TGroup) => {
+      dispatch({ type: Actions.UPDATE_CREATE_GROUP, payload: newGroup });
+    },
+    [dispatch]
+  );
 
   return (
-    <Layout title="Edit Group">
+    <Layout title="Add Group">
       <Container maxWidth="sm">
         <GroupAddEditForm group={group} setGroup={setGroup} />
         <Divider sx={{ mt: 2, mb: 2 }} />
         <Box display="flex" sx={{ p: 2 }}>
           <Button
-            fullWidth
             variant="outlined"
+            onClick={() => {
+              setGroup(createBlankGroup());
+              navigate("/");
+            }}
+            sx={{ flexGrow: 1, mr: 2 }}
+            size="large"
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
             onClick={() => {
               dispatch({
                 type: Actions.CREATE_GROUP,
                 payload: group,
               });
+              setGroup(createBlankGroup());
               navigate("/");
             }}
+            sx={{ flexGrow: 1 }}
+            size="large"
           >
             Save New Group
           </Button>

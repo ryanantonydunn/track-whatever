@@ -4,9 +4,11 @@ export enum Actions {
   CREATE_GROUP = "CREATE_GROUP",
   UPDATE_GROUP = "UPDATE_GROUP",
   DELETE_GROUP = "DELETE_GROUP",
+  UPDATE_CREATE_GROUP = "UPDATE_CREATE_GROUP",
   CREATE_TRACKER = "CREATE_TRACKER",
   UPDATE_TRACKER = "UPDATE_TRACKER",
   DELETE_TRACKER = "DELETE_TRACKER",
+  UPDATE_CREATE_TRACKER = "UPDATE_CREATE_TRACKER",
   CREATE_VIEW = "CREATE_VIEW",
   UPDATE_VIEW = "UPDATE_VIEW",
   DELETE_VIEW = "DELETE_VIEW",
@@ -27,6 +29,11 @@ type TDeleteGroup = {
   payload: string;
 };
 
+type TUpdateCreateGroup = {
+  type: Actions.UPDATE_CREATE_GROUP;
+  payload: TGroup;
+};
+
 type TCreateTracker = {
   type: Actions.CREATE_TRACKER;
   payload: TTracker;
@@ -40,6 +47,11 @@ type TUpdateTracker = {
 type TDeleteTracker = {
   type: Actions.DELETE_TRACKER;
   payload: string;
+};
+
+type TUpdateCreateTracker = {
+  type: Actions.UPDATE_CREATE_TRACKER;
+  payload: TTracker;
 };
 
 type TCreateView = {
@@ -61,9 +73,11 @@ export type TAction =
   | TCreateGroup
   | TUpdateGroup
   | TDeleteGroup
+  | TUpdateCreateGroup
   | TCreateTracker
   | TUpdateTracker
   | TDeleteTracker
+  | TUpdateCreateTracker
   | TCreateView
   | TUpdateView
   | TDeleteView;
@@ -81,6 +95,14 @@ export const reducer = (state: TStore, action: TAction): TStore => {
         groups: state.groups.map((group) =>
           group.id === action.payload.id ? action.payload : group
         ),
+      };
+    case Actions.UPDATE_CREATE_GROUP:
+      return {
+        ...state,
+        create: {
+          ...state.create,
+          group: action.payload,
+        },
       };
     case Actions.DELETE_GROUP:
       const groups = [...state.groups];

@@ -39,4 +39,8 @@ export type TStore = {
   groups: TGroup[];
   inputs: TInput[];
   views: TDataView[];
+  create: {
+    tracker: TTracker;
+    group: TGroup;
+  };
 };

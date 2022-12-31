@@ -37,7 +37,12 @@ export const Home: React.FC = () => {
           </nav>
         </Box>
         <Box display="flex" justifyContent="flex-end" sx={{ p: 2 }}>
-          <Button variant="contained" component={Link} to="/add-group">
+          <Button
+            variant="contained"
+            size="large"
+            component={Link}
+            to="/add-group"
+          >
             Add Group
           </Button>
         </Box>
