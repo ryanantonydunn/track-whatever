@@ -21,7 +21,11 @@ export const TrackerEdit: React.FC = () => {
   return (
     <Layout title="Edit Tracker">
       <Container maxWidth="sm">
-        <TrackerAddEditForm tracker={tracker} setTracker={setTracker} />
+        <TrackerAddEditForm
+          isEditing
+          tracker={tracker}
+          setTracker={setTracker}
+        />
       </Container>
     </Layout>
   );

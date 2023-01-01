@@ -13,11 +13,13 @@ import { ChecklistEdit } from "../base/ChecklistEdit";
 import { SliderEdit } from "../base/SliderEdit";
 
 type TTrackerAddEditForm = {
+  isEditing?: boolean;
   tracker: TTracker;
   setTracker: (tracker: TTracker) => void;
 };
 
 export const TrackerAddEditForm: React.FC<TTrackerAddEditForm> = ({
+  isEditing,
   tracker,
   setTracker,
 }) => {
@@ -50,6 +52,7 @@ export const TrackerAddEditForm: React.FC<TTrackerAddEditForm> = ({
                 inputType: e.target.value as TInputKey,
               });
             }}
+            disabled={isEditing}
           >
             {filteredInputTypes.map((inputType) => (
               <MenuItem key={inputType.id} value={inputType.id}>
