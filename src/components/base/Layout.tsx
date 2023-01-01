@@ -70,6 +70,16 @@ export const Layout: React.FC<TLayout> = ({ children, title, back = true }) => {
               <MenuItem onClick={closeMenu} component={Link} to="/">
                 Track
               </MenuItem>
+              <MenuItem onClick={closeMenu} component={Link} to="/edit-groups">
+                Edit Groups
+              </MenuItem>
+              <MenuItem
+                onClick={closeMenu}
+                component={Link}
+                to="/view-trackers"
+              >
+                View Trackers
+              </MenuItem>
               <MenuItem onClick={closeMenu} component={Link} to="/compare-data">
                 Compare Data
               </MenuItem>

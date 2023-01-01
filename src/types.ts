@@ -9,13 +9,22 @@ export const inputKeys = [
 
 export type TInputKey = typeof inputKeys[number];
 
+export type TInputType = {
+  id: string;
+  title: string;
+};
+
+export type TSliderValues = {
+  min: number;
+  max: number;
+  increment: number;
+};
+
 export type TTracker = {
   id: string;
   title: string;
   inputType: TInputKey;
-  min?: number;
-  max?: number;
-  increment?: number;
+  slider?: TSliderValues;
   items?: string[];
 };
 

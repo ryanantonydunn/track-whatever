@@ -18,9 +18,11 @@ export const getInitialState: TGetInitialState = () => ({
       id: "0",
       title: "Mood",
       inputType: "slider",
-      min: 0,
-      max: 10,
-      increment: 1,
+      slider: {
+        min: 0,
+        max: 10,
+        increment: 1,
+      },
     },
     {
       id: "1",

@@ -7,7 +7,9 @@ import {
   TextField,
 } from "@mui/material";
 import React from "react";
-import { TInputKey, TTracker, inputKeys } from "../../types";
+import { filteredInputTypes } from "../../data/helpers";
+import { TInputKey, TTracker } from "../../types";
+import { SliderInputValues } from "../base/SliderInputValues";
 
 type TTrackerAddEditForm = {
   tracker: TTracker;
@@ -48,13 +50,20 @@ export const TrackerAddEditForm: React.FC<TTrackerAddEditForm> = ({
               });
             }}
           >
-            {inputKeys.map((key) => (
-              <MenuItem key={key} value={key}>
-                {key}
+            {filteredInputTypes.map((inputType) => (
+              <MenuItem key={inputType.id} value={inputType.id}>
+                {inputType.title}
               </MenuItem>
             ))}
           </Select>
         </FormControl>
+
+        {tracker.inputType === "slider" && tracker.slider && (
+          <SliderInputValues
+            values={tracker.slider}
+            setValues={setSliderValues}
+          />
+        )}
       </Box>
     </>
   );
