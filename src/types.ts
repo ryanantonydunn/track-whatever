@@ -34,10 +34,12 @@ export type TGroup = {
   trackers: string[];
 };
 
+export type TInputPrimitive = number | string | boolean;
+
 export type TInput = {
   trackerId: string;
   date: string;
-  value: number | string | boolean;
+  value: TInputPrimitive;
 };
 
 export type TDataView = {

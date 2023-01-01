@@ -1,8 +1,8 @@
-import { Edit } from "@mui/icons-material";
-import { Box, Container, IconButton, Typography } from "@mui/material";
+import { Box, Container, List, ListItem, Typography } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
+import { useGetTracker, useGroup } from "../../data/hooks";
 import { Layout } from "../base/Layout";
-import { useGroup } from "../../data/hooks";
+import { TrackInput } from "../base/TrackInput";
 
 type TGroupViewParams = {
   groupId: string;
@@ -11,6 +11,7 @@ type TGroupViewParams = {
 export const GroupView: React.FC = () => {
   const { groupId } = useParams<TGroupViewParams>();
   const [group] = useGroup(groupId);
+  const getTracker = useGetTracker();
 
   if (!group) {
     // return <Navigate to="/" replace />;
@@ -20,18 +21,34 @@ export const GroupView: React.FC = () => {
   return (
     <Layout title={group.title}>
       <Container maxWidth="sm">
-        <Box display="flex" justifyContent="flex-end" sx={{ p: 2 }}>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="edit tracker group"
-            sx={{ mr: 2 }}
-            component={Link}
-            to={`/edit-group/${group.id}`}
-          >
-            <Edit />
-          </IconButton>
+        <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
+          <List>
+            {group.trackers.length ? (
+              group.trackers.map((trackerId) => {
+                const tracker = getTracker(trackerId);
+                if (!tracker) return null;
+                return (
+                  <ListItem key={groupId}>
+                    <TrackInput
+                      tracker={tracker}
+                      setValue={(value) => {
+                        console.log("yeah", value);
+                      }}
+                    />
+                  </ListItem>
+                );
+              })
+            ) : (
+              <Typography
+                component={Link}
+                to={`/edit-group/${groupId}`}
+                align="center"
+                sx={{ p: 2 }}
+              >
+                No trackers yet, click to edit this group and add some
+              </Typography>
+            )}
+          </List>
         </Box>
       </Container>
     </Layout>
