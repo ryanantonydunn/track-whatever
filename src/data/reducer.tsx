@@ -148,6 +148,14 @@ export const reducer = (state: TStore, action: TAction): TStore => {
           tracker.id === action.payload.id ? action.payload : tracker
         ),
       };
+    case Actions.UPDATE_CREATE_TRACKER:
+      return {
+        ...state,
+        create: {
+          ...state.create,
+          tracker: action.payload,
+        },
+      };
     case Actions.DELETE_TRACKER:
       const trackers = [...state.trackers];
       const trackerIndex = trackers.findIndex((t) => t.id === action.payload);
