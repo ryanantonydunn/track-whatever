@@ -126,7 +126,12 @@ export const GroupAddEditForm: React.FC<TGroupAddEditForm> = ({
         >
           Add Existing Tracker
         </Button>
-        <Button variant="text" size="small" component={Link} to="/add-tracker">
+        <Button
+          variant="text"
+          size="small"
+          component={Link}
+          to={`/add-tracker/${group.id}`}
+        >
           Add New Tracker
         </Button>
       </Box>

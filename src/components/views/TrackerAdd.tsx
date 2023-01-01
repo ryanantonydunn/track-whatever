@@ -1,14 +1,21 @@
 import { Box, Button, Container, Divider } from "@mui/material";
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { createBlankTracker } from "../../data/helpers";
 import { useStore } from "../../data/provider";
 import { Actions } from "../../data/reducer";
+import { useGroup } from "../../data/hooks";
 import { TTracker } from "../../types";
 import { Layout } from "../base/Layout";
 import { TrackerAddEditForm } from "./TrackerAddEditForm";
 
+type Params = {
+  groupId: string;
+};
+
 export const TrackerAdd: React.FC = () => {
+  const { groupId } = useParams<Params>();
+  const [group, setGroup] = useGroup(groupId);
   const navigate = useNavigate();
   const { state, dispatch } = useStore();
   const tracker = state.create.tracker;
@@ -19,6 +26,8 @@ export const TrackerAdd: React.FC = () => {
     },
     [dispatch]
   );
+
+  if (!group) return null;
 
   return (
     <Layout title="Add Tracker">
@@ -44,8 +53,9 @@ export const TrackerAdd: React.FC = () => {
                 type: Actions.CREATE_TRACKER,
                 payload: tracker,
               });
+              setGroup({ ...group, trackers: [...group.trackers, tracker.id] });
               setTracker(createBlankTracker());
-              navigate("/");
+              navigate(`/edit-group/${groupId}`);
             }}
             sx={{ flexGrow: 1 }}
             size="large"

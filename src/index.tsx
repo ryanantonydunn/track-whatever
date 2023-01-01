@@ -34,7 +34,7 @@ const router = createBrowserRouter([
     element: <GroupView />,
   },
   {
-    path: "/add-tracker",
+    path: "/add-tracker/:groupId",
     element: <TrackerAdd />,
   },
   {

@@ -5,12 +5,12 @@ import { useTracker } from "../../data/hooks";
 import { Layout } from "../base/Layout";
 import { TrackerAddEditForm } from "./TrackerAddEditForm";
 
-type TTrackerViewParams = {
+type Params = {
   trackerId: string;
 };
 
 export const TrackerEdit: React.FC = () => {
-  const { trackerId } = useParams<TTrackerViewParams>();
+  const { trackerId } = useParams<Params>();
   const [tracker, setTracker] = useTracker(trackerId);
 
   if (!tracker) {
