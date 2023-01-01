@@ -20,10 +20,16 @@ type TUseGroup = [TGroup | undefined, (group: TGroup) => void];
 
 export const useGroup = (id?: string): TUseGroup => {
   const { dispatch, state } = useStore();
-  const group = React.useMemo(
-    () => state.groups.find((d) => d.id === id),
-    [id, state.groups]
-  );
+
+  const group = React.useMemo(() => {
+    // check if is group being currently created
+    if (state.create.group.id === id) {
+      return state.create.group;
+    }
+    // if not then look in list of already created groups
+    return state.groups.find((d) => d.id === id);
+  }, [id, state.create.group, state.groups]);
+
   const setGroup = React.useCallback(
     (newGroup: TGroup) => {
       dispatch({ type: Actions.UPDATE_GROUP, payload: newGroup });
@@ -54,8 +60,15 @@ type TUseGetTracker = (id?: string) => TTracker | undefined;
 export const useGetTracker = (): TUseGetTracker => {
   const { state } = useStore();
   const getTracker = React.useCallback(
-    (id?: string) => state.trackers.find((t) => t.id === id),
-    [state.trackers]
+    (id?: string) => {
+      // check if is group being currently created
+      if (state.create.tracker.id === id) {
+        return state.create.tracker;
+      }
+      // if not then look in list of already created trackers
+      return state.trackers.find((d) => d.id === id);
+    },
+    [state.trackers, state.create.tracker]
   );
   return getTracker;
 };

@@ -1,17 +1,18 @@
 import { TDataView, TGroup, TStore, TTracker } from "../types";
 import { moveDown, moveUp } from "../utils/reorder-array";
+import { createBlankGroup, createBlankTracker } from "./helpers";
 
 export enum Actions {
   CREATE_GROUP = "CREATE_GROUP",
   UPDATE_GROUP = "UPDATE_GROUP",
   DELETE_GROUP = "DELETE_GROUP",
+  CLEAR_CREATE_GROUP = "CLEAR_CREATE_GROUP",
   MOVE_GROUP_UP = "MOVE_GROUP_UP",
   MOVE_GROUP_DOWN = "MOVE_GROUP_DOWN",
-  UPDATE_CREATE_GROUP = "UPDATE_CREATE_GROUP",
   CREATE_TRACKER = "CREATE_TRACKER",
   UPDATE_TRACKER = "UPDATE_TRACKER",
   DELETE_TRACKER = "DELETE_TRACKER",
-  UPDATE_CREATE_TRACKER = "UPDATE_CREATE_TRACKER",
+  CLEAR_CREATE_TRACKER = "CLEAR_CREATE_TRACKER",
   CREATE_VIEW = "CREATE_VIEW",
   UPDATE_VIEW = "UPDATE_VIEW",
   DELETE_VIEW = "DELETE_VIEW",
@@ -32,6 +33,10 @@ type TDeleteGroup = {
   payload: string;
 };
 
+type TClearCreateGroup = {
+  type: Actions.CLEAR_CREATE_GROUP;
+};
+
 type TMoveGroupUp = {
   type: Actions.MOVE_GROUP_UP;
   payload: number;
@@ -40,11 +45,6 @@ type TMoveGroupUp = {
 type TMoveGroupDown = {
   type: Actions.MOVE_GROUP_DOWN;
   payload: number;
-};
-
-type TUpdateCreateGroup = {
-  type: Actions.UPDATE_CREATE_GROUP;
-  payload: TGroup;
 };
 
 type TCreateTracker = {
@@ -62,9 +62,8 @@ type TDeleteTracker = {
   payload: string;
 };
 
-type TUpdateCreateTracker = {
-  type: Actions.UPDATE_CREATE_TRACKER;
-  payload: TTracker;
+type TClearCreateTracker = {
+  type: Actions.CLEAR_CREATE_TRACKER;
 };
 
 type TCreateView = {
@@ -86,13 +85,13 @@ export type TAction =
   | TCreateGroup
   | TUpdateGroup
   | TDeleteGroup
+  | TClearCreateGroup
   | TMoveGroupUp
   | TMoveGroupDown
-  | TUpdateCreateGroup
   | TCreateTracker
   | TUpdateTracker
   | TDeleteTracker
-  | TUpdateCreateTracker
+  | TClearCreateTracker
   | TCreateView
   | TUpdateView
   | TDeleteView;
@@ -105,19 +104,20 @@ export const reducer = (state: TStore, action: TAction): TStore => {
         groups: [...state.groups, action.payload],
       };
     case Actions.UPDATE_GROUP:
+      if (state.create.group.id === action.payload.id) {
+        return {
+          ...state,
+          create: {
+            ...state.create,
+            group: action.payload,
+          },
+        };
+      }
       return {
         ...state,
         groups: state.groups.map((group) =>
           group.id === action.payload.id ? action.payload : group
         ),
-      };
-    case Actions.UPDATE_CREATE_GROUP:
-      return {
-        ...state,
-        create: {
-          ...state.create,
-          group: action.payload,
-        },
       };
     case Actions.DELETE_GROUP:
       const groups = [...state.groups];
@@ -126,6 +126,11 @@ export const reducer = (state: TStore, action: TAction): TStore => {
         groups.splice(groupIndex, 1);
       }
       return { ...state, groups };
+    case Actions.CLEAR_CREATE_GROUP:
+      return {
+        ...state,
+        create: { ...state.create, group: createBlankGroup() },
+      };
     case Actions.MOVE_GROUP_UP:
       return {
         ...state,
@@ -142,19 +147,20 @@ export const reducer = (state: TStore, action: TAction): TStore => {
         trackers: [...state.trackers, action.payload],
       };
     case Actions.UPDATE_TRACKER:
+      if (state.create.tracker.id === action.payload.id) {
+        return {
+          ...state,
+          create: {
+            ...state.create,
+            tracker: action.payload,
+          },
+        };
+      }
       return {
         ...state,
         trackers: state.trackers.map((tracker) =>
           tracker.id === action.payload.id ? action.payload : tracker
         ),
-      };
-    case Actions.UPDATE_CREATE_TRACKER:
-      return {
-        ...state,
-        create: {
-          ...state.create,
-          tracker: action.payload,
-        },
       };
     case Actions.DELETE_TRACKER:
       const trackers = [...state.trackers];
@@ -164,6 +170,11 @@ export const reducer = (state: TStore, action: TAction): TStore => {
       }
       // TODO remove all associated data
       return { ...state, trackers };
+    case Actions.CLEAR_CREATE_TRACKER:
+      return {
+        ...state,
+        create: { ...state.create, tracker: createBlankTracker() },
+      };
     default:
       return state;
   }

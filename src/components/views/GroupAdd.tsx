@@ -3,10 +3,9 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "../../data/provider";
 import { Actions } from "../../data/reducer";
+import { TGroup } from "../../types";
 import { Layout } from "../base/Layout";
 import { GroupAddEditForm } from "./GroupAddEditForm";
-import { TGroup } from "../../types";
-import { createBlankGroup } from "../../data/helpers";
 
 export const GroupAdd: React.FC = () => {
   const navigate = useNavigate();
@@ -15,7 +14,7 @@ export const GroupAdd: React.FC = () => {
 
   const setGroup = React.useCallback(
     (newGroup: TGroup) => {
-      dispatch({ type: Actions.UPDATE_CREATE_GROUP, payload: newGroup });
+      dispatch({ type: Actions.UPDATE_GROUP, payload: newGroup });
     },
     [dispatch]
   );
@@ -29,8 +28,8 @@ export const GroupAdd: React.FC = () => {
           <Button
             variant="outlined"
             onClick={() => {
-              setGroup(createBlankGroup());
-              navigate("/");
+              dispatch({ type: Actions.CLEAR_CREATE_GROUP });
+              navigate(-1);
             }}
             sx={{ flexGrow: 1, mr: 2 }}
             size="large"
@@ -44,8 +43,8 @@ export const GroupAdd: React.FC = () => {
                 type: Actions.CREATE_GROUP,
                 payload: group,
               });
-              setGroup(createBlankGroup());
-              navigate("/");
+              dispatch({ type: Actions.CLEAR_CREATE_GROUP });
+              navigate(-1);
             }}
             sx={{ flexGrow: 1 }}
             size="large"

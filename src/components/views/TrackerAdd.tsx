@@ -1,10 +1,9 @@
 import { Box, Button, Container, Divider } from "@mui/material";
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { createBlankTracker } from "../../data/helpers";
+import { useGroup } from "../../data/hooks";
 import { useStore } from "../../data/provider";
 import { Actions } from "../../data/reducer";
-import { useGroup } from "../../data/hooks";
 import { TTracker } from "../../types";
 import { Layout } from "../base/Layout";
 import { TrackerAddEditForm } from "./TrackerAddEditForm";
@@ -22,7 +21,7 @@ export const TrackerAdd: React.FC = () => {
 
   const setTracker = React.useCallback(
     (newTracker: TTracker) => {
-      dispatch({ type: Actions.UPDATE_CREATE_TRACKER, payload: newTracker });
+      dispatch({ type: Actions.UPDATE_TRACKER, payload: newTracker });
     },
     [dispatch]
   );
@@ -38,8 +37,8 @@ export const TrackerAdd: React.FC = () => {
           <Button
             variant="outlined"
             onClick={() => {
-              setTracker(createBlankTracker());
-              navigate("/");
+              dispatch({ type: Actions.CLEAR_CREATE_TRACKER });
+              navigate(-1);
             }}
             sx={{ flexGrow: 1, mr: 2 }}
             size="large"
@@ -54,8 +53,8 @@ export const TrackerAdd: React.FC = () => {
                 payload: tracker,
               });
               setGroup({ ...group, trackers: [...group.trackers, tracker.id] });
-              setTracker(createBlankTracker());
-              navigate(`/edit-group/${groupId}`);
+              dispatch({ type: Actions.CLEAR_CREATE_TRACKER });
+              navigate(-1);
             }}
             sx={{ flexGrow: 1 }}
             size="large"

@@ -15,10 +15,10 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import { TGroup } from "../../types";
-import { useGetTracker, useTrackers } from "../../data/hooks";
-import { moveDown, moveUp, reorderArray } from "../../utils/reorder-array";
 import { Link } from "react-router-dom";
+import { useGetTracker, useTrackers } from "../../data/hooks";
+import { TGroup } from "../../types";
+import { moveDown, moveUp } from "../../utils/reorder-array";
 
 type TGroupAddEditForm = {
   group: TGroup;
