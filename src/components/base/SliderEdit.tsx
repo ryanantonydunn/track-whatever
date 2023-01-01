@@ -3,15 +3,12 @@ import React from "react";
 import { TSliderValues } from "../../types";
 import { isNumeric } from "../../utils/is-numeric";
 
-type TSliderInputValues = {
-  values: TSliderValues;
+type TSliderEdit = {
+  values?: TSliderValues;
   setValues: (values: TSliderValues) => void;
 };
 
-export const SliderInputValues: React.FC<TSliderInputValues> = ({
-  values,
-  setValues,
-}) => {
+export const SliderEdit: React.FC<TSliderEdit> = ({ values, setValues }) => {
   const [min, setMin] = React.useState("0");
   const [max, setMax] = React.useState("10");
   const [inc, setInc] = React.useState("1");

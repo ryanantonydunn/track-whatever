@@ -8,8 +8,9 @@ import {
 } from "@mui/material";
 import React from "react";
 import { filteredInputTypes } from "../../data/helpers";
-import { TInputKey, TTracker } from "../../types";
-import { SliderInputValues } from "../base/SliderInputValues";
+import { TInputKey, TSliderValues, TTracker } from "../../types";
+import { ChecklistEdit } from "../base/ChecklistEdit";
+import { SliderEdit } from "../base/SliderEdit";
 
 type TTrackerAddEditForm = {
   tracker: TTracker;
@@ -58,10 +59,21 @@ export const TrackerAddEditForm: React.FC<TTrackerAddEditForm> = ({
           </Select>
         </FormControl>
 
-        {tracker.inputType === "slider" && tracker.slider && (
-          <SliderInputValues
+        {tracker.inputType === "slider" && (
+          <SliderEdit
             values={tracker.slider}
-            setValues={setSliderValues}
+            setValues={(slider: TSliderValues) => {
+              setTracker({ ...tracker, slider });
+            }}
+          />
+        )}
+
+        {tracker.inputType === "checklist" && (
+          <ChecklistEdit
+            items={tracker.items}
+            setItems={(items: string[]) => {
+              setTracker({ ...tracker, items });
+            }}
           />
         )}
       </Box>
