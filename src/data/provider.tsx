@@ -1,7 +1,6 @@
 import React from "react";
 import { TStore } from "../types";
 import { TAction, reducer } from "./reducer";
-import { createBlankGroup, createBlankTracker } from "./helpers";
 
 export type TContextProps = {
   state: TStore;
@@ -25,35 +24,17 @@ export const getInitialState: TGetInitialState = () => ({
       },
     },
     {
-      id: "1",
-      title: "Food",
-      inputType: "checklist",
-      items: ["2", "3"],
-    },
-    {
       id: "2",
       title: "Sugar",
-      inputType: "checklistItem",
+      inputType: "boolean",
     },
     {
       id: "3",
       title: "Alcohol",
-      inputType: "checklistItem",
-    },
-  ],
-  groups: [
-    {
-      id: "0",
-      title: "Example Group",
-      trackers: ["0", "1"],
+      inputType: "boolean",
     },
   ],
   inputs: [],
-  views: [],
-  create: {
-    group: createBlankGroup(),
-    tracker: createBlankTracker(),
-  },
 });
 
 export const StoreContext = React.createContext({} as TContextProps);

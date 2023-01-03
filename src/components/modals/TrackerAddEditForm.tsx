@@ -7,9 +7,8 @@ import {
   TextField,
 } from "@mui/material";
 import React from "react";
-import { filteredInputTypes } from "../../data/helpers";
+import { inputTypes } from "../../data/helpers";
 import { TInputKey, TSliderValues, TTracker } from "../../types";
-import { ChecklistEdit } from "../base/ChecklistEdit";
 import { SliderEdit } from "../base/SliderEdit";
 
 type TTrackerAddEditForm = {
@@ -54,7 +53,7 @@ export const TrackerAddEditForm: React.FC<TTrackerAddEditForm> = ({
             }}
             disabled={isEditing}
           >
-            {filteredInputTypes.map((inputType) => (
+            {inputTypes.map((inputType) => (
               <MenuItem key={inputType.id} value={inputType.id}>
                 {inputType.title}
               </MenuItem>
@@ -67,15 +66,6 @@ export const TrackerAddEditForm: React.FC<TTrackerAddEditForm> = ({
             values={tracker.slider}
             setValues={(slider: TSliderValues) => {
               setTracker({ ...tracker, slider });
-            }}
-          />
-        )}
-
-        {tracker.inputType === "checklist" && (
-          <ChecklistEdit
-            items={tracker.items}
-            setItems={(items: string[]) => {
-              setTracker({ ...tracker, items });
             }}
           />
         )}
