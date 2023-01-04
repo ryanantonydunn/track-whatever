@@ -7,20 +7,23 @@ import {
   TextField,
 } from "@mui/material";
 import React from "react";
-import { TInputPrimitive, TTracker } from "../../types";
+import { useTracker } from "../../data/hooks";
+import { TInputPrimitive } from "../../types";
 import { isNumeric } from "../../utils/is-numeric";
 
 type TTrackInput = {
-  tracker: TTracker;
+  trackerId: string;
   value?: TInputPrimitive;
   setValue: (trackerId: string, value: TInputPrimitive) => void;
 };
 
 export const TrackInput: React.FC<TTrackInput> = ({
-  tracker,
+  trackerId,
   value,
   setValue,
 }) => {
+  const tracker = useTracker(trackerId);
+  if (!tracker) return null;
   let parsedValue;
   switch (tracker.inputType) {
     case "checkbox":
@@ -38,8 +41,8 @@ export const TrackInput: React.FC<TTrackInput> = ({
           sx={{
             border: 1,
             borderRadius: "5px",
-            width: "100%",
             borderColor: "grey.400",
+            width: "99%",
             ml: 0,
             mr: 0,
           }}
@@ -75,9 +78,9 @@ export const TrackInput: React.FC<TTrackInput> = ({
             pr: 3,
             pt: 1,
             pb: 1,
+            flex: 1,
             border: 1,
             borderRadius: "5px",
-            width: "100%",
             borderColor: "grey.400",
           }}
         >

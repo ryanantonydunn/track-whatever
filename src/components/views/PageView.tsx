@@ -64,7 +64,7 @@ export const PageView: React.FC = () => {
                 return (
                   <ListItem key={tracker.id}>
                     <TrackInput
-                      tracker={tracker}
+                      trackerId={tracker.id}
                       value={inputs[tracker.id]?.value || undefined}
                       setValue={setValue}
                     />
