@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { TInput, TInputType, TTracker } from "../types";
+import { TInput, TTracker } from "../types";
 
 export const createBlankTracker = (): TTracker => {
   return {

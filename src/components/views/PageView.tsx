@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 import { useStore } from "../../data/provider";
 import { Actions } from "../../data/reducer";
 import { TInput, TInputPrimitive } from "../../types";
@@ -16,14 +16,14 @@ import { TrackInput } from "../base/TrackInput";
 import { useTrackerAdd } from "../modals/TrackerAdd";
 import { createBlankInput } from "../../utils/create-blank-data";
 
-type TParams = {
-  pageId: string;
-};
+// type TParams = {
+//   pageId: string;
+// };
 
 type TInputs = { [key: string]: TInput }; // { trackerId: { ...input } }
 
 export const PageView: React.FC = () => {
-  const { pageId } = useParams<TParams>();
+  // const { pageId } = useParams<TParams>();
   const page = { title: "New Page" };
   const { state, dispatch } = useStore();
   const trackerAdd = useTrackerAdd();
