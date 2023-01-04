@@ -1,4 +1,11 @@
-import { Checkbox, FormControlLabel, Slider, TextField } from "@mui/material";
+import {
+  Box,
+  Checkbox,
+  FormControlLabel,
+  InputLabel,
+  Slider,
+  TextField,
+} from "@mui/material";
 import React from "react";
 import { TInputPrimitive, TTracker } from "../../types";
 import { isNumeric } from "../../utils/is-numeric";
@@ -28,6 +35,14 @@ export const TrackInput: React.FC<TTrackInput> = ({
               }}
             />
           }
+          sx={{
+            border: 1,
+            borderRadius: "5px",
+            width: "100%",
+            borderColor: "grey.400",
+            ml: 0,
+            mr: 0,
+          }}
           label={tracker.title}
         />
       );
@@ -54,15 +69,32 @@ export const TrackInput: React.FC<TTrackInput> = ({
         parsedValue = 0;
       }
       return (
-        <Slider
-          valueLabelDisplay="auto"
-          defaultValue={tracker.slider.min || 0}
-          step={tracker.slider.increment || 1}
-          min={tracker.slider.min || 0}
-          max={tracker.slider.max || 10}
-          value={parsedValue}
-          onChange={(e, newValue) => setValue(tracker.id, newValue as number)}
-        />
+        <Box
+          sx={{
+            pl: 3,
+            pr: 3,
+            pt: 1,
+            pb: 1,
+            border: 1,
+            borderRadius: "5px",
+            width: "100%",
+            borderColor: "grey.400",
+          }}
+        >
+          <InputLabel shrink id={`${tracker.title}-label`}>
+            Count
+          </InputLabel>
+          <Slider
+            aria-labelledby={`${tracker.title}-label`}
+            valueLabelDisplay="auto"
+            defaultValue={tracker.slider.min || 0}
+            step={tracker.slider.increment || 1}
+            min={tracker.slider.min || 0}
+            max={tracker.slider.max || 10}
+            value={parsedValue}
+            onChange={(e, newValue) => setValue(tracker.id, newValue as number)}
+          />
+        </Box>
       );
     case "text":
       return (
