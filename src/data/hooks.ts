@@ -1,15 +1,7 @@
 import React from "react";
-import { TTracker } from "../types";
+import { TInput, TTracker } from "../types";
 import { useStore } from "./provider";
-import { Actions } from "./reducer";
-/**
- * Get all trackers
- */
-
-export const useTrackers = (): TTracker[] => {
-  const { state } = useStore();
-  return state.trackers;
-};
+import { arrayObjSort } from "../utils/sort";
 
 /**
  * Function to get a particular trackers information
@@ -29,21 +21,48 @@ export const useGetTracker = (): TUseGetTracker => {
 };
 
 /**
- * Getter and setter tuple for a particular tracker
+ * Get a particular tracker
  */
 
-type TUseTracker = [TTracker | undefined, (tracker: TTracker) => void];
-
-export const useTracker = (id?: string): TUseTracker => {
+export const useTracker = (id?: string): TTracker | undefined => {
   const getTracker = useGetTracker();
-  const tracker = React.useMemo(() => getTracker(id), [id, getTracker]);
+  return React.useMemo(() => getTracker(id), [id, getTracker]);
+};
 
-  const { dispatch } = useStore();
-  const setTracker = React.useCallback(
-    (newTracker: TTracker) => {
-      dispatch({ type: Actions.UPDATE_TRACKER, payload: newTracker });
+/**
+ * Function to get a particular input information
+ */
+
+type TUseGetInput = (id?: string) => TInput | undefined;
+
+export const useGetInput = (): TUseGetInput => {
+  const { state } = useStore();
+  const getInput = React.useCallback(
+    (id?: string) => {
+      return state.inputs.find((d) => d.id === id);
     },
-    [dispatch]
+    [state.inputs]
   );
-  return [tracker, setTracker];
+  return getInput;
+};
+
+/**
+ * Get a particular input
+ */
+
+export const useInput = (id?: string): TInput | undefined => {
+  const getInput = useGetInput();
+  return React.useMemo(() => getInput(id), [id, getInput]);
+};
+
+/**
+ * Get inputs by tracker
+ */
+
+export const useInputsByTracker = (trackerId?: string): TInput[] => {
+  const { state } = useStore();
+  return arrayObjSort(
+    state.inputs.filter((d) => d.trackerId === trackerId),
+    "date"
+  );
 };

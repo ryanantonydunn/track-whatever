@@ -33,3 +33,10 @@ export type TStore = {
   trackers: TTracker[];
   inputs: TInput[];
 };
+
+export const inputTypes: TInputType[] = [
+  { id: "checkbox", title: "Checkbox" },
+  { id: "slider", title: "Slider" },
+  { id: "number", title: "Number" },
+  { id: "text", title: "Text" },
+];

@@ -4,7 +4,7 @@ import { TInput, TInputType, TTracker } from "../types";
 export const createBlankTracker = (): TTracker => {
   return {
     id: uuidv4(),
-    title: "New Tracker",
+    title: "",
     inputType: "checkbox",
   };
 };
@@ -17,10 +17,3 @@ export const createBlankInput = (): TInput => {
     value: "",
   };
 };
-
-export const inputTypes: TInputType[] = [
-  { id: "checkbox", title: "Checkbox" },
-  { id: "slider", title: "Slider" },
-  { id: "number", title: "Number" },
-  { id: "text", title: "Text" },
-];

@@ -6,27 +6,27 @@ import {
   DialogTitle,
 } from "@mui/material";
 import React from "react";
-import { createBlankTracker } from "../../data/helpers";
 import { TTracker } from "../../types";
 import { TrackerAddEditForm } from "./TrackerAddEditForm";
 import { useStore } from "../../data/provider";
 import { Actions } from "../../data/reducer";
+import { createBlankTracker } from "../../utils/create-blank-data";
 
-type TSaveArgs = {
-  onSave: (newTracker: TTracker) => void;
+type TOpenArgs = {
+  onSave?: (newTracker: TTracker) => void;
 };
 
 type TTrackerAdd = {
-  open: (args: TSaveArgs) => void;
+  open: (args?: TOpenArgs) => void;
   component: React.ReactNode;
 };
 
 export function useTrackerAdd(): TTrackerAdd {
   const { dispatch } = useStore();
   const [isOpen, setIsOpen] = React.useState(false);
-  const [args, setArgs] = React.useState<TSaveArgs | undefined>();
+  const [args, setArgs] = React.useState<TOpenArgs | undefined>();
 
-  const open = (args: TSaveArgs) => {
+  const open = (args?: TOpenArgs) => {
     setIsOpen(true);
     setArgs(args);
   };
@@ -39,7 +39,7 @@ export function useTrackerAdd(): TTrackerAdd {
       onClose={() => setIsOpen(false)}
       aria-labelledby="tracker-add-title"
     >
-      <DialogTitle id="confirm-dialog-title">Add a new tracker</DialogTitle>
+      <DialogTitle id="tracker-add-title">Add a new tracker</DialogTitle>
       <DialogContent>
         <TrackerAddEditForm tracker={tracker} setTracker={setTracker} />
       </DialogContent>

@@ -4,16 +4,22 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { PageView } from "./components/views/PageView";
 import { StoreProvider } from "./data/provider";
 import "./index.css";
+import { TrackerList } from "./components/views/TrackerList";
+import { TrackerView } from "./components/views/TrackerView";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <PageView />,
   },
-  // {
-  //   path: "/edit-groups",
-  //   element: <GroupEditList />,
-  // },
+  {
+    path: "/trackers",
+    element: <TrackerList />,
+  },
+  {
+    path: "/tracker/:trackerId",
+    element: <TrackerView />,
+  },
   // {
   //   path: "/add-group",
   //   element: <GroupAdd />,

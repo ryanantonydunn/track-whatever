@@ -7,8 +7,7 @@ import {
   TextField,
 } from "@mui/material";
 import React from "react";
-import { inputTypes } from "../../data/helpers";
-import { TInputKey, TSliderValues, TTracker } from "../../types";
+import { TInputKey, TSliderValues, TTracker, inputTypes } from "../../types";
 import { SliderEdit } from "../base/SliderEdit";
 
 type TTrackerAddEditForm = {
@@ -26,11 +25,10 @@ export const TrackerAddEditForm: React.FC<TTrackerAddEditForm> = ({
     <>
       <Box sx={{ p: 2 }}>
         <TextField
+          autoFocus
           fullWidth
           label="Title"
           value={tracker.title}
-          error={!tracker.title}
-          helperText={!tracker.title ? "Please enter a title" : ""}
           onChange={(e) => {
             setTracker({
               ...tracker,
