@@ -11,16 +11,47 @@ import { useTrackers } from "../../data/hooks";
 import { Layout } from "../base/Layout";
 import { TrackInput } from "../base/TrackInput";
 import { useTrackerAdd } from "../modals/TrackerAdd";
-import { TTracker } from "../../types";
+import { TInput, TInputPrimitive } from "../../types";
+import React from "react";
+import { useStore } from "../../data/provider";
+import { Actions } from "../../data/reducer";
+import { createBlankInput } from "../../data/helpers";
 
 type TParams = {
   pageId: string;
 };
 
+type TInputs = { [key: string]: TInput }; // { trackerId: { ...input } }
+
 export const PageView: React.FC = () => {
   const { pageId } = useParams<TParams>();
+  const { dispatch } = useStore();
   const trackers = useTrackers();
   const trackerAdd = useTrackerAdd();
+  const [inputs, setInputs] = React.useState<TInputs>({});
+
+  // handle input changes
+  const setValue = (trackerId: string, value: TInputPrimitive) => {
+    if (inputs[trackerId]) {
+      if (value === "" || value === undefined) {
+        // remove a set input that has been changed to empty
+        const newInputs = { ...inputs };
+        delete newInputs[trackerId];
+        setInputs({ ...newInputs });
+        dispatch({ type: Actions.DELETE_INPUT, payload: inputs[trackerId].id });
+      } else {
+        // replace a set input value
+        const newInput = { ...inputs[trackerId], value };
+        setInputs({ ...inputs, [trackerId]: newInput });
+        dispatch({ type: Actions.UPDATE_INPUT, payload: newInput });
+      }
+    } else {
+      // make new input value
+      const newInput = { ...createBlankInput(), trackerId, value };
+      setInputs({ ...inputs, [trackerId]: newInput });
+      dispatch({ type: Actions.CREATE_INPUT, payload: newInput });
+    }
+  };
 
   return (
     <Layout title="Trackers">
@@ -35,9 +66,8 @@ export const PageView: React.FC = () => {
                   <ListItem key={tracker.id}>
                     <TrackInput
                       tracker={tracker}
-                      setValue={(value) => {
-                        console.log("yeah", value);
-                      }}
+                      value={inputs[tracker.id]?.value || undefined}
+                      setValue={setValue}
                     />
                   </ListItem>
                 );

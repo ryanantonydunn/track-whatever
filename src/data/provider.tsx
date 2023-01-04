@@ -26,12 +26,17 @@ export const getInitialState: TGetInitialState = () => ({
     {
       id: "2",
       title: "Sugar",
-      inputType: "boolean",
+      inputType: "checkbox",
     },
     {
       id: "3",
       title: "Alcohol",
-      inputType: "boolean",
+      inputType: "number",
+    },
+    {
+      id: "4",
+      title: "Input",
+      inputType: "text",
     },
   ],
   inputs: [],

@@ -1,4 +1,4 @@
-export const inputKeys = ["slider", "number", "boolean", "text"] as const;
+export const inputKeys = ["slider", "number", "checkbox", "text"] as const;
 
 export type TInputKey = typeof inputKeys[number];
 
@@ -23,8 +23,9 @@ export type TTracker = {
 export type TInputPrimitive = number | string | boolean;
 
 export type TInput = {
-  trackerId: string;
+  id: string;
   date: string;
+  trackerId: string;
   value: TInputPrimitive;
 };
 
