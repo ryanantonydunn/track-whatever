@@ -11,42 +11,54 @@ type TGetInitialState = () => TStore;
 
 type TStoreProvider = { initialActions?: TAction[]; children: React.ReactNode };
 
-export const getInitialState: TGetInitialState = () => ({
-  trackers: [
-    {
-      id: "0",
-      title: "Mood",
-      inputType: "slider",
-      slider: {
-        min: 0,
-        max: 10,
-        increment: 1,
-      },
-    },
-    {
-      id: "2",
-      title: "Sugar",
-      inputType: "checkbox",
-    },
-    {
-      id: "3",
-      title: "Alcohol",
-      inputType: "number",
-    },
-    {
-      id: "4",
-      title: "Input",
-      inputType: "text",
-    },
-  ],
-  inputs: [],
-});
+// get data from local storage or default data
+export const getInitialState: TGetInitialState = () => {
+  const data = localStorage.getItem("data");
+  return data
+    ? JSON.parse(data)
+    : {
+        trackers: [
+          {
+            id: "0",
+            title: "Mood",
+            inputType: "slider",
+            slider: {
+              min: 0,
+              max: 10,
+              increment: 1,
+            },
+          },
+          {
+            id: "2",
+            title: "Sugar",
+            inputType: "checkbox",
+          },
+          {
+            id: "3",
+            title: "Alcohol",
+            inputType: "number",
+          },
+          {
+            id: "4",
+            title: "Input",
+            inputType: "text",
+          },
+        ],
+        inputs: [],
+      };
+};
 
 export const StoreContext = React.createContext({} as TContextProps);
 
 export const StoreProvider: React.FC<TStoreProvider> = ({ children }) => {
   const [state, dispatch] = React.useReducer(reducer, getInitialState());
   const value = { state, dispatch };
+
+  // save to local storage
+  React.useEffect(() => {
+    localStorage.setItem("data", JSON.stringify(state));
+  }, [state]);
+
   return (
     <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
   );
