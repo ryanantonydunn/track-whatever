@@ -6,11 +6,17 @@ import { StoreProvider } from "./data/provider";
 import "./index.css";
 import { TrackerList } from "./components/views/TrackerList";
 import { TrackerView } from "./components/views/TrackerView";
+import { ImportExport } from "./components/views/ImportExport";
+import { DataError } from "./components/views/DataError";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <PageView />,
+  },
+  {
+    path: "/import-export",
+    element: <ImportExport />,
   },
   {
     path: "/trackers",
@@ -52,7 +58,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <StoreProvider>
-      <RouterProvider router={router} />
+      <DataError>
+        <RouterProvider router={router} />
+      </DataError>
     </StoreProvider>
   </React.StrictMode>
 );

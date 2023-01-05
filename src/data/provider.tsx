@@ -12,40 +12,40 @@ type TGetInitialState = () => TStore;
 type TStoreProvider = { initialActions?: TAction[]; children: React.ReactNode };
 
 // get data from local storage or default data
+export const defaultData: TStore = {
+  trackers: [
+    {
+      id: "0",
+      title: "Mood",
+      inputType: "slider",
+      slider: {
+        min: 0,
+        max: 10,
+        increment: 1,
+      },
+    },
+    {
+      id: "2",
+      title: "Sugar",
+      inputType: "checkbox",
+    },
+    {
+      id: "3",
+      title: "Alcohol",
+      inputType: "number",
+    },
+    {
+      id: "4",
+      title: "Input",
+      inputType: "text",
+    },
+  ],
+  inputs: [],
+};
+
 export const getInitialState: TGetInitialState = () => {
   const data = localStorage.getItem("data");
-  return data
-    ? JSON.parse(data)
-    : {
-        trackers: [
-          {
-            id: "0",
-            title: "Mood",
-            inputType: "slider",
-            slider: {
-              min: 0,
-              max: 10,
-              increment: 1,
-            },
-          },
-          {
-            id: "2",
-            title: "Sugar",
-            inputType: "checkbox",
-          },
-          {
-            id: "3",
-            title: "Alcohol",
-            inputType: "number",
-          },
-          {
-            id: "4",
-            title: "Input",
-            inputType: "text",
-          },
-        ],
-        inputs: [],
-      };
+  return data ? JSON.parse(data) : defaultData;
 };
 
 export const StoreContext = React.createContext({} as TContextProps);

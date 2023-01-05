@@ -10,6 +10,7 @@ export enum Actions {
   CREATE_VIEW = "CREATE_VIEW",
   UPDATE_VIEW = "UPDATE_VIEW",
   DELETE_VIEW = "DELETE_VIEW",
+  RESET_ALL_DATA = "RESET_ALL_DATA",
 }
 
 type TCreateTracker = {
@@ -42,13 +43,19 @@ type TDeleteInput = {
   payload: string;
 };
 
+type TResetAllData = {
+  type: Actions.RESET_ALL_DATA;
+  payload: TStore;
+};
+
 export type TAction =
   | TCreateTracker
   | TUpdateTracker
   | TDeleteTracker
   | TCreateInput
   | TUpdateInput
-  | TDeleteInput;
+  | TDeleteInput
+  | TResetAllData;
 
 export const reducer = (state: TStore, action: TAction): TStore => {
   switch (action.type) {
@@ -91,6 +98,8 @@ export const reducer = (state: TStore, action: TAction): TStore => {
         inputs.splice(inputIndex, 1);
       }
       return { ...state, inputs };
+    case Actions.RESET_ALL_DATA:
+      return action.payload;
     default:
       return state;
   }

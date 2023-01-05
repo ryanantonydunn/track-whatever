@@ -1,12 +1,12 @@
 import { ArrowBack, Menu as MenuIcon } from "@mui/icons-material";
 import {
-  Menu,
   AppBar,
+  Box,
   IconButton,
+  Menu,
   MenuItem,
   Toolbar,
   Typography,
-  Box,
 } from "@mui/material";
 import { Container } from "@mui/system";
 import React from "react";
@@ -72,6 +72,13 @@ export const Layout: React.FC<TLayout> = ({ children, title, back = true }) => {
               </MenuItem>
               <MenuItem onClick={closeMenu} component={Link} to="/trackers">
                 Trackers
+              </MenuItem>
+              <MenuItem
+                onClick={closeMenu}
+                component={Link}
+                to="/import-export"
+              >
+                Import/Export Data
               </MenuItem>
             </Menu>
           </Toolbar>

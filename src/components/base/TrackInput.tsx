@@ -85,7 +85,7 @@ export const TrackInput: React.FC<TTrackInput> = ({
           }}
         >
           <InputLabel shrink id={`${tracker.title}-label`}>
-            Count
+            {tracker.title}
           </InputLabel>
           <Slider
             aria-labelledby={`${tracker.title}-label`}
