@@ -4,18 +4,26 @@ import { useStore } from "./provider";
 import { arrayObjSort } from "../utils/sort";
 
 /**
- * Function to get a particular trackers information
+ * Function to get a particular tracker
  */
 
 type TUseGetTracker = (id?: string) => TTracker | undefined;
 
+type TTrackerDataRef = {
+  [key: string]: TTracker;
+};
+
 export const useGetTracker = (): TUseGetTracker => {
   const { state } = useStore();
+
+  // store by ID
+  const byID = React.useMemo<TTrackerDataRef>(() => {
+    return Object.fromEntries(state.trackers.map((t) => [t.id, t]));
+  }, [state.trackers]);
+
   const getTracker = React.useCallback(
-    (id?: string) => {
-      return state.trackers.find((d) => d.id === id);
-    },
-    [state.trackers]
+    (id?: string) => byID[id || ''],
+    [byID]
   );
   return getTracker;
 };
@@ -56,13 +64,30 @@ export const useInput = (id?: string): TInput | undefined => {
 };
 
 /**
+ * Function to get inputs by tracker
+ */
+
+type TUseGetInputsByTracker = (id?: string) => TInput[];
+
+export const useGetInputsByTracker = (): TUseGetInputsByTracker => {
+  const { state } = useStore();
+  const getInputByTracker = React.useCallback(
+    (id?: string) => {
+      return arrayObjSort(
+        state.inputs.filter((d) => d.trackerId === id),
+        "date"
+      );
+    },
+    [state.inputs]
+  );
+  return getInputByTracker;
+};
+
+/**
  * Get inputs by tracker
  */
 
-export const useInputsByTracker = (trackerId?: string): TInput[] => {
-  const { state } = useStore();
-  return arrayObjSort(
-    state.inputs.filter((d) => d.trackerId === trackerId),
-    "date"
-  );
+export const useInputsByTracker = (id?: string): TInput[] => {
+  const getInputByTracker = useGetInputsByTracker();
+  return React.useMemo(() => getInputByTracker(id), [id, getInputByTracker]);
 };

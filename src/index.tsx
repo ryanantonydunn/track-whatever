@@ -8,6 +8,7 @@ import { TrackerList } from "./components/views/TrackerList";
 import { TrackerView } from "./components/views/TrackerView";
 import { ImportExport } from "./components/views/ImportExport";
 import { DataError } from "./components/views/DataError";
+import { CompareView } from "./components/views/CompareView";
 
 const router = createBrowserRouter([
   {
@@ -26,30 +27,10 @@ const router = createBrowserRouter([
     path: "/tracker/:trackerId",
     element: <TrackerView />,
   },
-  // {
-  //   path: "/add-group",
-  //   element: <GroupAdd />,
-  // },
-  // {
-  //   path: "/edit-group/:groupId",
-  //   element: <GroupEdit />,
-  // },
-  // {
-  //   path: "/group/:groupId",
-  //   element: <GroupView />,
-  // },
-  // {
-  //   path: "/add-tracker/:groupId",
-  //   element: <TrackerAdd />,
-  // },
-  // {
-  //   path: "/edit-tracker/:trackerId",
-  //   element: <TrackerEdit />,
-  // },
-  // {
-  //   path: "/compare-data",
-  //   element: <DataCompareList />,
-  // },
+  {
+    path: "/compare",
+    element: <CompareView />,
+  },
 ]);
 
 const root = ReactDOM.createRoot(

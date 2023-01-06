@@ -20,8 +20,8 @@ import { Actions } from "../../data/reducer";
 import { useConfirmDialog } from "../base/ConfirmDialog";
 import { Layout } from "../base/Layout";
 import { Error404 } from "./404";
-import { formatInputValue } from "../../utils/format-input-value";
 import { useInputEdit } from "../modals/InputEdit";
+import { InputValue } from "../base/InputValue";
 
 type TParams = {
   trackerId: string;
@@ -59,7 +59,9 @@ export const TrackerView: React.FC = () => {
                     <TableCell>
                       {format(new Date(input.date), "d MMM yyyy - H:m")}
                     </TableCell>
-                    <TableCell>{formatInputValue(input.value)}</TableCell>
+                    <TableCell>
+                      <InputValue input={input} />
+                    </TableCell>
                     <TableCell align="right">
                       <IconButton
                         size="medium"

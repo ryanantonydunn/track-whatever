@@ -73,6 +73,9 @@ export const Layout: React.FC<TLayout> = ({ children, title, back = true }) => {
               <MenuItem onClick={closeMenu} component={Link} to="/trackers">
                 Trackers
               </MenuItem>
+              <MenuItem onClick={closeMenu} component={Link} to="/compare">
+                Compare Data
+              </MenuItem>
               <MenuItem
                 onClick={closeMenu}
                 component={Link}
