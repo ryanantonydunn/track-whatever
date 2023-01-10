@@ -108,7 +108,7 @@ export const TrackInput: React.FC<TTrackInput> = ({
           multiline
           value={value || ""}
           onChange={(e) => {
-            setValue(tracker.id, e.currentTarget.value);
+            setValue(tracker.id, e.currentTarget.value.slice(0, 100));
           }}
         />
       );

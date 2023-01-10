@@ -29,7 +29,23 @@ export type TInput = {
   value: TInputPrimitive;
 };
 
+export const pageItemTypes = ["tracker"] as const;
+
+export type TPageItemType = typeof pageItemTypes[number];
+
+export type TPageItem = {
+  type: TPageItemType;
+  id?: string;
+};
+
+export type TPage = {
+  id: string;
+  title: string;
+  items: TPageItem[];
+};
+
 export type TStore = {
+  pages: TPage[];
   trackers: TTracker[];
   inputs: TInput[];
 };

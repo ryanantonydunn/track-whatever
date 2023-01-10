@@ -3,14 +3,16 @@ export function reorderArray<T>(
   oldIndex: number,
   newIndex: number
 ) {
-  array.splice(newIndex, 0, array.splice(oldIndex, 1)[0]);
-  return array;
-}
-
-export function moveUp<T>(array: T[], i: number) {
-  return reorderArray(array, i, Math.max(0, i - 1));
-}
-
-export function moveDown<T>(array: T[], i: number) {
-  return reorderArray(array, i, Math.min(array.length - 1, i + 1));
+  const copiedArray = [...array];
+  if (
+    oldIndex < 0 ||
+    newIndex < 0 ||
+    oldIndex >= array.length ||
+    newIndex >= array.length ||
+    oldIndex === newIndex
+  ) {
+    return array;
+  }
+  copiedArray.splice(newIndex, 0, copiedArray.splice(oldIndex, 1)[0]);
+  return copiedArray;
 }

@@ -1,7 +1,47 @@
 import React from "react";
-import { TInput, TTracker } from "../types";
-import { useStore } from "./provider";
+import { TInput, TPage, TTracker } from "../types";
 import { arrayObjSort } from "../utils/sort";
+import { useStore } from "./provider";
+
+/**
+ * Get pages sorted by their order value
+ */
+
+export const usePages = (): TPage[] => {
+  const { state } = useStore();
+  return state.pages;
+};
+
+/**
+ * Function to get a particular page
+ */
+
+type TUseGetPage = (id?: string) => TPage | undefined;
+
+type TPageDataRef = {
+  [key: string]: TPage;
+};
+
+export const useGetPage = (): TUseGetPage => {
+  const { state } = useStore();
+
+  // store by ID
+  const byID = React.useMemo<TPageDataRef>(() => {
+    return Object.fromEntries(state.pages.map((t) => [t.id, t]));
+  }, [state.pages]);
+
+  const getPage = React.useCallback((id?: string) => byID[id || ""], [byID]);
+  return getPage;
+};
+
+/**
+ * Get a particular page
+ */
+
+export const usePage = (id?: string): TPage | undefined => {
+  const getPage = useGetPage();
+  return React.useMemo(() => getPage(id), [id, getPage]);
+};
 
 /**
  * Function to get a particular tracker
@@ -21,10 +61,7 @@ export const useGetTracker = (): TUseGetTracker => {
     return Object.fromEntries(state.trackers.map((t) => [t.id, t]));
   }, [state.trackers]);
 
-  const getTracker = React.useCallback(
-    (id?: string) => byID[id || ''],
-    [byID]
-  );
+  const getTracker = React.useCallback((id?: string) => byID[id || ""], [byID]);
   return getTracker;
 };
 

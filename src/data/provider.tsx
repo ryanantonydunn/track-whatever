@@ -1,6 +1,7 @@
 import React from "react";
 import { TStore } from "../types";
 import { TAction, reducer } from "./reducer";
+import { runMigration } from "./migrations";
 
 export type TContextProps = {
   state: TStore;
@@ -13,6 +14,13 @@ type TStoreProvider = { initialActions?: TAction[]; children: React.ReactNode };
 
 // get data from local storage or default data
 export const defaultData: TStore = {
+  pages: [
+    {
+      id: "0",
+      title: "My Trackers",
+      items: [],
+    },
+  ],
   trackers: [
     {
       id: "0",
@@ -45,7 +53,7 @@ export const defaultData: TStore = {
 
 export const getInitialState: TGetInitialState = () => {
   const data = localStorage.getItem("data");
-  return data ? JSON.parse(data) : defaultData;
+  return data ? runMigration(JSON.parse(data)) : defaultData;
 };
 
 export const StoreContext = React.createContext({} as TContextProps);

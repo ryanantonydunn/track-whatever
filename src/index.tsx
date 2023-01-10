@@ -9,15 +9,26 @@ import { TrackerView } from "./components/views/TrackerView";
 import { ImportExport } from "./components/views/ImportExport";
 import { DataError } from "./components/views/DataError";
 import { CompareView } from "./components/views/CompareView";
+import { PageList } from "./components/views/PageList";
+import { PageListEdit } from "./components/views/PageListEdit";
+import { PageEdit } from "./components/views/PageEdit";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <PageView />,
+    element: <PageList />,
   },
   {
-    path: "/import-export",
-    element: <ImportExport />,
+    path: "/edit-pages",
+    element: <PageListEdit />,
+  },
+  {
+    path: "/edit-page/:pageId",
+    element: <PageEdit />,
+  },
+  {
+    path: "/page/:pageId",
+    element: <PageView />,
   },
   {
     path: "/trackers",
@@ -26,6 +37,10 @@ const router = createBrowserRouter([
   {
     path: "/tracker/:trackerId",
     element: <TrackerView />,
+  },
+  {
+    path: "/import-export",
+    element: <ImportExport />,
   },
   {
     path: "/compare",

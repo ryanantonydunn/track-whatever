@@ -7,26 +7,28 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-// import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { useGetTracker, usePage } from "../../data/hooks";
 import { useStore } from "../../data/provider";
 import { Actions } from "../../data/reducer";
 import { TInput, TInputPrimitive } from "../../types";
+import { createBlankInput } from "../../utils/create-blank-data";
 import { Layout } from "../base/Layout";
 import { TrackInput } from "../base/TrackInput";
-import { useTrackerAdd } from "../modals/TrackerAdd";
-import { createBlankInput } from "../../utils/create-blank-data";
+import { usePageItemAdd } from "../modals/PageItemAdd";
 
-// type TParams = {
-//   pageId: string;
-// };
+type TParams = {
+  pageId: string;
+};
 
 type TInputs = { [key: string]: TInput }; // { trackerId: { ...input } }
 
 export const PageView: React.FC = () => {
-  // const { pageId } = useParams<TParams>();
-  const page = { title: "New Page" };
-  const { state, dispatch } = useStore();
-  const trackerAdd = useTrackerAdd();
+  const { pageId } = useParams<TParams>();
+  const page = usePage(pageId);
+  const getTracker = useGetTracker();
+  const { dispatch } = useStore();
+  const pageItemAdd = usePageItemAdd();
   const [inputs, setInputs] = React.useState<TInputs>({});
 
   // handle input changes
@@ -52,49 +54,64 @@ export const PageView: React.FC = () => {
     }
   };
 
+  if (!page) return null;
+
   return (
     <Layout title={page.title}>
       <Container maxWidth="sm">
         <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
           <List>
-            {state.trackers.length ? (
-              state.trackers.map((tracker) => {
-                // const tracker = getTracker(trackerId);
-                // if (!tracker) return null;
-                return (
-                  <ListItem key={tracker.id}>
-                    <TrackInput
-                      trackerId={tracker.id}
-                      value={inputs[tracker.id]?.value || undefined}
-                      setValue={setValue}
-                    />
-                  </ListItem>
-                );
+            {page.items.length ? (
+              page.items.map((item) => {
+                if (item.type === "tracker") {
+                  const tracker = getTracker(item.id);
+                  if (!tracker) return null;
+                  return (
+                    <ListItem key={tracker.id}>
+                      <TrackInput
+                        trackerId={tracker.id}
+                        value={inputs[tracker.id]?.value || undefined}
+                        setValue={setValue}
+                      />
+                    </ListItem>
+                  );
+                }
+                return null;
               })
             ) : (
               <Typography align="center" sx={{ p: 2 }}>
-                No trackers yet, add a new one below
+                No items added yet, add a new one below
               </Typography>
             )}
           </List>
         </Box>
-        <Box display="flex" justifyContent="flex-end" sx={{ p: 2 }}>
+        <Box
+          display="flex"
+          flexDirection="row"
+          justifyContent="flex-end"
+          sx={{ p: 2 }}
+        >
+          <Button
+            variant="text"
+            size="small"
+            component={Link}
+            to={`/edit-page/${page.id}`}
+            sx={{ mr: 2 }}
+          >
+            Edit This Page
+          </Button>
           <Button
             variant="text"
             size="small"
             onClick={() => {
-              trackerAdd.open({
-                onSave: (newTracker) => {
-                  console.log(newTracker, "TODO add to end of page later");
-                },
-              });
+              pageItemAdd.open({ page });
             }}
           >
-            Add New Tracker
+            Add New Item
           </Button>
         </Box>
       </Container>
-      {trackerAdd.component}
+      {pageItemAdd.component}
     </Layout>
   );
 };

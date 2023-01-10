@@ -19,28 +19,30 @@ export const ImportExport: React.FC = () => {
   }, [state]);
 
   // import all data from json
-  const importJSON = React.useCallback((file?: File) => {
-    if (!file) {
-      alert("Invalid file");
-      return;
-    }
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      if (typeof e.target?.result === "string") {
-        try {
-          const newData = JSON.parse(e.target.result);
-          console.log(newData);
-          dispatch({
-            type: Actions.RESET_ALL_DATA,
-            payload: newData,
-          });
-        } catch (e) {
-          console.error(e);
-        }
+  const importJSON = React.useCallback(
+    (file?: File) => {
+      if (!file) {
+        alert("Invalid file");
+        return;
       }
-    };
-    reader.readAsText(file);
-  }, [dispatch]);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (typeof e.target?.result === "string") {
+          try {
+            const newData = JSON.parse(e.target.result);
+            dispatch({
+              type: Actions.RESET_ALL_DATA,
+              payload: newData,
+            });
+          } catch (e) {
+            console.error(e);
+          }
+        }
+      };
+      reader.readAsText(file);
+    },
+    [dispatch]
+  );
 
   return (
     <Layout title="Import/Export Data">
