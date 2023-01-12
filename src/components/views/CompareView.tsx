@@ -1,5 +1,6 @@
 import {
   Checkbox,
+  Collapse,
   Container,
   List,
   ListItem,
@@ -26,6 +27,7 @@ import { TInput } from "../../types";
 import { arrayObjSort } from "../../utils/sort";
 import { Layout } from "../base/Layout";
 import { InputValue } from "../base/InputValue";
+import { useExpandMore } from "../base/ExpandMore";
 
 // type TParams = {
 //   compareId: string;
@@ -38,6 +40,11 @@ type TInputDisplayDay = {
 
 export const CompareView: React.FC = () => {
   // const { compareId } = useParams<TParams>();
+  const expandMore = useExpandMore({
+    iconLabelOpen: "Hide trackers",
+    iconLabelClosed: "Show trackers",
+    defaultOpen: true,
+  });
   const compare = { title: "Compare Data" };
   const { state } = useStore();
   const getInputsByTracker = useGetInputsByTracker();
@@ -79,51 +86,59 @@ export const CompareView: React.FC = () => {
     <Layout title={compare.title}>
       <Container maxWidth="xl">
         <Paper>
-          <List>
-            {state.trackers.length ? (
-              state.trackers.map((tracker) => {
-                // const tracker = getTracker(trackerId);
-                // if (!tracker) return null;
-                return (
-                  <ListItem key={tracker.id} disablePadding>
-                    <ListItemButton
-                      onClick={() => {
-                        if (trackerIds.includes(tracker.id)) {
-                          setTrackerIds(
-                            trackerIds.filter((t) => t !== tracker.id)
-                          );
-                        } else {
-                          setTrackerIds([...trackerIds, tracker.id]);
-                        }
-                      }}
-                      sx={{ pt: 0, pb: 0 }}
-                    >
-                      <ListItemIcon>
-                        <Checkbox
-                          edge="start"
-                          checked={trackerIds.includes(tracker.id)}
-                          tabIndex={-1}
-                          disableRipple
-                          inputProps={{
-                            "aria-labelledby": `tracker-label-${tracker.id}`,
-                          }}
-                          size="small"
+          <Stack direction="row" alignItems="middle" sx={{ p: 2 }}>
+            <Typography component="h3" variant="h6" sx={{ flex: 1 }}>
+              Select Trackers
+            </Typography>
+            {expandMore.icon}
+          </Stack>
+          <Collapse in={expandMore.open} timeout="auto" unmountOnExit>
+            <List sx={{ pt: 0 }}>
+              {state.trackers.length ? (
+                state.trackers.map((tracker) => {
+                  // const tracker = getTracker(trackerId);
+                  // if (!tracker) return null;
+                  return (
+                    <ListItem key={tracker.id} disablePadding>
+                      <ListItemButton
+                        onClick={() => {
+                          if (trackerIds.includes(tracker.id)) {
+                            setTrackerIds(
+                              trackerIds.filter((t) => t !== tracker.id)
+                            );
+                          } else {
+                            setTrackerIds([...trackerIds, tracker.id]);
+                          }
+                        }}
+                        sx={{ pt: 0, pb: 0 }}
+                      >
+                        <ListItemIcon>
+                          <Checkbox
+                            edge="start"
+                            checked={trackerIds.includes(tracker.id)}
+                            tabIndex={-1}
+                            disableRipple
+                            inputProps={{
+                              "aria-labelledby": `tracker-label-${tracker.id}`,
+                            }}
+                            size="small"
+                          />
+                        </ListItemIcon>
+                        <ListItemText
+                          id={`tracker-label-${tracker.id}`}
+                          primary={tracker.title}
                         />
-                      </ListItemIcon>
-                      <ListItemText
-                        id={`tracker-label-${tracker.id}`}
-                        primary={tracker.title}
-                      />
-                    </ListItemButton>
-                  </ListItem>
-                );
-              })
-            ) : (
-              <Typography align="center" sx={{ p: 2 }}>
-                No trackers to compare
-              </Typography>
-            )}
-          </List>
+                      </ListItemButton>
+                    </ListItem>
+                  );
+                })
+              ) : (
+                <Typography align="center" sx={{ p: 2 }}>
+                  No trackers to compare
+                </Typography>
+              )}
+            </List>
+          </Collapse>
         </Paper>
 
         <TableContainer component={Paper} sx={{ mt: 2 }}>
