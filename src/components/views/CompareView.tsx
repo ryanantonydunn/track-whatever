@@ -149,29 +149,34 @@ export const CompareView: React.FC = () => {
                       {format(new Date(inputDay.date), "d MMM yyyy")}
                     </TableCell>
                     {trackerIds.map((trackerId) => (
-                      <TableCell key={`${inputDay.date}-${trackerId}`}>
+                      <TableCell
+                        key={`${inputDay.date}-${trackerId}`}
+                        sx={{ whiteSpace: "normal", wordWrap: "break-word" }}
+                      >
                         {inputDay.inputs[trackerId]?.map((input) => {
                           return (
                             <Stack
                               direction="row"
                               alignItems="center"
                               key={input.id}
-                              sx={{
-                                whiteSpace: "nowrap",
-                                textOverflow: "ellipsis",
-                              }}
+                              sx={{ mb: 1, mt: 1 }}
                             >
                               <Typography
                                 sx={{
                                   color: "grey.500",
                                   fontSize: "0.8em",
-                                  mr: 1,
+                                  mr: 2,
                                 }}
                               >
                                 {format(new Date(input.date), "HH:mm")}
                               </Typography>
-                              <Typography>
-                                <InputValue hideText input={input} />
+                              <Typography
+                                sx={{
+                                  maxWidth: "400px",
+                                  whiteSpace: "pre-wrap",
+                                }}
+                              >
+                                <InputValue input={input} />
                               </Typography>
                             </Stack>
                           );

@@ -128,7 +128,7 @@ export const InputEntry: React.FC<TInputEntry> = ({
           multiline
           value={value || ""}
           onChange={(e) => {
-            setValue(tracker.id, e.currentTarget.value.slice(0, 100));
+            setValue(tracker.id, e.currentTarget.value.slice(0, 10000));
           }}
         />
       );
