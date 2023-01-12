@@ -1,4 +1,4 @@
-import { Check, Close, Description } from "@mui/icons-material";
+import { Check, Close } from "@mui/icons-material";
 import React from "react";
 import { useGetTracker } from "../../data/hooks";
 import { TInput } from "../../types";
