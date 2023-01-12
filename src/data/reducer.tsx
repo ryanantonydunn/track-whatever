@@ -153,13 +153,28 @@ export const reducer = (state: TStore, action: TAction): TStore => {
         ),
       };
     case Actions.DELETE_TRACKER:
+      // remove actual tracker
       const trackers = [...state.trackers];
       const trackerIndex = trackers.findIndex((t) => t.id === action.payload);
       if (trackerIndex !== -1) {
         trackers.splice(trackerIndex, 1);
       }
-      // TODO remove all associated data
-      return { ...state, trackers };
+
+      return {
+        ...state,
+        trackers,
+        // remove all associated page items
+        pages: state.pages.map((page) => ({
+          ...page,
+          items: page.items.filter(
+            (page) => !(page.type === "tracker" && page.id === action.payload)
+          ),
+        })),
+        // remove all associated items
+        inputs: state.inputs.filter(
+          (input) => input.trackerId !== action.payload
+        ),
+      };
     case Actions.CREATE_INPUT:
       return {
         ...state,
