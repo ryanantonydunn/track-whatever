@@ -4,8 +4,11 @@ import {
   Container,
   List,
   ListItem,
+  Paper,
+  TextField,
   Typography,
 } from "@mui/material";
+import { DateTimePicker } from "@mui/x-date-pickers";
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 import { useGetTracker, usePage } from "../../data/hooks";
@@ -13,8 +16,8 @@ import { useStore } from "../../data/provider";
 import { Actions } from "../../data/reducer";
 import { TInput, TInputPrimitive } from "../../types";
 import { createBlankInput } from "../../utils/create-blank-data";
-import { Layout } from "../base/Layout";
 import { InputEntry } from "../base/InputEntry";
+import { Layout } from "../base/Layout";
 import { usePageItemAdd } from "../modals/PageItemAdd";
 
 type TParams = {
@@ -30,6 +33,7 @@ export const PageView: React.FC = () => {
   const { dispatch } = useStore();
   const pageItemAdd = usePageItemAdd();
   const [inputs, setInputs] = React.useState<TInputs>({});
+  const [inputTime, setInputTime] = React.useState(new Date());
 
   // handle input changes
   const setValue = (trackerId: string, value: TInputPrimitive | undefined) => {
@@ -49,7 +53,12 @@ export const PageView: React.FC = () => {
     } else {
       if (value !== undefined) {
         // make new input value
-        const newInput = { ...createBlankInput(), trackerId, value };
+        const newInput = {
+          ...createBlankInput(),
+          date: inputTime.toISOString(),
+          trackerId,
+          value,
+        };
         setInputs({ ...inputs, [trackerId]: newInput });
         dispatch({ type: Actions.CREATE_INPUT, payload: newInput });
       }
@@ -61,7 +70,17 @@ export const PageView: React.FC = () => {
   return (
     <Layout title={page.title}>
       <Container maxWidth="md">
-        <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
+        <Box sx={{ p: 2 }}>
+          <DateTimePicker
+            renderInput={(props) => <TextField {...props} />}
+            label="Set time"
+            value={inputTime}
+            onChange={(newValue) => {
+              setInputTime(newValue || new Date());
+            }}
+          />
+        </Box>
+        <Paper>
           <List>
             {page.items.length ? (
               page.items.map((item) => {
@@ -86,7 +105,7 @@ export const PageView: React.FC = () => {
               </Typography>
             )}
           </List>
-        </Box>
+        </Paper>
         <Box
           display="flex"
           flexDirection="row"
@@ -110,6 +129,22 @@ export const PageView: React.FC = () => {
             }}
           >
             Add New Item
+          </Button>
+        </Box>
+        <Box
+          display="flex"
+          flexDirection="row"
+          justifyContent="flex-end"
+          sx={{ p: 2 }}
+        >
+          <Button
+            fullWidth
+            variant="contained"
+            size="large"
+            component={Link}
+            to={`/`}
+          >
+            Done
           </Button>
         </Box>
       </Container>
