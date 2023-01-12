@@ -28,7 +28,7 @@ export const Layout: React.FC<TLayout> = ({ children, title, back = true }) => {
   return (
     <>
       <AppBar position="static">
-        <Container maxWidth="sm">
+        <Container maxWidth="md">
           <Toolbar>
             {back && (
               <IconButton

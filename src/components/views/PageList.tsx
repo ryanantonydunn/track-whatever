@@ -22,7 +22,7 @@ export const PageList: React.FC = () => {
 
   return (
     <Layout title="Track Whatever">
-      <Container maxWidth="sm">
+      <Container maxWidth="md">
         <Paper>
           <List>
             {pages.length ? (

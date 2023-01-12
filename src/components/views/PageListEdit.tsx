@@ -29,7 +29,7 @@ export const PageListEdit: React.FC = () => {
 
   return (
     <Layout title="Edit Pages">
-      <Container maxWidth="sm">
+      <Container maxWidth="md">
         <Paper>
           <List>
             {pages.length ? (

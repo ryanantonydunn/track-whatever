@@ -30,7 +30,7 @@
 
 //   return (
 //     <Layout title="Add Tracker">
-//       <Container maxWidth="sm">
+//       <Container maxWidth="md">
 //         <TrackerAddEditForm tracker={tracker} setTracker={setTracker} />
 //         <Divider sx={{ mt: 2, mb: 2 }} />
 //         <Box display="flex" sx={{ p: 2 }}>

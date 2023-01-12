@@ -46,7 +46,7 @@ export const PageEdit: React.FC = () => {
 
   return (
     <Layout title="Edit Page">
-      <Container maxWidth="sm" sx={{ pt: 2 }}>
+      <Container maxWidth="md" sx={{ pt: 2 }}>
         <TextField
           fullWidth
           label="Title"

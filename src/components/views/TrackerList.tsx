@@ -28,7 +28,7 @@ export const TrackerList: React.FC = () => {
 
   return (
     <Layout title="Trackers">
-      <Container maxWidth="sm">
+      <Container maxWidth="md">
         <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
           <List>
             {state.trackers.length ? (

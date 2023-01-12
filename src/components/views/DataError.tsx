@@ -12,7 +12,7 @@ export const DataError: React.FC<TDataError> = ({ children }) => {
   const { state, dispatch } = useStore();
 
   return !state.trackers || !state.inputs ? (
-    <Container maxWidth="sm">
+    <Container maxWidth="md">
       <Typography align="center" sx={{ p: 2 }}>
         Something has gone wrong with your data. If you imported your data
         recently, please check that the file was correct.

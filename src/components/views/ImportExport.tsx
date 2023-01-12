@@ -46,7 +46,7 @@ export const ImportExport: React.FC = () => {
 
   return (
     <Layout title="Import/Export Data">
-      <Container maxWidth="sm">
+      <Container maxWidth="md">
         <Button
           fullWidth
           variant="outlined"
