@@ -28,7 +28,7 @@ export const PageListEdit: React.FC = () => {
   const pageAdd = usePageAdd();
 
   return (
-    <Layout title="Edit Pages">
+    <Layout title="Edit Pages" back="/">
       <Container maxWidth="md">
         <Paper>
           <List>
@@ -121,6 +121,22 @@ export const PageListEdit: React.FC = () => {
             }}
           >
             Add New Page
+          </Button>
+        </Box>
+        <Box
+          display="flex"
+          flexDirection="row"
+          justifyContent="flex-end"
+          sx={{ p: 2 }}
+        >
+          <Button
+            fullWidth
+            variant="contained"
+            size="large"
+            component={Link}
+            to={`/`}
+          >
+            Done
           </Button>
         </Box>
       </Container>

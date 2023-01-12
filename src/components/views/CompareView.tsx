@@ -83,7 +83,7 @@ export const CompareView: React.FC = () => {
   }, [trackerIds, getInputsByTracker]);
 
   return (
-    <Layout title={compare.title}>
+    <Layout title={compare.title} back="/">
       <Container maxWidth="xl">
         <Paper>
           <Stack direction="row" alignItems="middle" sx={{ p: 2 }}>

@@ -10,17 +10,15 @@ import {
 } from "@mui/material";
 import { Container } from "@mui/system";
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 type TLayout = {
   children: React.ReactNode;
   title: string;
-  back?: boolean;
+  back?: string;
 };
 
-export const Layout: React.FC<TLayout> = ({ children, title, back = true }) => {
-  const navigate = useNavigate();
-
+export const Layout: React.FC<TLayout> = ({ children, title, back }) => {
   const [menuEl, setMenuEl] = React.useState<null | HTMLElement>(null);
   const closeMenu = () => setMenuEl(null);
   const isMenuOpen = !!menuEl;
@@ -37,7 +35,8 @@ export const Layout: React.FC<TLayout> = ({ children, title, back = true }) => {
                 color="inherit"
                 aria-label="back"
                 sx={{ mr: 2 }}
-                onClick={() => navigate(-1)}
+                component={Link}
+                to={back}
               >
                 <ArrowBack />
               </IconButton>
@@ -68,10 +67,10 @@ export const Layout: React.FC<TLayout> = ({ children, title, back = true }) => {
               }}
             >
               <MenuItem onClick={closeMenu} component={Link} to="/">
-                Pages
+                View Pages
               </MenuItem>
               <MenuItem onClick={closeMenu} component={Link} to="/trackers">
-                Trackers
+                View All Trackers
               </MenuItem>
               <MenuItem onClick={closeMenu} component={Link} to="/compare">
                 Compare Data

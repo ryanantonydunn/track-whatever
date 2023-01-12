@@ -27,7 +27,7 @@ export const TrackerList: React.FC = () => {
   const { state, dispatch } = useStore();
 
   return (
-    <Layout title="Trackers">
+    <Layout title="Trackers" back="/">
       <Container maxWidth="md">
         <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
           <List>

@@ -68,7 +68,7 @@ export const PageView: React.FC = () => {
   if (!page) return null;
 
   return (
-    <Layout title={page.title}>
+    <Layout title={page.title} back="/">
       <Container maxWidth="md">
         <Box sx={{ p: 2 }}>
           <DateTimePicker

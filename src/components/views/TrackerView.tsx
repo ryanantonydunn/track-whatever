@@ -38,7 +38,7 @@ export const TrackerView: React.FC = () => {
   if (!tracker) return <Error404 />;
 
   return (
-    <Layout title={tracker.title}>
+    <Layout title={tracker.title} back="/trackers">
       <Container maxWidth="xl">
         <TableContainer component={Paper}>
           {inputs.length ? (
