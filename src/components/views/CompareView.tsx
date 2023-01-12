@@ -160,7 +160,7 @@ export const CompareView: React.FC = () => {
                     key={inputDay.date}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <TableCell>
+                    <TableCell sx={{ whiteSpace: "nowrap" }}>
                       {format(new Date(inputDay.date), "d MMM yyyy")}
                     </TableCell>
                     {trackerIds.map((trackerId) => (
