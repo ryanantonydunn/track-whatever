@@ -10,7 +10,7 @@ import { useGetInput } from "../../data/hooks";
 import { useStore } from "../../data/provider";
 import { Actions } from "../../data/reducer";
 import { TInput } from "../../types";
-import { TrackInput } from "../base/TrackInput";
+import { InputEntry } from "../base/InputEntry";
 import { Box } from "@mui/system";
 
 type TOpenArgs = {
@@ -29,6 +29,7 @@ export function useInputEdit(): TInputEdit {
   const [isOpen, setIsOpen] = React.useState(false);
   const [args, setArgs] = React.useState<TOpenArgs | undefined>();
   const [input, setInput] = React.useState<TInput | undefined>();
+  const [isRemoving, setIsRemoving] = React.useState(false);
 
   const open = (args?: TOpenArgs) => {
     const editingInput = getInput(args?.inputId);
@@ -50,11 +51,16 @@ export function useInputEdit(): TInputEdit {
       <DialogTitle id="input-edit-title">Edit input</DialogTitle>
       <DialogContent>
         <Box sx={{ pt: 2 }}>
-          <TrackInput
+          <InputEntry
             trackerId={input.trackerId}
-            value={input.value}
+            value={isRemoving ? undefined : input.value}
             setValue={(trackerId, newValue) => {
-              setInput({ ...input, value: newValue });
+              if (newValue === undefined) {
+                setIsRemoving(true);
+              } else {
+                setIsRemoving(false);
+                setInput({ ...input, value: newValue });
+              }
             }}
           />
         </Box>
@@ -71,8 +77,13 @@ export function useInputEdit(): TInputEdit {
         </Button>
         <Button
           onClick={() => {
-            dispatch({ type: Actions.UPDATE_INPUT, payload: input });
+            if (isRemoving) {
+              dispatch({ type: Actions.DELETE_INPUT, payload: input.id });
+            } else {
+              dispatch({ type: Actions.UPDATE_INPUT, payload: input });
+            }
             setInput(undefined);
+            setIsRemoving(false);
             args?.onSave?.(input);
             setIsOpen(false);
           }}

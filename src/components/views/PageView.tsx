@@ -14,7 +14,7 @@ import { Actions } from "../../data/reducer";
 import { TInput, TInputPrimitive } from "../../types";
 import { createBlankInput } from "../../utils/create-blank-data";
 import { Layout } from "../base/Layout";
-import { TrackInput } from "../base/TrackInput";
+import { InputEntry } from "../base/InputEntry";
 import { usePageItemAdd } from "../modals/PageItemAdd";
 
 type TParams = {
@@ -32,7 +32,7 @@ export const PageView: React.FC = () => {
   const [inputs, setInputs] = React.useState<TInputs>({});
 
   // handle input changes
-  const setValue = (trackerId: string, value: TInputPrimitive) => {
+  const setValue = (trackerId: string, value: TInputPrimitive | undefined) => {
     if (inputs[trackerId]) {
       if (value === "" || value === undefined) {
         // remove a set input that has been changed to empty
@@ -47,10 +47,12 @@ export const PageView: React.FC = () => {
         dispatch({ type: Actions.UPDATE_INPUT, payload: newInput });
       }
     } else {
-      // make new input value
-      const newInput = { ...createBlankInput(), trackerId, value };
-      setInputs({ ...inputs, [trackerId]: newInput });
-      dispatch({ type: Actions.CREATE_INPUT, payload: newInput });
+      if (value !== undefined) {
+        // make new input value
+        const newInput = { ...createBlankInput(), trackerId, value };
+        setInputs({ ...inputs, [trackerId]: newInput });
+        dispatch({ type: Actions.CREATE_INPUT, payload: newInput });
+      }
     }
   };
 
@@ -68,7 +70,7 @@ export const PageView: React.FC = () => {
                   if (!tracker) return null;
                   return (
                     <ListItem key={tracker.id}>
-                      <TrackInput
+                      <InputEntry
                         trackerId={tracker.id}
                         value={inputs[tracker.id]?.value || undefined}
                         setValue={setValue}
