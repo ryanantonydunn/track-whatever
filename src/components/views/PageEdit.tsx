@@ -3,6 +3,7 @@ import {
   ArrowUpward,
   Close,
   Edit,
+  FormatListNumbered,
   TrendingUp,
 } from "@mui/icons-material";
 import {
@@ -100,17 +101,30 @@ export const PageEdit: React.FC = () => {
                         <ArrowUpward />
                       </IconButton>
                       {item.type === "tracker" ? (
-                        <IconButton
-                          size="medium"
-                          aria-label="edit tracker"
-                          onClick={() => {
-                            trackerEdit.open({ trackerId: item?.id || "" });
-                          }}
-                        >
-                          <Edit />
-                        </IconButton>
+                        <>
+                          <IconButton
+                            size="medium"
+                            aria-label="view inputs"
+                            component={Link}
+                            to={`/tracker/${item?.id || ""}`}
+                          >
+                            <FormatListNumbered />
+                          </IconButton>
+                          <IconButton
+                            size="medium"
+                            aria-label="edit tracker"
+                            onClick={() => {
+                              trackerEdit.open({ trackerId: item?.id || "" });
+                            }}
+                          >
+                            <Edit />
+                          </IconButton>
+                        </>
                       ) : (
-                        <IconButton size="medium"></IconButton>
+                        <>
+                          <IconButton size="medium"></IconButton>
+                          <IconButton size="medium"></IconButton>
+                        </>
                       )}
                       <IconButton
                         size="medium"
