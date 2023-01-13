@@ -91,7 +91,7 @@ export const PageView: React.FC = () => {
                     <ListItem key={tracker.id}>
                       <InputEntry
                         trackerId={tracker.id}
-                        value={inputs[tracker.id]?.value || undefined}
+                        value={inputs[tracker.id]?.value}
                         setValue={setValue}
                       />
                     </ListItem>

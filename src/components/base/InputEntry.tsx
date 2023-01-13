@@ -69,6 +69,8 @@ export const InputEntry: React.FC<TInputEntry> = ({
       if (!tracker.slider) return null;
       if (typeof value === "number") {
         parsedValue = value;
+      } else {
+        parsedValue = tracker.slider.min;
       }
       return (
         <Box
@@ -86,7 +88,7 @@ export const InputEntry: React.FC<TInputEntry> = ({
           <InputLabel shrink id={`${tracker.title}-label`}>
             {tracker.title}
           </InputLabel>
-          {parsedValue === undefined && (
+          {value === undefined && (
             <div
               dangerouslySetInnerHTML={{
                 __html: `<style>#slider-${tracker.id} .MuiSlider-thumb, #slider-${tracker.id} .MuiSlider-track {display: none;}</style>`,
@@ -103,9 +105,9 @@ export const InputEntry: React.FC<TInputEntry> = ({
               min={tracker.slider.min || 0}
               max={tracker.slider.max || 10}
               value={parsedValue}
-              onChange={(e, newValue) =>
-                setValue(tracker.id, newValue as number)
-              }
+              onChange={(e, newValue) => {
+                setValue(tracker.id, newValue as number);
+              }}
             />
             <IconButton
               size="small"

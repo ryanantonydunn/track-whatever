@@ -57,7 +57,7 @@ export const TrackerView: React.FC = () => {
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell>
-                      {format(new Date(input.date), "d MMM yyyy - H:m")}
+                      {format(new Date(input.date), "d MMM yyyy - HH:mm")}
                     </TableCell>
                     <TableCell>
                       <InputValue input={input} />
