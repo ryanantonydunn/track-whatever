@@ -28,6 +28,7 @@ import { arrayObjSort } from "../../utils/sort";
 import { Layout } from "../base/Layout";
 import { InputValue } from "../base/InputValue";
 import { useExpandMore } from "../base/ExpandMore";
+import { useQuery } from "../../utils/query";
 
 // type TParams = {
 //   compareId: string;
@@ -39,6 +40,7 @@ type TInputDisplayDay = {
 };
 
 export const CompareView: React.FC = () => {
+  const query = useQuery();
   // const { compareId } = useParams<TParams>();
   const expandMore = useExpandMore({
     iconLabelOpen: "Hide trackers",
@@ -49,7 +51,9 @@ export const CompareView: React.FC = () => {
   const { state } = useStore();
   const getInputsByTracker = useGetInputsByTracker();
   const getTracker = useGetTracker();
-  const [trackerIds, setTrackerIds] = React.useState<string[]>([]);
+  const [trackerIds, setTrackerIds] = React.useState<string[]>(() => {
+    return query.get("trackers")?.split(",").filter(Boolean) || [];
+  });
 
   // get the data based on the selected trackers
   const inputDisplayByDay = React.useMemo<TInputDisplayDay[]>(() => {
@@ -160,7 +164,7 @@ export const CompareView: React.FC = () => {
                     key={inputDay.date}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <TableCell sx={{ whiteSpace: "nowrap" }}>
+                    <TableCell>
                       {format(new Date(inputDay.date), "d MMM yyyy")}
                     </TableCell>
                     {trackerIds.map((trackerId) => (

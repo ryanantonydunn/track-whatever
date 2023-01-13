@@ -1,5 +1,7 @@
 import { Delete, Edit } from "@mui/icons-material";
 import {
+  Box,
+  Button,
   Container,
   IconButton,
   Paper,
@@ -13,7 +15,7 @@ import {
 } from "@mui/material";
 import { format } from "date-fns";
 import React from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useInputsByTracker, useTracker } from "../../data/hooks";
 import { useStore } from "../../data/provider";
 import { Actions } from "../../data/reducer";
@@ -22,6 +24,7 @@ import { Layout } from "../base/Layout";
 import { Error404 } from "./404";
 import { useInputEdit } from "../modals/InputEdit";
 import { InputValue } from "../base/InputValue";
+import { useInputAdd } from "../modals/InputAdd";
 
 type TParams = {
   trackerId: string;
@@ -30,12 +33,13 @@ type TParams = {
 export const TrackerView: React.FC = () => {
   const confirmDialog = useConfirmDialog();
   const inputEdit = useInputEdit();
+  const inputAdd = useInputAdd();
   const { dispatch } = useStore();
   const { trackerId } = useParams<TParams>();
   const tracker = useTracker(trackerId);
   const inputs = useInputsByTracker(trackerId);
 
-  if (!tracker) return <Error404 />;
+  if (!tracker || !trackerId) return <Error404 />;
 
   return (
     <Layout title={tracker.title} back="/trackers">
@@ -62,7 +66,7 @@ export const TrackerView: React.FC = () => {
                     <TableCell>
                       <InputValue input={input} />
                     </TableCell>
-                    <TableCell align="right">
+                    <TableCell align="right" sx={{ whiteSpace: "nowrap" }}>
                       <IconButton
                         size="medium"
                         aria-label="edit input value"
@@ -102,9 +106,30 @@ export const TrackerView: React.FC = () => {
             </Typography>
           )}
         </TableContainer>
+        <Box display="flex" justifyContent="flex-end" sx={{ p: 2 }}>
+          <Button
+            variant="text"
+            size="small"
+            component={Link}
+            to={`/compare?trackers=${trackerId}`}
+            sx={{ mr: 2 }}
+          >
+            Compare
+          </Button>
+          <Button
+            variant="text"
+            size="small"
+            onClick={() => {
+              inputAdd.open({ trackerId });
+            }}
+          >
+            Add Entry
+          </Button>
+        </Box>
       </Container>
       {confirmDialog.component}
       {inputEdit.component}
+      {inputAdd.component}
     </Layout>
   );
 };
