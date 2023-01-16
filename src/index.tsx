@@ -3,7 +3,6 @@ import ReactDOM from "react-dom/client";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { PageView } from "./components/views/PageView";
-import { StoreProvider } from "./data/provider";
 import "./index.css";
 import { TrackerList } from "./components/views/TrackerList";
 import { TrackerView } from "./components/views/TrackerView";
@@ -14,6 +13,7 @@ import { PageList } from "./components/views/PageList";
 import { PageListEdit } from "./components/views/PageListEdit";
 import { PageEdit } from "./components/views/PageEdit";
 import { LocalizationProvider } from "@mui/x-date-pickers";
+import { StoreProvider } from "./data/setup";
 
 const router = createBrowserRouter([
   {

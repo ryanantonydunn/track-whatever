@@ -14,14 +14,11 @@ import {
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { usePages } from "../../data/hooks";
-import { useStore } from "../../data/provider";
-import { Actions } from "../../data/reducer";
 import { useConfirmDialog } from "../base/ConfirmDialog";
 import { Layout } from "../base/Layout";
 import { usePageAdd } from "../modals/PageAdd";
 
 export const PageListEdit: React.FC = () => {
-  const { dispatch } = useStore();
   const pages = usePages();
   const confirmDialog = useConfirmDialog();
   const navigate = useNavigate();
@@ -35,7 +32,7 @@ export const PageListEdit: React.FC = () => {
             {pages.length ? (
               pages.map((page, i) => {
                 return (
-                  <ListItem disablePadding key={page.id}>
+                  <ListItem disablePadding key={page._id}>
                     <ListItemText sx={{ p: 1, pl: 3 }}>
                       {page.title}
                     </ListItemText>
@@ -44,13 +41,14 @@ export const PageListEdit: React.FC = () => {
                         size="medium"
                         aria-label="move down"
                         onClick={() => {
-                          dispatch({
-                            type: Actions.REORDER_PAGES,
-                            payload: {
-                              oldIndex: i,
-                              newIndex: i + 1,
-                            },
-                          });
+                          // dispatch({
+                          //   type: Actions.REORDER_PAGES,
+                          //   payload: {
+                          //     oldIndex: i,
+                          //     newIndex: i + 1,
+                          //   },
+                          // });
+                          // TODO
                         }}
                       >
                         <ArrowDownward />
@@ -59,13 +57,14 @@ export const PageListEdit: React.FC = () => {
                         size="medium"
                         aria-label="move up"
                         onClick={() => {
-                          dispatch({
-                            type: Actions.REORDER_PAGES,
-                            payload: {
-                              oldIndex: i,
-                              newIndex: i - 1,
-                            },
-                          });
+                          // dispatch({
+                          //   type: Actions.REORDER_PAGES,
+                          //   payload: {
+                          //     oldIndex: i,
+                          //     newIndex: i - 1,
+                          //   },
+                          // });
+                          // TODO
                         }}
                       >
                         <ArrowUpward />
@@ -74,7 +73,7 @@ export const PageListEdit: React.FC = () => {
                         size="medium"
                         aria-label="edit page"
                         component={Link}
-                        to={`/edit-page/${page.id}`}
+                        to={`/edit-page/${page._id}`}
                       >
                         <Edit />
                       </IconButton>
@@ -87,10 +86,11 @@ export const PageListEdit: React.FC = () => {
                             description:
                               "Are you sure you want to delete this page. This will not delete your trackers, you can add them to a different page later.",
                             onConfirm: () => {
-                              dispatch({
-                                type: Actions.DELETE_PAGE,
-                                payload: page.id,
-                              });
+                              // dispatch({
+                              //   type: Actions.DELETE_PAGE,
+                              //   payload: page._id,
+                              // });
+                              // TODO
                             },
                           });
                         }}
@@ -115,7 +115,7 @@ export const PageListEdit: React.FC = () => {
             onClick={() => {
               pageAdd.open({
                 onSave: (newPage) => {
-                  navigate(`/edit-page/${newPage.id}`);
+                  navigate(`/edit-page/${newPage._id}`);
                 },
               });
             }}

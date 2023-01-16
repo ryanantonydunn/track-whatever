@@ -8,8 +8,6 @@ import {
 import React from "react";
 import { TTracker } from "../../types";
 import { TrackerAddEditForm } from "./TrackerAddEditForm";
-import { useStore } from "../../data/provider";
-import { Actions } from "../../data/reducer";
 import { createBlankTracker } from "../../utils/create-blank-data";
 
 type TOpenArgs = {
@@ -22,7 +20,6 @@ type TTrackerAdd = {
 };
 
 export function useTrackerAdd(): TTrackerAdd {
-  const { dispatch } = useStore();
   const [isOpen, setIsOpen] = React.useState(false);
   const [args, setArgs] = React.useState<TOpenArgs | undefined>();
 
@@ -49,7 +46,8 @@ export function useTrackerAdd(): TTrackerAdd {
         </Button>
         <Button
           onClick={() => {
-            dispatch({ type: Actions.CREATE_TRACKER, payload: tracker });
+            // dispatch({ type: Actions.CREATE_TRACKER, payload: tracker });
+            // TODO
             args?.onSave?.(tracker);
             setIsOpen(false);
             setTracker(createBlankTracker());

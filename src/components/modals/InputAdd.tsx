@@ -9,8 +9,6 @@ import {
 import { Box } from "@mui/system";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import React from "react";
-import { useStore } from "../../data/provider";
-import { Actions } from "../../data/reducer";
 import { TInput, TInputPrimitive } from "../../types";
 import { createBlankInput } from "../../utils/create-blank-data";
 import { InputEntry } from "../base/InputEntry";
@@ -26,7 +24,6 @@ type TInputAdd = {
 };
 
 export function useInputAdd(): TInputAdd {
-  const { dispatch } = useStore();
   const [isOpen, setIsOpen] = React.useState(false);
   const [args, setArgs] = React.useState<TOpenArgs | undefined>();
   const [value, setValue] = React.useState<TInputPrimitive | undefined>();
@@ -88,7 +85,8 @@ export function useInputAdd(): TInputAdd {
                 trackerId: args.trackerId,
                 value,
               };
-              dispatch({ type: Actions.CREATE_INPUT, payload: newInput });
+              // dispatch({ type: Actions.CREATE_INPUT, payload: newInput });
+              // TODO create input
               setValue(undefined);
               args?.onSave?.(newInput);
               setIsOpen(false);

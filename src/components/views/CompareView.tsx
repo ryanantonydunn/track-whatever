@@ -22,13 +22,13 @@ import React from "react";
 // import { useInputsByTracker } from "../../data/hooks";
 import { format, isSameDay } from "date-fns";
 import { useGetInputsByTracker, useGetTracker } from "../../data/hooks";
-import { useStore } from "../../data/provider";
 import { TInput } from "../../types";
 import { arrayObjSort } from "../../utils/sort";
 import { Layout } from "../base/Layout";
 import { InputValue } from "../base/InputValue";
 import { useExpandMore } from "../base/ExpandMore";
 import { useQuery } from "../../utils/query";
+import { useStore } from "../../data/setup";
 
 // type TParams = {
 //   compareId: string;
@@ -103,15 +103,15 @@ export const CompareView: React.FC = () => {
                   // const tracker = getTracker(trackerId);
                   // if (!tracker) return null;
                   return (
-                    <ListItem key={tracker.id} disablePadding>
+                    <ListItem key={tracker._id} disablePadding>
                       <ListItemButton
                         onClick={() => {
-                          if (trackerIds.includes(tracker.id)) {
+                          if (trackerIds.includes(tracker._id)) {
                             setTrackerIds(
-                              trackerIds.filter((t) => t !== tracker.id)
+                              trackerIds.filter((t) => t !== tracker._id)
                             );
                           } else {
-                            setTrackerIds([...trackerIds, tracker.id]);
+                            setTrackerIds([...trackerIds, tracker._id]);
                           }
                         }}
                         sx={{ pt: 0, pb: 0 }}
@@ -119,17 +119,17 @@ export const CompareView: React.FC = () => {
                         <ListItemIcon>
                           <Checkbox
                             edge="start"
-                            checked={trackerIds.includes(tracker.id)}
+                            checked={trackerIds.includes(tracker._id)}
                             tabIndex={-1}
                             disableRipple
                             inputProps={{
-                              "aria-labelledby": `tracker-label-${tracker.id}`,
+                              "aria-labelledby": `tracker-label-${tracker._id}`,
                             }}
                             size="small"
                           />
                         </ListItemIcon>
                         <ListItemText
-                          id={`tracker-label-${tracker.id}`}
+                          id={`tracker-label-${tracker._id}`}
                           primary={tracker.title}
                         />
                       </ListItemButton>
@@ -177,7 +177,7 @@ export const CompareView: React.FC = () => {
                             <Stack
                               direction="row"
                               alignItems="center"
-                              key={input.id}
+                              key={input._id}
                               sx={{ mb: 1, mt: 1 }}
                             >
                               <Typography

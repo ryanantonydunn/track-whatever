@@ -12,8 +12,6 @@ import {
   ListItemText,
 } from "@mui/material";
 import React from "react";
-import { useStore } from "../../data/provider";
-import { Actions } from "../../data/reducer";
 import { TPage, TPageItemType } from "../../types";
 import { TrackerMenuList } from "../base/TrackerMenuList";
 import { useTrackerAdd } from "./TrackerAdd";
@@ -28,7 +26,6 @@ type TPageItemAdd = {
 };
 
 export function usePageItemAdd(): TPageItemAdd {
-  const { dispatch } = useStore();
   const trackerAdd = useTrackerAdd();
   const [isOpen, setIsOpen] = React.useState(false);
   const [args, setArgs] = React.useState<TOpenArgs | undefined>();
@@ -48,13 +45,14 @@ export function usePageItemAdd(): TPageItemAdd {
   const save = React.useCallback(
     (type: TPageItemType, id?: string) => {
       if (!args?.page) return;
-      dispatch({
-        type: Actions.UPDATE_PAGE,
-        payload: { ...args.page, items: [...args.page.items, { id, type }] },
-      });
+      // dispatch({
+      //   type: Actions.UPDATE_PAGE,
+      //   payload: { ...args.page, items: [...args.page.items, { id, type }] },
+      // });
+      // TODO
       close();
     },
-    [args, dispatch]
+    [args]
   );
 
   const component = (
@@ -75,7 +73,7 @@ export function usePageItemAdd(): TPageItemAdd {
                   onClick={() => {
                     trackerAdd.open({
                       onSave: (newTracker) => {
-                        save("tracker", newTracker.id);
+                        save("tracker", newTracker._id);
                       },
                     });
                   }}
@@ -99,11 +97,11 @@ export function usePageItemAdd(): TPageItemAdd {
           {menu === "existingTracker" && (
             <TrackerMenuList
               onClick={(tracker) => {
-                save("tracker", tracker.id);
+                save("tracker", tracker._id);
               }}
               disableIds={(args?.page.items || [])
                 .filter((item) => item.type === "tracker")
-                .map((item) => item.id || "")}
+                .map((item) => item._id || "")}
             />
           )}
         </DialogContent>

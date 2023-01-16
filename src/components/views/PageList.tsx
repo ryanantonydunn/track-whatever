@@ -25,8 +25,8 @@ export const PageList: React.FC = () => {
             {pages.length ? (
               pages.map((page) => {
                 return (
-                  <ListItem key={page.id} disablePadding>
-                    <ListItemButton component={Link} to={`/page/${page.id}`}>
+                  <ListItem key={page._id} disablePadding>
+                    <ListItemButton component={Link} to={`/page/${page._id}`}>
                       <ListItemText primary={page.title} />
                     </ListItemButton>
                   </ListItem>

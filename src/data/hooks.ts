@@ -1,7 +1,7 @@
 import React from "react";
 import { TInput, TPage, TTracker } from "../types";
 import { arrayObjSort } from "../utils/sort";
-import { useStore } from "./provider";
+import { useStore } from "./setup";
 
 /**
  * Get pages sorted by their order value
@@ -27,7 +27,7 @@ export const useGetPage = (): TUseGetPage => {
 
   // store by ID
   const byID = React.useMemo<TPageDataRef>(() => {
-    return Object.fromEntries(state.pages.map((t) => [t.id, t]));
+    return Object.fromEntries(state.pages.map((t) => [t._id, t]));
   }, [state.pages]);
 
   const getPage = React.useCallback((id?: string) => byID[id || ""], [byID]);
@@ -58,7 +58,7 @@ export const useGetTracker = (): TUseGetTracker => {
 
   // store by ID
   const byID = React.useMemo<TTrackerDataRef>(() => {
-    return Object.fromEntries(state.trackers.map((t) => [t.id, t]));
+    return Object.fromEntries(state.trackers.map((t) => [t._id, t]));
   }, [state.trackers]);
 
   const getTracker = React.useCallback((id?: string) => byID[id || ""], [byID]);
@@ -84,7 +84,7 @@ export const useGetInput = (): TUseGetInput => {
   const { state } = useStore();
   const getInput = React.useCallback(
     (id?: string) => {
-      return state.inputs.find((d) => d.id === id);
+      return state.inputs.find((d) => d._id === id);
     },
     [state.inputs]
   );

@@ -7,8 +7,6 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useGetTracker } from "../../data/hooks";
-import { useStore } from "../../data/provider";
-import { Actions } from "../../data/reducer";
 import { TTracker } from "../../types";
 import { TrackerAddEditForm } from "./TrackerAddEditForm";
 
@@ -23,7 +21,6 @@ type TTrackerAdd = {
 };
 
 export function useTrackerEdit(): TTrackerAdd {
-  const { dispatch } = useStore();
   const getTracker = useGetTracker();
   const [isOpen, setIsOpen] = React.useState(false);
   const [args, setArgs] = React.useState<TOpenArgs | undefined>();
@@ -64,7 +61,8 @@ export function useTrackerEdit(): TTrackerAdd {
         </Button>
         <Button
           onClick={() => {
-            dispatch({ type: Actions.UPDATE_TRACKER, payload: tracker });
+            // dispatch({ type: Actions.UPDATE_TRACKER, payload: tracker });
+            // TODO
             setTracker(undefined);
             args?.onSave?.(tracker);
             setIsOpen(false);

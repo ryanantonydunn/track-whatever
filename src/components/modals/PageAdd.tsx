@@ -8,8 +8,6 @@ import {
   TextField,
 } from "@mui/material";
 import React from "react";
-import { useStore } from "../../data/provider";
-import { Actions } from "../../data/reducer";
 import { TPage } from "../../types";
 import { createBlankPage } from "../../utils/create-blank-data";
 
@@ -23,7 +21,6 @@ type TPageAdd = {
 };
 
 export function usePageAdd(): TPageAdd {
-  const { dispatch } = useStore();
   const [isOpen, setIsOpen] = React.useState(false);
   const [args, setArgs] = React.useState<TOpenArgs | undefined>();
 
@@ -59,7 +56,8 @@ export function usePageAdd(): TPageAdd {
         </Button>
         <Button
           onClick={() => {
-            dispatch({ type: Actions.CREATE_PAGE, payload: page });
+            // dispatch({ type: Actions.CREATE_PAGE, payload: page });
+            // TODO
             args?.onSave?.(page);
             setIsOpen(false);
             setPage(createBlankPage());

@@ -1,7 +1,7 @@
 import { List, ListItem, ListItemButton, ListItemText } from "@mui/material";
 import React from "react";
-import { useStore } from "../../data/provider";
 import { TTracker } from "../../types";
+import { useStore } from "../../data/setup";
 
 type TTrackerList = {
   onClick: (tracker: TTracker) => void;
@@ -18,12 +18,12 @@ export const TrackerMenuList: React.FC<TTrackerList> = ({
     <List>
       {state.trackers.length ? (
         state.trackers.map((tracker) => (
-          <ListItem disablePadding key={tracker.id}>
+          <ListItem disablePadding key={tracker._id}>
             <ListItemButton
               onClick={() => {
                 onClick(tracker);
               }}
-              disabled={disableIds.includes(tracker.id)}
+              disabled={disableIds.includes(tracker._id)}
             >
               <ListItemText primary={tracker.title} />
             </ListItemButton>

@@ -17,8 +17,6 @@ import { format } from "date-fns";
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 import { useInputsByTracker, useTracker } from "../../data/hooks";
-import { useStore } from "../../data/provider";
-import { Actions } from "../../data/reducer";
 import { useConfirmDialog } from "../base/ConfirmDialog";
 import { Layout } from "../base/Layout";
 import { Error404 } from "./404";
@@ -34,7 +32,6 @@ export const TrackerView: React.FC = () => {
   const confirmDialog = useConfirmDialog();
   const inputEdit = useInputEdit();
   const inputAdd = useInputAdd();
-  const { dispatch } = useStore();
   const { trackerId } = useParams<TParams>();
   const tracker = useTracker(trackerId);
   const inputs = useInputsByTracker(trackerId);
@@ -57,7 +54,7 @@ export const TrackerView: React.FC = () => {
               <TableBody>
                 {inputs.map((input) => (
                   <TableRow
-                    key={input.id}
+                    key={input._id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell>
@@ -71,7 +68,7 @@ export const TrackerView: React.FC = () => {
                         size="medium"
                         aria-label="edit input value"
                         onClick={() => {
-                          inputEdit.open({ inputId: input.id });
+                          inputEdit.open({ inputId: input._id });
                         }}
                       >
                         <Edit />
@@ -85,10 +82,11 @@ export const TrackerView: React.FC = () => {
                             description:
                               "Are you sure you want to delete this input?",
                             onConfirm: () => {
-                              dispatch({
-                                type: Actions.DELETE_INPUT,
-                                payload: input.id,
-                              });
+                              // dispatch({
+                              //   type: Actions.DELETE_INPUT,
+                              //   payload: input._id,
+                              // });
+                              // TODO
                             },
                           });
                         }}

@@ -12,19 +12,18 @@ import {
 } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
-import { useStore } from "../../data/provider";
-import { Actions } from "../../data/reducer";
 import { useConfirmDialog } from "../base/ConfirmDialog";
 import { Layout } from "../base/Layout";
 import { useTrackerAdd } from "../modals/TrackerAdd";
 import { useTrackerEdit } from "../modals/TrackerEdit";
+import { useStore } from "../../data/setup";
 
 export const TrackerList: React.FC = () => {
   const confirmDialog = useConfirmDialog();
   const trackerEdit = useTrackerEdit();
   const trackerAdd = useTrackerAdd();
 
-  const { state, dispatch } = useStore();
+  const { state } = useStore();
 
   return (
     <Layout title="Trackers" back="/">
@@ -33,7 +32,7 @@ export const TrackerList: React.FC = () => {
           <List>
             {state.trackers.length ? (
               state.trackers.map((tracker) => (
-                <ListItem disablePadding key={tracker.id}>
+                <ListItem disablePadding key={tracker._id}>
                   <ListItemText sx={{ p: 1, pl: 3 }}>
                     {tracker.title}
                   </ListItemText>
@@ -42,7 +41,7 @@ export const TrackerList: React.FC = () => {
                       size="medium"
                       aria-label="view inputs"
                       component={Link}
-                      to={`/tracker/${tracker.id}`}
+                      to={`/tracker/${tracker._id}`}
                     >
                       <FormatListNumbered />
                     </IconButton>
@@ -50,7 +49,7 @@ export const TrackerList: React.FC = () => {
                       size="medium"
                       aria-label="edit tracker"
                       onClick={() => {
-                        trackerEdit.open({ trackerId: tracker.id });
+                        trackerEdit.open({ trackerId: tracker._id });
                       }}
                     >
                       <Edit />
@@ -64,10 +63,11 @@ export const TrackerList: React.FC = () => {
                           description:
                             "Are you sure you want to remove this tracker, this will remove all associated input data.",
                           onConfirm: () => {
-                            dispatch({
-                              type: Actions.DELETE_TRACKER,
-                              payload: tracker.id,
-                            });
+                            // dispatch({
+                            //   type: Actions.DELETE_TRACKER,
+                            //   payload: tracker._id,
+                            // });
+                            // TODO
                           },
                         });
                       }}

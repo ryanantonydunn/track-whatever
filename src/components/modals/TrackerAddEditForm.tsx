@@ -52,7 +52,7 @@ export const TrackerAddEditForm: React.FC<TTrackerAddEditForm> = ({
             disabled={isEditing}
           >
             {inputTypes.map((inputType) => (
-              <MenuItem key={inputType.id} value={inputType.id}>
+              <MenuItem key={inputType._id} value={inputType._id}>
                 {inputType.title}
               </MenuItem>
             ))}

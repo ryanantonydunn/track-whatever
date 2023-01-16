@@ -1,7 +1,6 @@
 import { Button, Container, Typography } from "@mui/material";
 import { useConfirmDialog } from "../base/ConfirmDialog";
-import { Actions } from "../../data/reducer";
-import { defaultData, useStore } from "../../data/provider";
+import { useStore } from "../../data/setup";
 
 type TDataError = {
   children: React.ReactNode;
@@ -9,9 +8,9 @@ type TDataError = {
 
 export const DataError: React.FC<TDataError> = ({ children }) => {
   const confirmDialog = useConfirmDialog();
-  const { state, dispatch } = useStore();
+  const { state } = useStore();
 
-  return !state.trackers || !state.inputs ? (
+  return !state.trackers || !state.inputs || !state.pages ? (
     <Container maxWidth="md">
       <Typography align="center" sx={{ p: 2 }}>
         Something has gone wrong with your data. If you imported your data
@@ -29,10 +28,11 @@ export const DataError: React.FC<TDataError> = ({ children }) => {
             description:
               "This will remove all current data and reset you to the default? Are you sure you want to do this?",
             onConfirm: () => {
-              dispatch({
-                type: Actions.RESET_ALL_DATA,
-                payload: defaultData,
-              });
+              // dispatch({
+              //   type: Actions.RESET_ALL_DATA,
+              //   payload: defaultData,
+              // });
+              // TODO
             },
           });
         }}

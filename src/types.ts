@@ -3,7 +3,7 @@ export const inputKeys = ["slider", "number", "checkbox", "text"] as const;
 export type TInputKey = typeof inputKeys[number];
 
 export type TInputType = {
-  id: string;
+  _id: string;
   title: string;
 };
 
@@ -14,7 +14,8 @@ export type TSliderValues = {
 };
 
 export type TTracker = {
-  id: string;
+  _id: string;
+  _rev: string;
   title: string;
   inputType: TInputKey;
   slider?: TSliderValues;
@@ -23,7 +24,8 @@ export type TTracker = {
 export type TInputPrimitive = number | string | boolean;
 
 export type TInput = {
-  id: string;
+  _id: string;
+  _rev: string;
   date: string;
   trackerId: string;
   value: TInputPrimitive;
@@ -35,11 +37,12 @@ export type TPageItemType = typeof pageItemTypes[number];
 
 export type TPageItem = {
   type: TPageItemType;
-  id?: string;
+  _id?: string;
 };
 
 export type TPage = {
-  id: string;
+  _id: string;
+  _rev: string;
   title: string;
   items: TPageItem[];
 };
@@ -51,8 +54,8 @@ export type TStore = {
 };
 
 export const inputTypes: TInputType[] = [
-  { id: "checkbox", title: "Checkbox" },
-  { id: "slider", title: "Slider" },
-  { id: "number", title: "Number" },
-  { id: "text", title: "Text" },
+  { _id: "checkbox", title: "Checkbox" },
+  { _id: "slider", title: "Slider" },
+  { _id: "number", title: "Number" },
+  { _id: "text", title: "Text" },
 ];

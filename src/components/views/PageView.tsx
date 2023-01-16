@@ -12,8 +12,6 @@ import { DateTimePicker } from "@mui/x-date-pickers";
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 import { useGetTracker, usePage } from "../../data/hooks";
-import { useStore } from "../../data/provider";
-import { Actions } from "../../data/reducer";
 import { TInput, TInputPrimitive } from "../../types";
 import { createBlankInput } from "../../utils/create-blank-data";
 import { InputEntry } from "../base/InputEntry";
@@ -30,7 +28,6 @@ export const PageView: React.FC = () => {
   const { pageId } = useParams<TParams>();
   const page = usePage(pageId);
   const getTracker = useGetTracker();
-  const { dispatch } = useStore();
   const pageItemAdd = usePageItemAdd();
   const [inputs, setInputs] = React.useState<TInputs>({});
   const [inputTime, setInputTime] = React.useState(new Date());
@@ -43,12 +40,17 @@ export const PageView: React.FC = () => {
         const newInputs = { ...inputs };
         delete newInputs[trackerId];
         setInputs({ ...newInputs });
-        dispatch({ type: Actions.DELETE_INPUT, payload: inputs[trackerId].id });
+        // dispatch({
+        //   type: Actions.DELETE_INPUT,
+        //   payload: inputs[trackerId]._id,
+        // });
+        // TODO
       } else {
         // replace a set input value
         const newInput = { ...inputs[trackerId], value };
         setInputs({ ...inputs, [trackerId]: newInput });
-        dispatch({ type: Actions.UPDATE_INPUT, payload: newInput });
+        // dispatch({ type: Actions.UPDATE_INPUT, payload: newInput });
+        // TODO
       }
     } else {
       if (value !== undefined) {
@@ -60,7 +62,8 @@ export const PageView: React.FC = () => {
           value,
         };
         setInputs({ ...inputs, [trackerId]: newInput });
-        dispatch({ type: Actions.CREATE_INPUT, payload: newInput });
+        // dispatch({ type: Actions.CREATE_INPUT, payload: newInput });
+        // TODO
       }
     }
   };
@@ -85,13 +88,13 @@ export const PageView: React.FC = () => {
             {page.items.length ? (
               page.items.map((item) => {
                 if (item.type === "tracker") {
-                  const tracker = getTracker(item.id);
+                  const tracker = getTracker(item._id);
                   if (!tracker) return null;
                   return (
-                    <ListItem key={tracker.id}>
+                    <ListItem key={tracker._id}>
                       <InputEntry
-                        trackerId={tracker.id}
-                        value={inputs[tracker.id]?.value}
+                        trackerId={tracker._id}
+                        value={inputs[tracker._id]?.value}
                         setValue={setValue}
                       />
                     </ListItem>
@@ -116,7 +119,7 @@ export const PageView: React.FC = () => {
             variant="text"
             size="small"
             component={Link}
-            to={`/edit-page/${page.id}`}
+            to={`/edit-page/${page._id}`}
             sx={{ mr: 2 }}
           >
             Edit This Page

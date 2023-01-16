@@ -23,8 +23,6 @@ import {
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 import { useGetTracker, usePage } from "../../data/hooks";
-import { useStore } from "../../data/provider";
-import { Actions } from "../../data/reducer";
 import { TPageItem } from "../../types";
 import { reorderArray } from "../../utils/reorder-array";
 import { useConfirmDialog } from "../base/ConfirmDialog";
@@ -39,7 +37,6 @@ type TParams = {
 export const PageEdit: React.FC = () => {
   const { pageId } = useParams<TParams>();
   const page = usePage(pageId);
-  const { dispatch } = useStore();
   const trackerEdit = useTrackerEdit();
   const confirmDialog = useConfirmDialog();
   const pageItemAdd = usePageItemAdd();
@@ -53,10 +50,11 @@ export const PageEdit: React.FC = () => {
           label="Title"
           value={page.title}
           onChange={(e) => {
-            dispatch({
-              type: Actions.UPDATE_PAGE,
-              payload: { ...page, title: e.currentTarget.value.slice(0, 100) },
-            });
+            // dispatch({
+            //   type: Actions.UPDATE_PAGE,
+            //   payload: { ...page, title: e.currentTarget.value.slice(0, 100) },
+            // });
+            // TODO
           }}
         />
         <Typography variant="h6" component="h3" sx={{ p: 2, mt: 2 }}>
@@ -67,20 +65,21 @@ export const PageEdit: React.FC = () => {
             {page.items.length ? (
               page.items.map((item, i) => {
                 return (
-                  <ListItem key={item.id}>
+                  <ListItem key={item._id}>
                     <PageEditItem item={item} />
                     <ListItemSecondaryAction>
                       <IconButton
                         size="medium"
                         aria-label="move down"
                         onClick={() => {
-                          dispatch({
-                            type: Actions.UPDATE_PAGE,
-                            payload: {
-                              ...page,
-                              items: reorderArray(page.items, i, i + 1),
-                            },
-                          });
+                          // dispatch({
+                          //   type: Actions.UPDATE_PAGE,
+                          //   payload: {
+                          //     ...page,
+                          //     items: reorderArray(page.items, i, i + 1),
+                          //   },
+                          // });
+                          // TODO
                         }}
                       >
                         <ArrowDownward />
@@ -89,13 +88,14 @@ export const PageEdit: React.FC = () => {
                         size="medium"
                         aria-label="move up"
                         onClick={() => {
-                          dispatch({
-                            type: Actions.UPDATE_PAGE,
-                            payload: {
-                              ...page,
-                              items: reorderArray(page.items, i, i - 1),
-                            },
-                          });
+                          // dispatch({
+                          //   type: Actions.UPDATE_PAGE,
+                          //   payload: {
+                          //     ...page,
+                          //     items: reorderArray(page.items, i, i - 1),
+                          //   },
+                          // });
+                          // TODO
                         }}
                       >
                         <ArrowUpward />
@@ -106,7 +106,7 @@ export const PageEdit: React.FC = () => {
                             size="medium"
                             aria-label="view inputs"
                             component={Link}
-                            to={`/tracker/${item?.id || ""}`}
+                            to={`/tracker/${item?._id || ""}`}
                           >
                             <FormatListNumbered />
                           </IconButton>
@@ -114,7 +114,7 @@ export const PageEdit: React.FC = () => {
                             size="medium"
                             aria-label="edit tracker"
                             onClick={() => {
-                              trackerEdit.open({ trackerId: item?.id || "" });
+                              trackerEdit.open({ trackerId: item?._id || "" });
                             }}
                           >
                             <Edit />
@@ -137,10 +137,11 @@ export const PageEdit: React.FC = () => {
                             onConfirm: () => {
                               const newItems = [...page.items];
                               newItems.splice(i, 1);
-                              dispatch({
-                                type: Actions.UPDATE_PAGE,
-                                payload: { ...page, items: newItems },
-                              });
+                              // dispatch({
+                              //   type: Actions.UPDATE_PAGE,
+                              //   payload: { ...page, items: newItems },
+                              // });
+                              // TODO
                             },
                           });
                         }}
@@ -168,7 +169,7 @@ export const PageEdit: React.FC = () => {
             variant="text"
             size="small"
             component={Link}
-            to={`/page/${page.id}`}
+            to={`/page/${page._id}`}
             sx={{ mr: 2 }}
           >
             View This Page
@@ -194,7 +195,7 @@ export const PageEdit: React.FC = () => {
 const PageEditItem: React.FC<{ item: TPageItem }> = ({ item }) => {
   const getTracker = useGetTracker();
   if (item.type === "tracker") {
-    const tracker = getTracker(item.id);
+    const tracker = getTracker(item._id);
     if (!tracker) return null;
     return (
       <>

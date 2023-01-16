@@ -7,8 +7,6 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useGetInput } from "../../data/hooks";
-import { useStore } from "../../data/provider";
-import { Actions } from "../../data/reducer";
 import { TInput } from "../../types";
 import { InputEntry } from "../base/InputEntry";
 import { Box } from "@mui/system";
@@ -24,7 +22,6 @@ type TInputEdit = {
 };
 
 export function useInputEdit(): TInputEdit {
-  const { dispatch } = useStore();
   const getInput = useGetInput();
   const [isOpen, setIsOpen] = React.useState(false);
   const [args, setArgs] = React.useState<TOpenArgs | undefined>();
@@ -78,9 +75,10 @@ export function useInputEdit(): TInputEdit {
         <Button
           onClick={() => {
             if (isRemoving) {
-              dispatch({ type: Actions.DELETE_INPUT, payload: input.id });
+              // dispatch({ type: Actions.DELETE_INPUT, payload: input.id });
             } else {
-              dispatch({ type: Actions.UPDATE_INPUT, payload: input });
+              // dispatch({ type: Actions.UPDATE_INPUT, payload: input });
+              // TODO
             }
             setInput(undefined);
             setIsRemoving(false);

@@ -37,7 +37,7 @@ export const InputEntry: React.FC<TInputEntry> = ({
               size="medium"
               checked={!!value}
               onChange={(e) => {
-                setValue(tracker.id, e.target.checked);
+                setValue(tracker._id, e.target.checked);
               }}
             />
           }
@@ -60,7 +60,7 @@ export const InputEntry: React.FC<TInputEntry> = ({
           value={value || ""}
           onChange={(e) => {
             const val = e.currentTarget.value;
-            setValue(tracker.id, isNumeric(val) ? parseFloat(val) : "");
+            setValue(tracker._id, isNumeric(val) ? parseFloat(val) : "");
           }}
           inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
         />
@@ -91,13 +91,13 @@ export const InputEntry: React.FC<TInputEntry> = ({
           {value === undefined && (
             <div
               dangerouslySetInnerHTML={{
-                __html: `<style>#slider-${tracker.id} .MuiSlider-thumb, #slider-${tracker.id} .MuiSlider-track {display: none;}</style>`,
+                __html: `<style>#slider-${tracker._id} .MuiSlider-thumb, #slider-${tracker._id} .MuiSlider-track {display: none;}</style>`,
               }}
             />
           )}
           <Stack direction="row" alignItems="center">
             <Slider
-              id={`slider-${tracker.id}`}
+              id={`slider-${tracker._id}`}
               aria-labelledby={`${tracker.title}-label`}
               valueLabelDisplay="auto"
               defaultValue={tracker.slider.min || 0}
@@ -106,13 +106,13 @@ export const InputEntry: React.FC<TInputEntry> = ({
               max={tracker.slider.max || 10}
               value={parsedValue}
               onChange={(e, newValue) => {
-                setValue(tracker.id, newValue as number);
+                setValue(tracker._id, newValue as number);
               }}
             />
             <IconButton
               size="small"
               aria-label="delete input"
-              onClick={() => setValue(tracker.id, undefined)}
+              onClick={() => setValue(tracker._id, undefined)}
               sx={{ ml: 2 }}
               disabled={parsedValue === undefined}
             >
@@ -130,7 +130,7 @@ export const InputEntry: React.FC<TInputEntry> = ({
           multiline
           value={value || ""}
           onChange={(e) => {
-            setValue(tracker.id, e.currentTarget.value.slice(0, 10000));
+            setValue(tracker._id, e.currentTarget.value.slice(0, 10000));
           }}
         />
       );
