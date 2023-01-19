@@ -48,6 +48,7 @@ export type TPage = {
 };
 
 export type TStore = {
+  loading: boolean;
   pages: TPage[];
   trackers: TTracker[];
   inputs: TInput[];

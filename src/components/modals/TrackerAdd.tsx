@@ -9,6 +9,7 @@ import React from "react";
 import { TTracker } from "../../types";
 import { TrackerAddEditForm } from "./TrackerAddEditForm";
 import { createBlankTracker } from "../../utils/create-blank-data";
+import { useTrackerCreate } from "../../data/actions/tracker-create";
 
 type TOpenArgs = {
   onSave?: (newTracker: TTracker) => void;
@@ -22,13 +23,20 @@ type TTrackerAdd = {
 export function useTrackerAdd(): TTrackerAdd {
   const [isOpen, setIsOpen] = React.useState(false);
   const [args, setArgs] = React.useState<TOpenArgs | undefined>();
+  const trackerCreate = useTrackerCreate();
+  const [tracker, setTracker] = React.useState(createBlankTracker());
 
   const open = (args?: TOpenArgs) => {
     setIsOpen(true);
     setArgs(args);
   };
 
-  const [tracker, setTracker] = React.useState(createBlankTracker());
+  const save = async () => {
+    await trackerCreate(tracker);
+    args?.onSave?.(tracker);
+    setIsOpen(false);
+    setTracker(createBlankTracker());
+  };
 
   const component = (
     <Dialog
@@ -44,16 +52,7 @@ export function useTrackerAdd(): TTrackerAdd {
         <Button onClick={() => setIsOpen(false)} variant="outlined">
           Cancel
         </Button>
-        <Button
-          onClick={() => {
-            // dispatch({ type: Actions.CREATE_TRACKER, payload: tracker });
-            // TODO
-            args?.onSave?.(tracker);
-            setIsOpen(false);
-            setTracker(createBlankTracker());
-          }}
-          variant="contained"
-        >
+        <Button onClick={save} variant="contained">
           Save
         </Button>
       </DialogActions>

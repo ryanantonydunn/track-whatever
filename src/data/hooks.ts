@@ -1,7 +1,7 @@
 import React from "react";
 import { TInput, TPage, TTracker } from "../types";
 import { arrayObjSort } from "../utils/sort";
-import { useStore } from "./setup";
+import { useStore } from "./provider";
 
 /**
  * Get pages sorted by their order value
@@ -58,7 +58,10 @@ export const useGetTracker = (): TUseGetTracker => {
 
   // store by ID
   const byID = React.useMemo<TTrackerDataRef>(() => {
-    return Object.fromEntries(state.trackers.map((t) => [t._id, t]));
+    const trackersByID = Object.fromEntries(
+      state.trackers.map((t) => [t._id, t])
+    );
+    return trackersByID;
   }, [state.trackers]);
 
   const getTracker = React.useCallback((id?: string) => byID[id || ""], [byID]);
@@ -71,7 +74,9 @@ export const useGetTracker = (): TUseGetTracker => {
 
 export const useTracker = (id?: string): TTracker | undefined => {
   const getTracker = useGetTracker();
-  return React.useMemo(() => getTracker(id), [id, getTracker]);
+  return React.useMemo(() => {
+    return getTracker(id);
+  }, [id, getTracker]);
 };
 
 /**

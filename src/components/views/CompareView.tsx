@@ -28,7 +28,7 @@ import { Layout } from "../base/Layout";
 import { InputValue } from "../base/InputValue";
 import { useExpandMore } from "../base/ExpandMore";
 import { useQuery } from "../../utils/query";
-import { useStore } from "../../data/setup";
+import { useStore } from "../../data/provider";
 
 // type TParams = {
 //   compareId: string;

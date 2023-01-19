@@ -1,6 +1,6 @@
 import { Button, Container, Typography } from "@mui/material";
 import { useConfirmDialog } from "../base/ConfirmDialog";
-import { useStore } from "../../data/setup";
+import { useStore } from "../../data/provider";
 
 type TDataError = {
   children: React.ReactNode;

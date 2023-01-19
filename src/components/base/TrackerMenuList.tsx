@@ -1,7 +1,7 @@
 import { List, ListItem, ListItemButton, ListItemText } from "@mui/material";
 import React from "react";
 import { TTracker } from "../../types";
-import { useStore } from "../../data/setup";
+import { useStore } from "../../data/provider";
 
 type TTrackerList = {
   onClick: (tracker: TTracker) => void;

@@ -3,13 +3,13 @@ import { useStore } from "../provider";
 import { db } from "../database";
 import React from "react";
 
-export async function trackerCreate(
-  newTracker: TTracker
+export async function trackerUpdate(
+  tracker: TTracker
 ): Promise<TTracker | undefined> {
   try {
-    const response = await db.trackers.put(newTracker);
+    const response = await db.trackers.put(tracker);
     if (response.ok) {
-      const refetch = await db.trackers.get<TTracker>(newTracker._id);
+      const refetch = await db.trackers.get<TTracker>(tracker._id);
       return refetch;
     } else {
       console.error(response);
@@ -19,17 +19,20 @@ export async function trackerCreate(
   }
 }
 
-export const useTrackerCreate = () => {
+export const useTrackerUpdate = () => {
   const { state, dispatch } = useStore();
   return React.useCallback(
     async (tracker: TTracker) => {
-      const newTracker = await trackerCreate(tracker);
-      if (newTracker) {
+      const updatedTracker = await trackerUpdate(tracker);
+      if (updatedTracker) {
         dispatch({
-          trackers: [...state.trackers, newTracker],
+          ...state,
+          trackers: state.trackers.map((tracker) =>
+            tracker._id === updatedTracker._id ? updatedTracker : tracker
+          ),
         });
       }
     },
-    [state.trackers, dispatch]
+    [state, dispatch]
   );
 };

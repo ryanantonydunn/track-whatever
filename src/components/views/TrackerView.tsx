@@ -23,6 +23,7 @@ import { Error404 } from "./404";
 import { useInputEdit } from "../modals/InputEdit";
 import { InputValue } from "../base/InputValue";
 import { useInputAdd } from "../modals/InputAdd";
+import { useInputDelete } from "../../data/actions/input-delete";
 
 type TParams = {
   trackerId: string;
@@ -35,6 +36,7 @@ export const TrackerView: React.FC = () => {
   const { trackerId } = useParams<TParams>();
   const tracker = useTracker(trackerId);
   const inputs = useInputsByTracker(trackerId);
+  const inputDelete = useInputDelete();
 
   if (!tracker || !trackerId) return <Error404 />;
 
@@ -81,12 +83,8 @@ export const TrackerView: React.FC = () => {
                             title: "Confirm delete input",
                             description:
                               "Are you sure you want to delete this input?",
-                            onConfirm: () => {
-                              // dispatch({
-                              //   type: Actions.DELETE_INPUT,
-                              //   payload: input._id,
-                              // });
-                              // TODO
+                            onConfirm: async () => {
+                              await inputDelete(input);
                             },
                           });
                         }}

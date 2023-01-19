@@ -17,6 +17,9 @@ import { createBlankInput } from "../../utils/create-blank-data";
 import { InputEntry } from "../base/InputEntry";
 import { Layout } from "../base/Layout";
 import { usePageItemAdd } from "../modals/PageItemAdd";
+import { useInputDelete } from "../../data/actions/input-delete";
+import { useInputUpdate } from "../../data/actions/input-update";
+import { useInputCreate } from "../../data/actions/input-create";
 
 type TParams = {
   pageId: string;
@@ -31,6 +34,9 @@ export const PageView: React.FC = () => {
   const pageItemAdd = usePageItemAdd();
   const [inputs, setInputs] = React.useState<TInputs>({});
   const [inputTime, setInputTime] = React.useState(new Date());
+  const inputDelete = useInputDelete();
+  const inputUpdate = useInputUpdate();
+  const inputCreate = useInputCreate();
 
   // handle input changes
   const setValue = (trackerId: string, value: TInputPrimitive | undefined) => {
@@ -40,17 +46,12 @@ export const PageView: React.FC = () => {
         const newInputs = { ...inputs };
         delete newInputs[trackerId];
         setInputs({ ...newInputs });
-        // dispatch({
-        //   type: Actions.DELETE_INPUT,
-        //   payload: inputs[trackerId]._id,
-        // });
-        // TODO
+        inputDelete(inputs[trackerId]);
       } else {
         // replace a set input value
         const newInput = { ...inputs[trackerId], value };
         setInputs({ ...inputs, [trackerId]: newInput });
-        // dispatch({ type: Actions.UPDATE_INPUT, payload: newInput });
-        // TODO
+        inputUpdate(newInput);
       }
     } else {
       if (value !== undefined) {
@@ -62,8 +63,7 @@ export const PageView: React.FC = () => {
           value,
         };
         setInputs({ ...inputs, [trackerId]: newInput });
-        // dispatch({ type: Actions.CREATE_INPUT, payload: newInput });
-        // TODO
+        inputCreate(newInput);
       }
     }
   };

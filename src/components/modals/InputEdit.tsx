@@ -10,6 +10,8 @@ import { useGetInput } from "../../data/hooks";
 import { TInput } from "../../types";
 import { InputEntry } from "../base/InputEntry";
 import { Box } from "@mui/system";
+import { useInputDelete } from "../../data/actions/input-delete";
+import { useInputUpdate } from "../../data/actions/input-update";
 
 type TOpenArgs = {
   inputId: string;
@@ -27,6 +29,8 @@ export function useInputEdit(): TInputEdit {
   const [args, setArgs] = React.useState<TOpenArgs | undefined>();
   const [input, setInput] = React.useState<TInput | undefined>();
   const [isRemoving, setIsRemoving] = React.useState(false);
+  const inputDelete = useInputDelete();
+  const inputUpdate = useInputUpdate();
 
   const open = (args?: TOpenArgs) => {
     const editingInput = getInput(args?.inputId);
@@ -75,10 +79,9 @@ export function useInputEdit(): TInputEdit {
         <Button
           onClick={() => {
             if (isRemoving) {
-              // dispatch({ type: Actions.DELETE_INPUT, payload: input.id });
+              inputDelete(input);
             } else {
-              // dispatch({ type: Actions.UPDATE_INPUT, payload: input });
-              // TODO
+              inputUpdate(input);
             }
             setInput(undefined);
             setIsRemoving(false);

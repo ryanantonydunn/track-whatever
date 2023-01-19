@@ -22,7 +22,8 @@ import {
 } from "@mui/material";
 import React from "react";
 import { Link, useParams } from "react-router-dom";
-import { useGetTracker, usePage } from "../../data/hooks";
+import { usePageUpdate } from "../../data/actions/page-update";
+import { usePage, useTracker } from "../../data/hooks";
 import { TPageItem } from "../../types";
 import { reorderArray } from "../../utils/reorder-array";
 import { useConfirmDialog } from "../base/ConfirmDialog";
@@ -40,6 +41,12 @@ export const PageEdit: React.FC = () => {
   const trackerEdit = useTrackerEdit();
   const confirmDialog = useConfirmDialog();
   const pageItemAdd = usePageItemAdd();
+  const pageUpdate = usePageUpdate();
+  const [title, setTitle] = React.useState(page?.title || "");
+  React.useEffect(() => {
+    setTitle(page?.title || "");
+  }, [page?.title]);
+
   if (!page) return null;
 
   return (
@@ -48,13 +55,12 @@ export const PageEdit: React.FC = () => {
         <TextField
           fullWidth
           label="Title"
-          value={page.title}
+          value={title}
           onChange={(e) => {
-            // dispatch({
-            //   type: Actions.UPDATE_PAGE,
-            //   payload: { ...page, title: e.currentTarget.value.slice(0, 100) },
-            // });
-            // TODO
+            setTitle(e.currentTarget.value.slice(0, 100));
+          }}
+          onBlur={() => {
+            pageUpdate({ ...page, title });
           }}
         />
         <Typography variant="h6" component="h3" sx={{ p: 2, mt: 2 }}>
@@ -72,14 +78,10 @@ export const PageEdit: React.FC = () => {
                         size="medium"
                         aria-label="move down"
                         onClick={() => {
-                          // dispatch({
-                          //   type: Actions.UPDATE_PAGE,
-                          //   payload: {
-                          //     ...page,
-                          //     items: reorderArray(page.items, i, i + 1),
-                          //   },
-                          // });
-                          // TODO
+                          pageUpdate({
+                            ...page,
+                            items: reorderArray(page.items, i, i + 1),
+                          });
                         }}
                       >
                         <ArrowDownward />
@@ -88,14 +90,10 @@ export const PageEdit: React.FC = () => {
                         size="medium"
                         aria-label="move up"
                         onClick={() => {
-                          // dispatch({
-                          //   type: Actions.UPDATE_PAGE,
-                          //   payload: {
-                          //     ...page,
-                          //     items: reorderArray(page.items, i, i - 1),
-                          //   },
-                          // });
-                          // TODO
+                          pageUpdate({
+                            ...page,
+                            items: reorderArray(page.items, i, i - 1),
+                          });
                         }}
                       >
                         <ArrowUpward />
@@ -137,11 +135,7 @@ export const PageEdit: React.FC = () => {
                             onConfirm: () => {
                               const newItems = [...page.items];
                               newItems.splice(i, 1);
-                              // dispatch({
-                              //   type: Actions.UPDATE_PAGE,
-                              //   payload: { ...page, items: newItems },
-                              // });
-                              // TODO
+                              pageUpdate({ ...page, items: newItems });
                             },
                           });
                         }}
@@ -193,9 +187,8 @@ export const PageEdit: React.FC = () => {
 };
 
 const PageEditItem: React.FC<{ item: TPageItem }> = ({ item }) => {
-  const getTracker = useGetTracker();
+  const tracker = useTracker(item._id);
   if (item.type === "tracker") {
-    const tracker = getTracker(item._id);
     if (!tracker) return null;
     return (
       <>

@@ -15,6 +15,7 @@ import React from "react";
 import { TPage, TPageItemType } from "../../types";
 import { TrackerMenuList } from "../base/TrackerMenuList";
 import { useTrackerAdd } from "./TrackerAdd";
+import { usePageUpdate } from "../../data/actions/page-update";
 
 type TOpenArgs = {
   page: TPage;
@@ -30,6 +31,7 @@ export function usePageItemAdd(): TPageItemAdd {
   const [isOpen, setIsOpen] = React.useState(false);
   const [args, setArgs] = React.useState<TOpenArgs | undefined>();
   const [menu, setMenu] = React.useState<"type" | "existingTracker">("type");
+  const pageUpdate = usePageUpdate();
 
   const close = () => {
     setMenu("type");
@@ -42,18 +44,14 @@ export function usePageItemAdd(): TPageItemAdd {
     setArgs(args);
   };
 
-  const save = React.useCallback(
-    (type: TPageItemType, id?: string) => {
-      if (!args?.page) return;
-      // dispatch({
-      //   type: Actions.UPDATE_PAGE,
-      //   payload: { ...args.page, items: [...args.page.items, { id, type }] },
-      // });
-      // TODO
-      close();
-    },
-    [args]
-  );
+  const save = async (type: TPageItemType, _id?: string) => {
+    if (!args?.page) return;
+    await pageUpdate({
+      ...args.page,
+      items: [...args.page.items, { _id, type }],
+    });
+    close();
+  };
 
   const component = (
     <>

@@ -12,6 +12,7 @@ import React from "react";
 import { TInput, TInputPrimitive } from "../../types";
 import { createBlankInput } from "../../utils/create-blank-data";
 import { InputEntry } from "../base/InputEntry";
+import { useInputCreate } from "../../data/actions/input-create";
 
 type TOpenArgs = {
   trackerId: string;
@@ -28,6 +29,7 @@ export function useInputAdd(): TInputAdd {
   const [args, setArgs] = React.useState<TOpenArgs | undefined>();
   const [value, setValue] = React.useState<TInputPrimitive | undefined>();
   const [time, setTime] = React.useState(new Date());
+  const inputCreate = useInputCreate();
 
   const open = (args?: TOpenArgs) => {
     setArgs(args);
@@ -85,8 +87,7 @@ export function useInputAdd(): TInputAdd {
                 trackerId: args.trackerId,
                 value,
               };
-              // dispatch({ type: Actions.CREATE_INPUT, payload: newInput });
-              // TODO create input
+              inputCreate(newInput);
               setValue(undefined);
               args?.onSave?.(newInput);
               setIsOpen(false);

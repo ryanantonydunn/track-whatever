@@ -13,7 +13,7 @@ import { PageList } from "./components/views/PageList";
 import { PageListEdit } from "./components/views/PageListEdit";
 import { PageEdit } from "./components/views/PageEdit";
 import { LocalizationProvider } from "@mui/x-date-pickers";
-import { StoreProvider } from "./data/setup";
+import { StoreProvider } from "./data/provider";
 
 const router = createBrowserRouter([
   {

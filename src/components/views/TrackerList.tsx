@@ -16,12 +16,14 @@ import { useConfirmDialog } from "../base/ConfirmDialog";
 import { Layout } from "../base/Layout";
 import { useTrackerAdd } from "../modals/TrackerAdd";
 import { useTrackerEdit } from "../modals/TrackerEdit";
-import { useStore } from "../../data/setup";
+import { useStore } from "../../data/provider";
+import { useTrackerDelete } from "../../data/actions/tracker-delete";
 
 export const TrackerList: React.FC = () => {
   const confirmDialog = useConfirmDialog();
   const trackerEdit = useTrackerEdit();
   const trackerAdd = useTrackerAdd();
+  const trackerDelete = useTrackerDelete();
 
   const { state } = useStore();
 
@@ -62,12 +64,8 @@ export const TrackerList: React.FC = () => {
                           title: "Confirm delete tracker",
                           description:
                             "Are you sure you want to remove this tracker, this will remove all associated input data.",
-                          onConfirm: () => {
-                            // dispatch({
-                            //   type: Actions.DELETE_TRACKER,
-                            //   payload: tracker._id,
-                            // });
-                            // TODO
+                          onConfirm: async () => {
+                            await trackerDelete(tracker);
                           },
                         });
                       }}

@@ -10,6 +10,7 @@ import {
 import React from "react";
 import { TPage } from "../../types";
 import { createBlankPage } from "../../utils/create-blank-data";
+import { usePageCreate } from "../../data/actions/page-create";
 
 type TOpenArgs = {
   onSave?: (newPage: TPage) => void;
@@ -23,6 +24,7 @@ type TPageAdd = {
 export function usePageAdd(): TPageAdd {
   const [isOpen, setIsOpen] = React.useState(false);
   const [args, setArgs] = React.useState<TOpenArgs | undefined>();
+  const pageCreate = usePageCreate();
 
   const open = (args?: TOpenArgs) => {
     setIsOpen(true);
@@ -30,6 +32,13 @@ export function usePageAdd(): TPageAdd {
   };
 
   const [page, setPage] = React.useState(createBlankPage());
+
+  const save = async () => {
+    await pageCreate(page);
+    args?.onSave?.(page);
+    setIsOpen(false);
+    setPage(createBlankPage());
+  };
 
   const component = (
     <Dialog
@@ -54,16 +63,7 @@ export function usePageAdd(): TPageAdd {
         <Button onClick={() => setIsOpen(false)} variant="outlined">
           Cancel
         </Button>
-        <Button
-          onClick={() => {
-            // dispatch({ type: Actions.CREATE_PAGE, payload: page });
-            // TODO
-            args?.onSave?.(page);
-            setIsOpen(false);
-            setPage(createBlankPage());
-          }}
-          variant="contained"
-        >
+        <Button onClick={save} variant="contained">
           Save
         </Button>
       </DialogActions>

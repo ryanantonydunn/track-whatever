@@ -9,6 +9,7 @@ import React from "react";
 import { useGetTracker } from "../../data/hooks";
 import { TTracker } from "../../types";
 import { TrackerAddEditForm } from "./TrackerAddEditForm";
+import { useTrackerUpdate } from "../../data/actions/tracker-update";
 
 type TOpenArgs = {
   trackerId: string;
@@ -25,6 +26,7 @@ export function useTrackerEdit(): TTrackerAdd {
   const [isOpen, setIsOpen] = React.useState(false);
   const [args, setArgs] = React.useState<TOpenArgs | undefined>();
   const [tracker, setTracker] = React.useState<TTracker | undefined>();
+  const trackerUpdate = useTrackerUpdate();
 
   const open = (args?: TOpenArgs) => {
     const editingTracker = getTracker(args?.trackerId);
@@ -61,8 +63,7 @@ export function useTrackerEdit(): TTrackerAdd {
         </Button>
         <Button
           onClick={() => {
-            // dispatch({ type: Actions.UPDATE_TRACKER, payload: tracker });
-            // TODO
+            trackerUpdate(tracker);
             setTracker(undefined);
             args?.onSave?.(tracker);
             setIsOpen(false);

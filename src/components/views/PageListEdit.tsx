@@ -17,12 +17,14 @@ import { usePages } from "../../data/hooks";
 import { useConfirmDialog } from "../base/ConfirmDialog";
 import { Layout } from "../base/Layout";
 import { usePageAdd } from "../modals/PageAdd";
+import { usePageDelete } from "../../data/actions/page-delete";
 
 export const PageListEdit: React.FC = () => {
   const pages = usePages();
   const confirmDialog = useConfirmDialog();
   const navigate = useNavigate();
   const pageAdd = usePageAdd();
+  const pageDelete = usePageDelete();
 
   return (
     <Layout title="Edit Pages" back="/">
@@ -85,12 +87,8 @@ export const PageListEdit: React.FC = () => {
                             title: "Confirm delete page",
                             description:
                               "Are you sure you want to delete this page. This will not delete your trackers, you can add them to a different page later.",
-                            onConfirm: () => {
-                              // dispatch({
-                              //   type: Actions.DELETE_PAGE,
-                              //   payload: page._id,
-                              // });
-                              // TODO
+                            onConfirm: async () => {
+                              await pageDelete(page);
                             },
                           });
                         }}
