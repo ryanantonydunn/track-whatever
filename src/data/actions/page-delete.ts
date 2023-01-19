@@ -2,6 +2,7 @@ import { TPage } from "../../types";
 import { useStore } from "../provider";
 import { db } from "../database";
 import React from "react";
+import { Actions } from "../reducer";
 
 export async function pageDelete(
   page: TPage
@@ -16,19 +17,14 @@ export async function pageDelete(
 }
 
 export const usePageDelete = () => {
-  const { state, dispatch } = useStore();
+  const { dispatch } = useStore();
   return React.useCallback(
     async (page: TPage) => {
       const response = await pageDelete(page);
       if (response?.ok) {
-        const pages = [...state.pages];
-        const pageIndex = pages.findIndex((t) => t._id === page._id);
-        if (pageIndex !== -1) {
-          pages.splice(pageIndex, 1);
-        }
-        dispatch({ ...state, pages });
+        dispatch({ type: Actions.DELETE_PAGE, payload: page._id });
       }
     },
-    [state, dispatch]
+    [dispatch]
   );
 };

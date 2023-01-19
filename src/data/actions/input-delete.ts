@@ -2,6 +2,7 @@ import { TInput } from "../../types";
 import { useStore } from "../provider";
 import { db } from "../database";
 import React from "react";
+import { Actions } from "../reducer";
 
 export async function inputDelete(
   input: TInput
@@ -15,19 +16,14 @@ export async function inputDelete(
 }
 
 export const useInputDelete = () => {
-  const { state, dispatch } = useStore();
+  const { dispatch } = useStore();
   return React.useCallback(
     async (input: TInput) => {
       const response = await inputDelete(input);
       if (response?.ok) {
-        const inputs = [...state.inputs];
-        const inputIndex = inputs.findIndex((t) => t._id === input._id);
-        if (inputIndex !== -1) {
-          inputs.splice(inputIndex, 1);
-        }
-        dispatch({ ...state, inputs });
+        dispatch({ type: Actions.DELETE_INPUT, payload: input._id });
       }
     },
-    [state, dispatch]
+    [dispatch]
   );
 };

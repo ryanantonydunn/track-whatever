@@ -8,6 +8,7 @@ import {
   ListItem,
   ListItemSecondaryAction,
   ListItemText,
+  Paper,
   Typography,
 } from "@mui/material";
 import React from "react";
@@ -30,7 +31,7 @@ export const TrackerList: React.FC = () => {
   return (
     <Layout title="Trackers" back="/">
       <Container maxWidth="md">
-        <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
+        <Paper>
           <List>
             {state.trackers.length ? (
               state.trackers.map((tracker) => (
@@ -81,7 +82,7 @@ export const TrackerList: React.FC = () => {
               </Typography>
             )}
           </List>
-        </Box>
+        </Paper>
         <Box display="flex" justifyContent="flex-end" sx={{ p: 2 }}>
           <Button
             variant="text"

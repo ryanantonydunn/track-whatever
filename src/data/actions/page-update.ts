@@ -2,6 +2,7 @@ import { TPage } from "../../types";
 import { useStore } from "../provider";
 import { db } from "../database";
 import React from "react";
+import { Actions } from "../reducer";
 
 export async function pageUpdate(page: TPage): Promise<TPage | undefined> {
   try {
@@ -18,17 +19,14 @@ export async function pageUpdate(page: TPage): Promise<TPage | undefined> {
 }
 
 export const usePageUpdate = () => {
-  const { state, dispatch } = useStore();
+  const { dispatch } = useStore();
   return React.useCallback(
     async (page: TPage) => {
       const newPage = await pageUpdate(page);
       if (newPage) {
-        const pages: TPage[] = state.pages.map((d) =>
-          d._id === newPage._id ? newPage : d
-        );
-        dispatch({ pages });
+        dispatch({ type: Actions.UPDATE_PAGE, payload: newPage });
       }
     },
-    [state.pages, dispatch]
+    [dispatch]
   );
 };

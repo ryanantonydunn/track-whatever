@@ -2,6 +2,7 @@ import { TTracker } from "../../types";
 import { useStore } from "../provider";
 import { db } from "../database";
 import React from "react";
+import { Actions } from "../reducer";
 
 export async function trackerUpdate(
   tracker: TTracker
@@ -20,19 +21,14 @@ export async function trackerUpdate(
 }
 
 export const useTrackerUpdate = () => {
-  const { state, dispatch } = useStore();
+  const { dispatch } = useStore();
   return React.useCallback(
     async (tracker: TTracker) => {
       const updatedTracker = await trackerUpdate(tracker);
       if (updatedTracker) {
-        dispatch({
-          ...state,
-          trackers: state.trackers.map((tracker) =>
-            tracker._id === updatedTracker._id ? updatedTracker : tracker
-          ),
-        });
+        dispatch({ type: Actions.UPDATE_TRACKER, payload: updatedTracker });
       }
     },
-    [state, dispatch]
+    [dispatch]
   );
 };

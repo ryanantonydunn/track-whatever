@@ -2,6 +2,7 @@ import { TPage } from "../../types";
 import { useStore } from "../provider";
 import { db } from "../database";
 import React from "react";
+import { Actions } from "../reducer";
 
 export async function pageCreate(newPage: TPage): Promise<TPage | undefined> {
   try {
@@ -18,17 +19,14 @@ export async function pageCreate(newPage: TPage): Promise<TPage | undefined> {
 }
 
 export const usePageCreate = () => {
-  const { state, dispatch } = useStore();
+  const { dispatch } = useStore();
   return React.useCallback(
     async (page: TPage) => {
       const newPage = await pageCreate(page);
       if (newPage) {
-        dispatch({
-          ...state,
-          pages: [...state.pages, newPage],
-        });
+        dispatch({ type: Actions.CREATE_PAGE, payload: newPage });
       }
     },
-    [state, dispatch]
+    [dispatch]
   );
 };

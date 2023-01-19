@@ -2,6 +2,7 @@ import { TTracker } from "../../types";
 import { useStore } from "../provider";
 import { db } from "../database";
 import React from "react";
+import { Actions } from "../reducer";
 
 export async function trackerCreate(
   newTracker: TTracker
@@ -20,16 +21,14 @@ export async function trackerCreate(
 }
 
 export const useTrackerCreate = () => {
-  const { state, dispatch } = useStore();
+  const { dispatch } = useStore();
   return React.useCallback(
     async (tracker: TTracker) => {
       const newTracker = await trackerCreate(tracker);
       if (newTracker) {
-        dispatch({
-          trackers: [...state.trackers, newTracker],
-        });
+        dispatch({ type: Actions.CREATE_TRACKER, payload: newTracker });
       }
     },
-    [state.trackers, dispatch]
+    [dispatch]
   );
 };

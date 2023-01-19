@@ -2,6 +2,7 @@ import { TInput } from "../../types";
 import { useStore } from "../provider";
 import { db } from "../database";
 import React from "react";
+import { Actions } from "../reducer";
 
 export async function inputCreate(
   newInput: TInput
@@ -20,17 +21,14 @@ export async function inputCreate(
 }
 
 export const useInputCreate = () => {
-  const { state, dispatch } = useStore();
+  const { dispatch } = useStore();
   return React.useCallback(
     async (input: TInput) => {
       const newInput = await inputCreate(input);
       if (newInput) {
-        dispatch({
-          ...state,
-          inputs: [...state.inputs, newInput],
-        });
+        dispatch({ type: Actions.CREATE_INPUT, payload: newInput });
       }
     },
-    [state, dispatch]
+    [dispatch]
   );
 };

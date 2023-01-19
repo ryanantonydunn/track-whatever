@@ -2,6 +2,7 @@ import { TInput } from "../../types";
 import { useStore } from "../provider";
 import { db } from "../database";
 import React from "react";
+import { Actions } from "../reducer";
 
 export async function inputUpdate(input: TInput): Promise<TInput | undefined> {
   try {
@@ -18,19 +19,14 @@ export async function inputUpdate(input: TInput): Promise<TInput | undefined> {
 }
 
 export const useInputUpdate = () => {
-  const { state, dispatch } = useStore();
+  const { dispatch } = useStore();
   return React.useCallback(
     async (input: TInput) => {
       const updatedInput = await inputUpdate(input);
       if (updatedInput) {
-        dispatch({
-          ...state,
-          inputs: state.inputs.map((input) =>
-            input._id === updatedInput._id ? updatedInput : input
-          ),
-        });
+        dispatch({ type: Actions.UPDATE_INPUT, payload: updatedInput });
       }
     },
-    [state, dispatch]
+    [dispatch]
   );
 };

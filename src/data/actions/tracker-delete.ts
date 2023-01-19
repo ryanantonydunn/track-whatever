@@ -2,6 +2,7 @@ import { TTracker } from "../../types";
 import { useStore } from "../provider";
 import { db } from "../database";
 import React from "react";
+import { Actions } from "../reducer";
 
 export async function trackerDelete(
   tracker: TTracker
@@ -29,19 +30,14 @@ export async function trackerDelete(
 }
 
 export const useTrackerDelete = () => {
-  const { state, dispatch } = useStore();
+  const { dispatch } = useStore();
   return React.useCallback(
     async (tracker: TTracker) => {
       const response = await trackerDelete(tracker);
       if (response?.ok) {
-        const trackers = [...state.trackers];
-        const trackerIndex = trackers.findIndex((t) => t._id === tracker._id);
-        if (trackerIndex !== -1) {
-          trackers.splice(trackerIndex, 1);
-        }
-        dispatch({ ...state, trackers });
+        dispatch({ type: Actions.DELETE_TRACKER, payload: tracker._id });
       }
     },
-    [state, dispatch]
+    [dispatch]
   );
 };

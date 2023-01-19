@@ -93,7 +93,8 @@ export const Layout: React.FC<TLayout> = ({ children, title, back }) => {
       <Box
         component="main"
         sx={{
-          p: 2,
+          py: 2,
+          px: 1,
           backgroundColor: (theme) =>
             theme.palette.mode === "light"
               ? theme.palette.grey[100]
