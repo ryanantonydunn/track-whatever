@@ -47,8 +47,16 @@ export type TPage = {
   items: TPageItem[];
 };
 
+export type TConfig = {
+  _id: string;
+  _rev: string;
+  hasInitialised: boolean;
+  pageOrder: string[];
+};
+
 export type TStore = {
   loading: boolean;
+  config: TConfig;
   pages: TPage[];
   trackers: TTracker[];
   inputs: TInput[];

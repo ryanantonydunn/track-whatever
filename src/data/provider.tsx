@@ -1,9 +1,9 @@
 import React from "react";
 import { TStore } from "../types";
-import { trackersGet } from "./actions/trackers-get";
-import { pagesGet } from "./actions/pages-get";
-import { setupDB } from "./database";
 import { Actions, TAction, reducer } from "./reducer";
+import { initConfig, setExampleDocs } from "./actions/preload-data";
+import { pagesGet } from "./actions/pages-get";
+import { trackersGet } from "./actions/trackers-get";
 
 export type TContext = {
   state: TStore;
@@ -19,19 +19,24 @@ export const StoreProvider: React.FC<TProvider> = ({ children }) => {
     trackers: [],
     pages: [],
     inputs: [],
+    config: { _id: "", _rev: "", hasInitialised: false, pageOrder: [] },
     loading: true,
   });
 
-  // load when starting up
+  // preload data
   React.useEffect(() => {
+    console.log("loading");
     async function preloadData() {
-      await setupDB();
-      const trackers = await trackersGet();
-      const pages = await pagesGet();
-      if (trackers && pages) {
+      const config = await initConfig();
+      if (config) {
+        if (!config.hasInitialised) {
+          await setExampleDocs(config);
+        }
+        const pages = (await pagesGet()) || [];
+        const trackers = (await trackersGet()) || [];
         dispatch({
           type: Actions.RESET_ALL_DATA,
-          payload: { trackers, pages, inputs: [], loading: false },
+          payload: { config, pages, trackers, inputs: [], loading: false },
         });
       }
     }
@@ -39,6 +44,7 @@ export const StoreProvider: React.FC<TProvider> = ({ children }) => {
   }, []);
 
   const value = { state, dispatch };
+
   return (
     <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
   );

@@ -1,19 +1,19 @@
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { PageView } from "./components/views/PageView";
-import "./index.css";
-import { TrackerList } from "./components/views/TrackerList";
-import { TrackerView } from "./components/views/TrackerView";
-import { ImportExport } from "./components/views/ImportExport";
-import { DataError } from "./components/views/DataError";
 import { CompareView } from "./components/views/CompareView";
+import { DataError } from "./components/views/DataError";
+import { ImportExport } from "./components/views/ImportExport";
+import { PageEdit } from "./components/views/PageEdit";
 import { PageList } from "./components/views/PageList";
 import { PageListEdit } from "./components/views/PageListEdit";
-import { PageEdit } from "./components/views/PageEdit";
-import { LocalizationProvider } from "@mui/x-date-pickers";
+import { PageView } from "./components/views/PageView";
+import { TrackerList } from "./components/views/TrackerList";
+import { TrackerView } from "./components/views/TrackerView";
 import { StoreProvider } from "./data/provider";
+import "./index.css";
 
 const router = createBrowserRouter([
   {

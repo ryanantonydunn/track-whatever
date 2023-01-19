@@ -1,5 +1,4 @@
-import { TInput, TPage, TStore, TTracker } from "../types";
-import { reorderArray } from "../utils/reorder-array";
+import { TConfig, TInput, TPage, TStore, TTracker } from "../types";
 
 export enum Actions {
   CREATE_TRACKER = "CREATE_TRACKER",
@@ -8,13 +7,13 @@ export enum Actions {
   CREATE_PAGE = "CREATE_PAGE",
   UPDATE_PAGE = "UPDATE_PAGE",
   DELETE_PAGE = "DELETE_PAGE",
-  REORDER_PAGES = "REORDER_PAGES",
   CREATE_INPUT = "CREATE_INPUT",
   UPDATE_INPUT = "UPDATE_INPUT",
   DELETE_INPUT = "DELETE_INPUT",
   CREATE_VIEW = "CREATE_VIEW",
   UPDATE_VIEW = "UPDATE_VIEW",
   DELETE_VIEW = "DELETE_VIEW",
+  UPDATE_CONFIG = "UPDATE_CONFIG",
   RESET_ALL_DATA = "RESET_ALL_DATA",
 }
 
@@ -31,11 +30,6 @@ type TUpdatePage = {
 type TDeletePage = {
   type: Actions.DELETE_PAGE;
   payload: string;
-};
-
-type TReorderPages = {
-  type: Actions.REORDER_PAGES;
-  payload: { oldIndex: number; newIndex: number };
 };
 
 type TCreateTracker = {
@@ -68,6 +62,11 @@ type TDeleteInput = {
   payload: string;
 };
 
+type TUpdateConfig = {
+  type: Actions.UPDATE_CONFIG;
+  payload: TConfig;
+};
+
 type TResetAllData = {
   type: Actions.RESET_ALL_DATA;
   payload: TStore;
@@ -77,13 +76,13 @@ export type TAction =
   | TCreatePage
   | TUpdatePage
   | TDeletePage
-  | TReorderPages
   | TCreateTracker
   | TUpdateTracker
   | TDeleteTracker
   | TCreateInput
   | TUpdateInput
   | TDeleteInput
+  | TUpdateConfig
   | TResetAllData;
 
 export const reducer = (state: TStore, action: TAction): TStore => {
@@ -107,15 +106,6 @@ export const reducer = (state: TStore, action: TAction): TStore => {
         pages.splice(pageIndex, 1);
       }
       return { ...state, pages };
-    case Actions.REORDER_PAGES:
-      return {
-        ...state,
-        pages: reorderArray(
-          state.pages,
-          action.payload.oldIndex,
-          action.payload.newIndex
-        ),
-      };
     case Actions.CREATE_TRACKER:
       return {
         ...state,
@@ -170,6 +160,11 @@ export const reducer = (state: TStore, action: TAction): TStore => {
         inputs.splice(inputIndex, 1);
       }
       return { ...state, inputs };
+    case Actions.UPDATE_CONFIG:
+      return {
+        ...state,
+        config: action.payload,
+      };
     case Actions.RESET_ALL_DATA:
       return action.payload;
     default:

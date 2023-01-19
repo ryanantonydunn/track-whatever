@@ -9,7 +9,12 @@ import { useStore } from "./provider";
 
 export const usePages = (): TPage[] => {
   const { state } = useStore();
-  return state.pages;
+  const pages = React.useMemo(() => {
+    return state.config.pageOrder
+      .map((id) => state.pages.find((page) => page._id === id))
+      .filter(Boolean) as TPage[]; // not sure why TS doesn't recognise this filter is removing undefineds
+  }, [state.config.pageOrder, state.pages]);
+  return pages;
 };
 
 /**

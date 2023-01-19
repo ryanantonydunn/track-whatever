@@ -1,8 +1,9 @@
-import { TPage } from "../../types";
-import { useStore } from "../provider";
-import { db } from "../database";
 import React from "react";
+import { TPage } from "../../types";
+import { db } from "../database";
+import { useStore } from "../provider";
 import { Actions } from "../reducer";
+import { useConfigUpdate } from "./config-update";
 
 export async function pageCreate(newPage: TPage): Promise<TPage | undefined> {
   try {
@@ -19,14 +20,18 @@ export async function pageCreate(newPage: TPage): Promise<TPage | undefined> {
 }
 
 export const usePageCreate = () => {
-  const { dispatch } = useStore();
+  const { state, dispatch } = useStore();
+  const configUpdate = useConfigUpdate();
   return React.useCallback(
     async (page: TPage) => {
       const newPage = await pageCreate(page);
       if (newPage) {
         dispatch({ type: Actions.CREATE_PAGE, payload: newPage });
+
+        // add page id to the pageOrder array
+        configUpdate({ pageOrder: [...state.config.pageOrder, newPage._id] });
       }
     },
-    [dispatch]
+    [dispatch, configUpdate, state.config.pageOrder]
   );
 };

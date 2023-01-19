@@ -18,6 +18,9 @@ import { useConfirmDialog } from "../base/ConfirmDialog";
 import { Layout } from "../base/Layout";
 import { usePageAdd } from "../modals/PageAdd";
 import { usePageDelete } from "../../data/actions/page-delete";
+import { useConfigUpdate } from "../../data/actions/config-update";
+import { reorderArray } from "../../utils/reorder-array";
+import { useStore } from "../../data/provider";
 
 export const PageListEdit: React.FC = () => {
   const pages = usePages();
@@ -25,6 +28,9 @@ export const PageListEdit: React.FC = () => {
   const navigate = useNavigate();
   const pageAdd = usePageAdd();
   const pageDelete = usePageDelete();
+
+  const { state } = useStore();
+  const configUpdate = useConfigUpdate();
 
   return (
     <Layout title="Edit Pages" back="/">
@@ -43,14 +49,13 @@ export const PageListEdit: React.FC = () => {
                         size="medium"
                         aria-label="move down"
                         onClick={() => {
-                          // dispatch({
-                          //   type: Actions.REORDER_PAGES,
-                          //   payload: {
-                          //     oldIndex: i,
-                          //     newIndex: i + 1,
-                          //   },
-                          // });
-                          // TODO
+                          configUpdate({
+                            pageOrder: reorderArray(
+                              state.config.pageOrder,
+                              i,
+                              i + 1
+                            ),
+                          });
                         }}
                       >
                         <ArrowDownward />
@@ -59,14 +64,13 @@ export const PageListEdit: React.FC = () => {
                         size="medium"
                         aria-label="move up"
                         onClick={() => {
-                          // dispatch({
-                          //   type: Actions.REORDER_PAGES,
-                          //   payload: {
-                          //     oldIndex: i,
-                          //     newIndex: i - 1,
-                          //   },
-                          // });
-                          // TODO
+                          configUpdate({
+                            pageOrder: reorderArray(
+                              state.config.pageOrder,
+                              i,
+                              i - 1
+                            ),
+                          });
                         }}
                       >
                         <ArrowUpward />
