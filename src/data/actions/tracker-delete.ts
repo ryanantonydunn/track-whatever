@@ -3,41 +3,39 @@ import { useStore } from "../provider";
 import { db } from "../database";
 import React from "react";
 import { Actions } from "../reducer";
+import { usePageUpdate } from "./page-update";
 
-export async function trackerDelete(
-  tracker: TTracker
-): Promise<PouchDB.Core.Response | undefined> {
+export async function trackerDelete(tracker: TTracker): Promise<void> {
   try {
-    const response = await db.trackers.remove(tracker);
-
-    //  TODO
-    //         // remove all associated page items
-    //         pages: state.pages.map((page) => ({
-    //           ...page,
-    //           items: page.items.filter(
-    //             (page) => !(page.type === "tracker" && page.id === action.payload)
-    //           ),
-    //         })),
-    //         // remove all associated items
-    //         inputs: state.inputs.filter(
-    //           (input) => input.trackerId !== action.payload
-    //         ),
-
-    return response;
+    await db.trackers.remove(tracker);
   } catch (err) {
     console.error(err);
   }
 }
 
 export const useTrackerDelete = () => {
-  const { dispatch } = useStore();
+  const { state, dispatch } = useStore();
+  const pageUpdate = usePageUpdate();
   return React.useCallback(
     async (tracker: TTracker) => {
-      const response = await trackerDelete(tracker);
-      if (response?.ok) {
-        dispatch({ type: Actions.DELETE_TRACKER, payload: tracker._id });
+      // remove tracker
+      await trackerDelete(tracker);
+      dispatch({ type: Actions.DELETE_TRACKER, payload: tracker._id });
+
+      // remove any page items of this tracker
+      for (let i = 0; i < state.pages.length; i++) {
+        const page = state.pages[i];
+        await pageUpdate({
+          ...page,
+          items: page.items.filter(
+            (item) => !(item.type === "tracker" && item._id === tracker._id)
+          ),
+        });
       }
+
+      // find all inputs of this tracker type
+      // TODO
     },
-    [dispatch]
+    [dispatch, pageUpdate, state.pages]
   );
 };

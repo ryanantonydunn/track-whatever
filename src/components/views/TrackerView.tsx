@@ -16,7 +16,6 @@ import {
 import { format } from "date-fns";
 import React from "react";
 import { Link, useParams } from "react-router-dom";
-import { useInputsByTracker, useTracker } from "../../data/hooks";
 import { useConfirmDialog } from "../base/ConfirmDialog";
 import { Layout } from "../base/Layout";
 import { Error404 } from "./404";
@@ -24,6 +23,9 @@ import { useInputEdit } from "../modals/InputEdit";
 import { InputValue } from "../base/InputValue";
 import { useInputAdd } from "../modals/InputAdd";
 import { useInputDelete } from "../../data/actions/input-delete";
+import { useStore } from "../../data/provider";
+import { useTracker } from "../../data/hooks";
+import { useLoadInputs } from "../../data/actions/inputs-get";
 
 type TParams = {
   trackerId: string;
@@ -35,8 +37,17 @@ export const TrackerView: React.FC = () => {
   const inputAdd = useInputAdd();
   const { trackerId } = useParams<TParams>();
   const tracker = useTracker(trackerId);
-  const inputs = useInputsByTracker(trackerId);
   const inputDelete = useInputDelete();
+  const { state } = useStore();
+
+  const { load, loading } = useLoadInputs();
+  React.useEffect(() => {
+    load({
+      trackerIds: [trackerId || ""],
+      limit: 30,
+      skip: 0,
+    });
+  }, [load, trackerId]);
 
   if (!tracker || !trackerId) return <Error404 />;
 
@@ -44,7 +55,7 @@ export const TrackerView: React.FC = () => {
     <Layout title={tracker.title} back="/trackers">
       <Container maxWidth="xl">
         <TableContainer component={Paper}>
-          {inputs.length ? (
+          {loading ? null : state.inputs.length ? (
             <Table size="small" aria-label="tracker inputs">
               <TableHead>
                 <TableRow>
@@ -54,7 +65,7 @@ export const TrackerView: React.FC = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {inputs.map((input) => (
+                {state.inputs.map((input) => (
                   <TableRow
                     key={input._id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}

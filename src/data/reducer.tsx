@@ -7,6 +7,7 @@ export enum Actions {
   CREATE_PAGE = "CREATE_PAGE",
   UPDATE_PAGE = "UPDATE_PAGE",
   DELETE_PAGE = "DELETE_PAGE",
+  SET_INPUTS = "SET_INPUTS",
   CREATE_INPUT = "CREATE_INPUT",
   UPDATE_INPUT = "UPDATE_INPUT",
   DELETE_INPUT = "DELETE_INPUT",
@@ -47,6 +48,11 @@ type TDeleteTracker = {
   payload: string;
 };
 
+type TSetInputs = {
+  type: Actions.SET_INPUTS;
+  payload: TInput[];
+};
+
 type TCreateInput = {
   type: Actions.CREATE_INPUT;
   payload: TInput;
@@ -79,6 +85,7 @@ export type TAction =
   | TCreateTracker
   | TUpdateTracker
   | TDeleteTracker
+  | TSetInputs
   | TCreateInput
   | TUpdateInput
   | TDeleteInput
@@ -119,27 +126,19 @@ export const reducer = (state: TStore, action: TAction): TStore => {
         ),
       };
     case Actions.DELETE_TRACKER:
-      // remove actual tracker
       const trackers = [...state.trackers];
       const trackerIndex = trackers.findIndex((t) => t._id === action.payload);
       if (trackerIndex !== -1) {
         trackers.splice(trackerIndex, 1);
       }
-
       return {
         ...state,
         trackers,
-        // remove all associated page items
-        pages: state.pages.map((page) => ({
-          ...page,
-          items: page.items.filter(
-            (page) => !(page.type === "tracker" && page._id === action.payload)
-          ),
-        })),
-        // remove all associated items
-        inputs: state.inputs.filter(
-          (input) => input.trackerId !== action.payload
-        ),
+      };
+    case Actions.SET_INPUTS:
+      return {
+        ...state,
+        inputs: action.payload,
       };
     case Actions.CREATE_INPUT:
       return {

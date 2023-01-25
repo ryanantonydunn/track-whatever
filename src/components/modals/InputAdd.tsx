@@ -28,7 +28,7 @@ export function useInputAdd(): TInputAdd {
   const [isOpen, setIsOpen] = React.useState(false);
   const [args, setArgs] = React.useState<TOpenArgs | undefined>();
   const [value, setValue] = React.useState<TInputPrimitive | undefined>();
-  const [time, setTime] = React.useState(new Date());
+  const [date, setDate] = React.useState(new Date());
   const inputCreate = useInputCreate();
 
   const open = (args?: TOpenArgs) => {
@@ -50,9 +50,9 @@ export function useInputAdd(): TInputAdd {
           <DateTimePicker
             renderInput={(props) => <TextField {...props} />}
             label="Set time"
-            value={time}
+            value={date}
             onChange={(newValue) => {
-              setTime(newValue || new Date());
+              setDate(newValue || new Date());
             }}
           />
           {args?.trackerId && (
@@ -83,7 +83,7 @@ export function useInputAdd(): TInputAdd {
             if (args?.trackerId && value !== undefined) {
               const newInput = {
                 ...createBlankInput(),
-                time: time.toISOString(),
+                date: date.toISOString(),
                 trackerId: args.trackerId,
                 value,
               };

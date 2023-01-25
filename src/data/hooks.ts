@@ -109,32 +109,3 @@ export const useInput = (id?: string): TInput | undefined => {
   const getInput = useGetInput();
   return React.useMemo(() => getInput(id), [id, getInput]);
 };
-
-/**
- * Function to get inputs by tracker
- */
-
-type TUseGetInputsByTracker = (id?: string) => TInput[];
-
-export const useGetInputsByTracker = (): TUseGetInputsByTracker => {
-  const { state } = useStore();
-  const getInputByTracker = React.useCallback(
-    (id?: string) => {
-      return arrayObjSort(
-        state.inputs.filter((d) => d.trackerId === id),
-        "date"
-      );
-    },
-    [state.inputs]
-  );
-  return getInputByTracker;
-};
-
-/**
- * Get inputs by tracker
- */
-
-export const useInputsByTracker = (id?: string): TInput[] => {
-  const getInputByTracker = useGetInputsByTracker();
-  return React.useMemo(() => getInputByTracker(id), [id, getInputByTracker]);
-};

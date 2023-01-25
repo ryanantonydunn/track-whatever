@@ -25,7 +25,6 @@ export const StoreProvider: React.FC<TProvider> = ({ children }) => {
 
   // preload data
   React.useEffect(() => {
-    console.log("loading");
     async function preloadData() {
       const config = await initConfig();
       if (config) {

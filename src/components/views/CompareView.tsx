@@ -1,4 +1,5 @@
 import {
+  Box,
   Checkbox,
   Collapse,
   Container,
@@ -15,20 +16,20 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
   Typography,
 } from "@mui/material";
+import { endOfMonth, format, isSameDay, startOfMonth } from "date-fns";
 import React from "react";
-// import { useParams } from "react-router-dom";
-// import { useInputsByTracker } from "../../data/hooks";
-import { format, isSameDay } from "date-fns";
-import { useGetInputsByTracker, useGetTracker } from "../../data/hooks";
-import { TInput } from "../../types";
-import { arrayObjSort } from "../../utils/sort";
-import { Layout } from "../base/Layout";
-import { InputValue } from "../base/InputValue";
-import { useExpandMore } from "../base/ExpandMore";
-import { useQuery } from "../../utils/query";
+import { useLoadInputs } from "../../data/actions/inputs-get";
+import { useGetTracker } from "../../data/hooks";
 import { useStore } from "../../data/provider";
+import { TInput } from "../../types";
+import { useQuery } from "../../utils/query";
+import { useExpandMore } from "../base/ExpandMore";
+import { InputValue } from "../base/InputValue";
+import { Layout } from "../base/Layout";
+import { DateTimePicker } from "@mui/x-date-pickers";
 
 // type TParams = {
 //   compareId: string;
@@ -49,20 +50,28 @@ export const CompareView: React.FC = () => {
   });
   const compare = { title: "Compare Data" };
   const { state } = useStore();
-  const getInputsByTracker = useGetInputsByTracker();
   const getTracker = useGetTracker();
   const [trackerIds, setTrackerIds] = React.useState<string[]>(() => {
     return query.get("trackers")?.split(",").filter(Boolean) || [];
   });
 
+  const [dateFrom, setDateFrom] = React.useState(startOfMonth(new Date()));
+  const [dateTo, setDateTo] = React.useState(endOfMonth(new Date()));
+
+  // load the inputs
+  const { load, loading } = useLoadInputs();
+  React.useEffect(() => {
+    load({
+      trackerIds,
+      dateFrom,
+      dateTo,
+    });
+  }, [load, trackerIds, dateFrom, dateTo]);
+
   // get the data based on the selected trackers
   const inputDisplayByDay = React.useMemo<TInputDisplayDay[]>(() => {
-    const inputs = arrayObjSort<TInput>(
-      trackerIds.map((id) => getInputsByTracker(id)).flat(),
-      "date"
-    );
     const days: TInputDisplayDay[] = [];
-    inputs.forEach((input, i) => {
+    state.inputs.forEach((input, i) => {
       // check if we are still on the same day
       const previousDay = days[days.length - 1];
       const previousDayDate = previousDay?.date;
@@ -84,11 +93,30 @@ export const CompareView: React.FC = () => {
     });
 
     return days;
-  }, [trackerIds, getInputsByTracker]);
+  }, [state.inputs]);
 
   return (
     <Layout title={compare.title} back="/">
       <Container maxWidth="xl">
+        <Box sx={{ p: 2 }}>
+          <DateTimePicker
+            renderInput={(props) => <TextField {...props} />}
+            label="Date from"
+            value={dateFrom}
+            onChange={(newValue) => {
+              setDateFrom(newValue || startOfMonth(new Date()));
+            }}
+          />
+          <Box sx={{ mx: 2 }}> to </Box>
+          <DateTimePicker
+            renderInput={(props) => <TextField {...props} />}
+            label="Date to"
+            value={dateTo}
+            onChange={(newValue) => {
+              setDateTo(newValue || endOfMonth(new Date()));
+            }}
+          />
+        </Box>
         <Paper>
           <Stack direction="row" alignItems="middle" sx={{ p: 2 }}>
             <Typography component="h3" variant="h6" sx={{ flex: 1 }}>
@@ -146,7 +174,7 @@ export const CompareView: React.FC = () => {
         </Paper>
 
         <TableContainer component={Paper} sx={{ mt: 2 }}>
-          {inputDisplayByDay.length ? (
+          {loading ? null : inputDisplayByDay.length ? (
             <Table size="small" aria-label="tracker inputs">
               <TableHead>
                 <TableRow>
