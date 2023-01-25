@@ -29,7 +29,7 @@ import { useQuery } from "../../utils/query";
 import { useExpandMore } from "../base/ExpandMore";
 import { InputValue } from "../base/InputValue";
 import { Layout } from "../base/Layout";
-import { DateTimePicker } from "@mui/x-date-pickers";
+import { DatePicker } from "@mui/x-date-pickers";
 
 // type TParams = {
 //   compareId: string;
@@ -98,32 +98,34 @@ export const CompareView: React.FC = () => {
   return (
     <Layout title={compare.title} back="/">
       <Container maxWidth="xl">
-        <Box sx={{ p: 2 }}>
-          <DateTimePicker
+        <Stack direction="row" alignItems="center" sx={{ py: 2 }}>
+          <DatePicker
             renderInput={(props) => <TextField {...props} />}
             label="Date from"
             value={dateFrom}
+            maxDate={dateTo}
             onChange={(newValue) => {
               setDateFrom(newValue || startOfMonth(new Date()));
             }}
           />
           <Box sx={{ mx: 2 }}> to </Box>
-          <DateTimePicker
+          <DatePicker
             renderInput={(props) => <TextField {...props} />}
             label="Date to"
             value={dateTo}
+            minDate={dateFrom}
             onChange={(newValue) => {
               setDateTo(newValue || endOfMonth(new Date()));
             }}
           />
-        </Box>
-        <Paper>
-          <Stack direction="row" alignItems="middle" sx={{ p: 2 }}>
-            <Typography component="h3" variant="h6" sx={{ flex: 1 }}>
-              Select Trackers
-            </Typography>
+        </Stack>
+        <Paper sx={{ position: "relative", minHeight: 40 }}>
+          <Box sx={{ position: "absolute", top: 2, right: 2, zIndex: 10 }}>
             {expandMore.icon}
-          </Stack>
+          </Box>
+          <Typography sx={{ px: 2, py: 1, fontSize: 14 }} component="h3">
+            Trackers
+          </Typography>
           <Collapse in={expandMore.open} timeout="auto" unmountOnExit>
             <List sx={{ pt: 0 }}>
               {state.trackers.length ? (
