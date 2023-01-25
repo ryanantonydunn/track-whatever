@@ -2,11 +2,12 @@ import { TConfig, TPage, TTracker } from "../../types";
 import { db } from "../database";
 
 // set up the config
-export async function initConfig(): Promise<TConfig | undefined> {
+export async function configGet(): Promise<TConfig | undefined> {
   try {
     const config = await db.config.get<TConfig>("config");
     return config;
   } catch (err) {
+    // init config if not existing
     await db.config.put({
       _id: "config",
       hasInitialised: false,

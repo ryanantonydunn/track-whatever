@@ -1,6 +1,5 @@
 import React from "react";
 import { TInput, TPage, TTracker } from "../types";
-import { arrayObjSort } from "../utils/sort";
 import { useStore } from "./provider";
 
 /**

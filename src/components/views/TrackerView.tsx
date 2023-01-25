@@ -5,15 +5,17 @@ import {
   Container,
   IconButton,
   Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
   Typography,
 } from "@mui/material";
-import { format } from "date-fns";
+import { endOfMonth, format, startOfMonth } from "date-fns";
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 import { useConfirmDialog } from "../base/ConfirmDialog";
@@ -26,6 +28,7 @@ import { useInputDelete } from "../../data/actions/input-delete";
 import { useStore } from "../../data/provider";
 import { useTracker } from "../../data/hooks";
 import { useLoadInputs } from "../../data/actions/inputs-get";
+import { DatePicker } from "@mui/x-date-pickers";
 
 type TParams = {
   trackerId: string;
@@ -40,20 +43,45 @@ export const TrackerView: React.FC = () => {
   const inputDelete = useInputDelete();
   const { state } = useStore();
 
+  const [dateFrom, setDateFrom] = React.useState(startOfMonth(new Date()));
+  const [dateTo, setDateTo] = React.useState(endOfMonth(new Date()));
+
+  // load the inputs
   const { load, loading } = useLoadInputs();
   React.useEffect(() => {
     load({
       trackerIds: [trackerId || ""],
-      limit: 30,
-      skip: 0,
+      dateFrom,
+      dateTo,
     });
-  }, [load, trackerId]);
+  }, [load, trackerId, dateFrom, dateTo]);
 
   if (!tracker || !trackerId) return <Error404 />;
 
   return (
     <Layout title={tracker.title} back="/trackers">
       <Container maxWidth="xl">
+        <Stack direction="row" alignItems="center" sx={{ py: 2 }}>
+          <DatePicker
+            renderInput={(props) => <TextField {...props} />}
+            label="Date from"
+            value={dateFrom}
+            maxDate={dateTo}
+            onChange={(newValue) => {
+              setDateFrom(newValue || startOfMonth(new Date()));
+            }}
+          />
+          <Box sx={{ mx: 2 }}> to </Box>
+          <DatePicker
+            renderInput={(props) => <TextField {...props} />}
+            label="Date to"
+            value={dateTo}
+            minDate={dateFrom}
+            onChange={(newValue) => {
+              setDateTo(newValue || endOfMonth(new Date()));
+            }}
+          />
+        </Stack>
         <TableContainer component={Paper}>
           {loading ? null : state.inputs.length ? (
             <Table size="small" aria-label="tracker inputs">

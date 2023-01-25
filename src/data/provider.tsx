@@ -1,7 +1,7 @@
 import React from "react";
 import { TStore } from "../types";
 import { Actions, TAction, reducer } from "./reducer";
-import { initConfig, setExampleDocs } from "./actions/preload-data";
+import { configGet, setExampleDocs } from "./actions/config-get";
 import { pagesGet } from "./actions/pages-get";
 import { trackersGet } from "./actions/trackers-get";
 
@@ -26,11 +26,13 @@ export const StoreProvider: React.FC<TProvider> = ({ children }) => {
   // preload data
   React.useEffect(() => {
     async function preloadData() {
-      const config = await initConfig();
+      let config = await configGet();
       if (config) {
         if (!config.hasInitialised) {
           await setExampleDocs(config);
+          config = await configGet();
         }
+        if (!config) return;
         const pages = (await pagesGet()) || [];
         const trackers = (await trackersGet()) || [];
         dispatch({
