@@ -76,3 +76,15 @@ export const useLoadInputs = (): TUseInputs => {
 
   return { loading, load };
 };
+
+export async function inputsGetAll(): Promise<TInput[] | undefined> {
+  try {
+    const response = await db.inputs.allDocs<TInput>({
+      include_docs: true,
+    });
+    const inputs = response.rows.map((d) => d.doc).filter(Boolean) as TInput[];
+    return inputs;
+  } catch (err) {
+    console.error(err);
+  }
+}

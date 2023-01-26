@@ -1,6 +1,5 @@
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import React from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { CompareView } from "./components/views/CompareView";
@@ -54,13 +53,11 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
-  <React.StrictMode>
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <StoreProvider>
-        <DataError>
-          <RouterProvider router={router} />
-        </DataError>
-      </StoreProvider>
-    </LocalizationProvider>
-  </React.StrictMode>
+  <LocalizationProvider dateAdapter={AdapterDateFns}>
+    <StoreProvider>
+      <DataError>
+        <RouterProvider router={router} />
+      </DataError>
+    </StoreProvider>
+  </LocalizationProvider>
 );

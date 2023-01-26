@@ -1,9 +1,10 @@
 import React from "react";
 import { TStore } from "../types";
 import { Actions, TAction, reducer } from "./reducer";
-import { configGet, setExampleDocs } from "./actions/config-get";
+import { configGet } from "./actions/config-get";
 import { pagesGet } from "./actions/pages-get";
 import { trackersGet } from "./actions/trackers-get";
+import { dbBase } from "./database";
 
 export type TContext = {
   state: TStore;
@@ -19,7 +20,7 @@ export const StoreProvider: React.FC<TProvider> = ({ children }) => {
     trackers: [],
     pages: [],
     inputs: [],
-    config: { _id: "", _rev: "", hasInitialised: false, pageOrder: [] },
+    config: { _id: "", _rev: "", pageOrder: [] },
     loading: true,
   });
 
@@ -27,19 +28,17 @@ export const StoreProvider: React.FC<TProvider> = ({ children }) => {
   React.useEffect(() => {
     async function preloadData() {
       let config = await configGet();
-      if (config) {
-        if (!config.hasInitialised) {
-          await setExampleDocs(config);
-          config = await configGet();
-        }
-        if (!config) return;
-        const pages = (await pagesGet()) || [];
-        const trackers = (await trackersGet()) || [];
-        dispatch({
-          type: Actions.RESET_ALL_DATA,
-          payload: { config, pages, trackers, inputs: [], loading: false },
-        });
+      if (!config) {
+        await dbBase();
+        config = await configGet();
       }
+      if (!config) return;
+      const pages = (await pagesGet()) || [];
+      const trackers = (await trackersGet()) || [];
+      dispatch({
+        type: Actions.RESET_ALL_DATA,
+        payload: { config, pages, trackers, inputs: [], loading: false },
+      });
     }
     preloadData();
   }, []);

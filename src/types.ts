@@ -50,7 +50,6 @@ export type TPage = {
 export type TConfig = {
   _id: string;
   _rev: string;
-  hasInitialised: boolean;
   pageOrder: string[];
 };
 
