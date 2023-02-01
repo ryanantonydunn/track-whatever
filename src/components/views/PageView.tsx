@@ -20,37 +20,48 @@ import { usePageItemAdd } from "../modals/PageItemAdd";
 import { useInputDelete } from "../../data/actions/input-delete";
 import { useInputUpdate } from "../../data/actions/input-update";
 import { useInputCreate } from "../../data/actions/input-create";
+import { useStore } from "../../data/provider";
 
 type TParams = {
   pageId: string;
 };
 
-type TInputs = { [key: string]: TInput }; // { trackerId: { ...input } }
+type TInputs = { [key: string]: string }; // { trackerId: inputId }
 
 export const PageView: React.FC = () => {
+  const { state } = useStore();
   const { pageId } = useParams<TParams>();
   const page = usePage(pageId);
   const getTracker = useGetTracker();
   const pageItemAdd = usePageItemAdd();
-  const [inputs, setInputs] = React.useState<TInputs>({});
+  const [currentInputIds, setCurrentInputIds] = React.useState<TInputs>({});
   const [inputTime, setInputTime] = React.useState(new Date());
   const inputDelete = useInputDelete();
   const inputUpdate = useInputUpdate();
   const inputCreate = useInputCreate();
 
+  // keep a record of which inputs have been created by this page for easy updating
+  const currentInputs = Object.fromEntries(
+    Object.entries(currentInputIds)
+      .map(([trackerId, inputId]) => [
+        trackerId,
+        state.inputs.find((d) => d._id === inputId),
+      ])
+      .filter(([_, input]) => Boolean(input))
+  );
+
   // handle input changes
   const setValue = (trackerId: string, value: TInputPrimitive | undefined) => {
-    if (inputs[trackerId]) {
+    if (currentInputIds[trackerId]) {
       if (value === "" || value === undefined) {
         // remove a set input that has been changed to empty
-        const newInputs = { ...inputs };
+        const newInputs = { ...currentInputIds };
         delete newInputs[trackerId];
-        setInputs({ ...newInputs });
-        inputDelete(inputs[trackerId]);
+        setCurrentInputIds({ ...newInputs });
+        inputDelete(currentInputs[trackerId]);
       } else {
         // replace a set input value
-        const newInput = { ...inputs[trackerId], value };
-        setInputs({ ...inputs, [trackerId]: newInput });
+        const newInput = { ...currentInputs[trackerId], value };
         inputUpdate(newInput);
       }
     } else {
@@ -62,7 +73,7 @@ export const PageView: React.FC = () => {
           trackerId,
           value,
         };
-        setInputs({ ...inputs, [trackerId]: newInput });
+        setCurrentInputIds({ ...currentInputIds, [trackerId]: newInput._id });
         inputCreate(newInput);
       }
     }
@@ -94,7 +105,7 @@ export const PageView: React.FC = () => {
                     <ListItem key={tracker._id}>
                       <InputEntry
                         trackerId={tracker._id}
-                        value={inputs[tracker._id]?.value}
+                        value={currentInputs[tracker._id]?.value}
                         setValue={setValue}
                       />
                     </ListItem>

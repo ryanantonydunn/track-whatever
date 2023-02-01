@@ -26,8 +26,13 @@ export const InputEntry: React.FC<TInputEntry> = ({
   setValue,
 }) => {
   const tracker = useTracker(trackerId);
+  const [localValue, setLocalValue] = React.useState(value);
+  React.useEffect(() => {
+    setLocalValue(value);
+  }, [value]);
+
   if (!tracker) return null;
-  let parsedValue;
+
   switch (tracker.inputType) {
     case "checkbox":
       return (
@@ -53,25 +58,28 @@ export const InputEntry: React.FC<TInputEntry> = ({
         />
       );
     case "number":
+      const numValue = value !== undefined ? String(value) : "";
       return (
         <TextField
           label={tracker.title}
           fullWidth
-          value={value || ""}
+          value={numValue}
           onChange={(e) => {
             const val = e.currentTarget.value;
-            setValue(tracker._id, isNumeric(val) ? parseFloat(val) : "");
+            setLocalValue(val);
+          }}
+          onBlur={() => {
+            if (typeof localValue !== "string") return;
+            setValue(
+              tracker._id,
+              isNumeric(localValue) ? parseFloat(localValue) : ""
+            );
           }}
           inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
         />
       );
     case "slider":
       if (!tracker.slider) return null;
-      if (typeof value === "number") {
-        parsedValue = value;
-      } else {
-        parsedValue = tracker.slider.min;
-      }
       return (
         <Box
           sx={{
@@ -104,7 +112,6 @@ export const InputEntry: React.FC<TInputEntry> = ({
               step={tracker.slider.increment || 1}
               min={tracker.slider.min || 0}
               max={tracker.slider.max || 10}
-              value={parsedValue}
               onChange={(e, newValue) => {
                 setValue(tracker._id, newValue as number);
               }}
@@ -114,7 +121,7 @@ export const InputEntry: React.FC<TInputEntry> = ({
               aria-label="delete input"
               onClick={() => setValue(tracker._id, undefined)}
               sx={{ ml: 2 }}
-              disabled={parsedValue === undefined}
+              disabled={localValue === undefined}
             >
               <Delete />
             </IconButton>
@@ -128,9 +135,12 @@ export const InputEntry: React.FC<TInputEntry> = ({
           rows={3}
           fullWidth
           multiline
-          value={value || ""}
+          value={localValue || ""}
           onChange={(e) => {
-            setValue(tracker._id, e.currentTarget.value.slice(0, 10000));
+            setLocalValue(e.currentTarget.value.slice(0, 10000));
+          }}
+          onBlur={() => {
+            setValue(tracker._id, localValue);
           }}
         />
       );
