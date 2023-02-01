@@ -18,8 +18,9 @@ type TQuery = {
       $gte: string;
       $lt: string;
     };
-    $or?: { trackerId: string }[];
+    trackerId?: { $in: string[] };
   };
+  sort?: { [propName: string]: "desc" | "asc" }[];
   limit?: number;
   skip?: number;
 };
@@ -30,6 +31,7 @@ export async function inputsGet(
   try {
     const query: TQuery = {
       selector: {},
+      sort: [{ date: "desc" }],
     };
     if (args.dateFrom || args.dateTo) {
       query.selector.date = {
@@ -38,7 +40,9 @@ export async function inputsGet(
       };
     }
     if (args.trackerIds) {
-      query.selector.$or = args.trackerIds.map((id) => ({ trackerId: id }));
+      query.selector.trackerId = {
+        $in: args.trackerIds,
+      };
     }
     if (args.limit !== undefined) query.limit = args.limit;
     if (args.skip !== undefined) query.skip = args.skip;
