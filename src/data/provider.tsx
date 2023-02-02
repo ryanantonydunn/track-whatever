@@ -50,6 +50,6 @@ export const StoreProvider: React.FC<TProvider> = ({ children }) => {
   );
 };
 
-export const useStore = (): TContext => {
+export const useStore = () => {
   return React.useContext(StoreContext);
 };

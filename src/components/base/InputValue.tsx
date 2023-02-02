@@ -16,7 +16,11 @@ export const InputValue: React.FC<TInputValue> = ({ input, hideText }) => {
   );
 
   if (trackerType === "checkbox") {
-    return input.value ? <Check aria-label="yes" /> : <Close aria-label="no" />;
+    return input.value ? (
+      <Check fontSize="small" aria-label="yes" />
+    ) : (
+      <Close aria-label="no" />
+    );
   }
   if (hideText && trackerType === "text") {
     return <>{input.value}</>;

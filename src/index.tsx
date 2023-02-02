@@ -4,20 +4,24 @@ import ReactDOM from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { CompareView } from "./components/views/CompareView";
 import { DataError } from "./components/views/DataError";
+import { DataView } from "./components/views/DataView";
 import { ImportExport } from "./components/views/ImportExport";
 import { PageEdit } from "./components/views/PageEdit";
-import { PageList } from "./components/views/PageList";
 import { PageListEdit } from "./components/views/PageListEdit";
-import { PageView } from "./components/views/PageView";
 import { TrackerList } from "./components/views/TrackerList";
 import { TrackerView } from "./components/views/TrackerView";
 import { StoreProvider } from "./data/provider";
 import "./index.css";
+import { PageView } from "./components/views/PageView";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <PageList />,
+    element: <DataView />,
+  },
+  {
+    path: "/entry/:pageId",
+    element: <PageView />,
   },
   {
     path: "/pages",

@@ -9,8 +9,6 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
-  Menu,
-  MenuItem,
   Stack,
   Typography,
 } from "@mui/material";
@@ -49,8 +47,6 @@ const menu = [
 ];
 
 export const Layout: React.FC<TLayout> = ({ children, title, back }) => {
-  const [menuEl, setMenuEl] = React.useState<null | HTMLElement>(null);
-  const isMenuOpen = !!menuEl;
   const { state } = useStore();
   const [menuOpen, setMenuOpen] = React.useState(false);
 
@@ -62,6 +58,7 @@ export const Layout: React.FC<TLayout> = ({ children, title, back }) => {
           boxShadow: `inset 0 -1px 0 rgba(0,0,0,.3)`,
           color: "white",
           p: 1,
+          pl: 2,
         }}
       >
         <Stack direction="row" alignItems="center">
@@ -82,9 +79,9 @@ export const Layout: React.FC<TLayout> = ({ children, title, back }) => {
           <IconButton
             id="menu-button"
             color="inherit"
-            aria-controls={isMenuOpen ? "menu" : undefined}
+            aria-controls={menuOpen ? "menu" : undefined}
             aria-haspopup="true"
-            aria-expanded={isMenuOpen ? "true" : undefined}
+            aria-expanded={menuOpen ? "true" : undefined}
             aria-label="menu"
             onClick={(e) => {
               setMenuOpen(!menuOpen);
