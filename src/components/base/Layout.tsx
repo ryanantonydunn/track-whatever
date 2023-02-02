@@ -1,16 +1,20 @@
 import { ArrowBack, Menu as MenuIcon } from "@mui/icons-material";
 import {
-  AppBar,
   Backdrop,
   Box,
   CircularProgress,
+  Drawer,
   IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
   Menu,
   MenuItem,
-  Toolbar,
+  Stack,
   Typography,
 } from "@mui/material";
-import { Container } from "@mui/system";
+import { lightBlue, lightGreen } from "@mui/material/colors";
 import React from "react";
 import { Link } from "react-router-dom";
 import { useStore } from "../../data/provider";
@@ -21,91 +25,94 @@ type TLayout = {
   back?: string;
 };
 
+const menu = [
+  {
+    text: "Home",
+    to: "/",
+  },
+  {
+    text: "Compare Data",
+    to: "/compare",
+  },
+  {
+    text: "Manage Trackers",
+    to: "/trackers",
+  },
+  {
+    text: "Manage Pages",
+    to: "/pages",
+  },
+  {
+    text: "Import/Export Data",
+    to: "/import-export",
+  },
+];
+
 export const Layout: React.FC<TLayout> = ({ children, title, back }) => {
   const [menuEl, setMenuEl] = React.useState<null | HTMLElement>(null);
-  const closeMenu = () => setMenuEl(null);
   const isMenuOpen = !!menuEl;
   const { state } = useStore();
+  const [menuOpen, setMenuOpen] = React.useState(false);
 
   return (
     <>
-      <AppBar position="static">
-        <Container maxWidth="md">
-          <Toolbar>
-            {back && (
-              <IconButton
-                size="large"
-                edge="start"
-                color="inherit"
-                aria-label="back"
-                sx={{ mr: 2 }}
-                component={Link}
-                to={back}
-              >
-                <ArrowBack />
-              </IconButton>
-            )}
-            <Typography variant="h6" component="h1" sx={{ flexGrow: 1 }}>
-              {title}
-            </Typography>
-            <IconButton
-              id="menu-button"
-              color="inherit"
-              aria-controls={isMenuOpen ? "menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={isMenuOpen ? "true" : undefined}
-              aria-label="Menu"
-              onClick={(e) => {
-                setMenuEl(e.currentTarget);
-              }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu"
-              anchorEl={menuEl}
-              open={isMenuOpen}
-              onClose={closeMenu}
-              MenuListProps={{
-                "aria-labelledby": "menu-button",
-              }}
-            >
-              <MenuItem onClick={closeMenu} component={Link} to="/">
-                View Pages
-              </MenuItem>
-              <MenuItem onClick={closeMenu} component={Link} to="/trackers">
-                View All Trackers
-              </MenuItem>
-              <MenuItem onClick={closeMenu} component={Link} to="/compare">
-                Compare Data
-              </MenuItem>
-              <MenuItem
-                onClick={closeMenu}
-                component={Link}
-                to="/import-export"
-              >
-                Import/Export Data
-              </MenuItem>
-            </Menu>
-          </Toolbar>
-        </Container>
-      </AppBar>
       <Box
-        component="main"
         sx={{
-          py: 2,
-          px: 1,
-          backgroundColor: (theme) =>
-            theme.palette.mode === "light"
-              ? theme.palette.grey[100]
-              : theme.palette.grey[900],
-          flexGrow: 1,
-          height: "100vh",
-          overflow: "auto",
+          background: `linear-gradient(to right, ${lightGreen["700"]}, ${lightBlue["700"]})`,
+          boxShadow: `inset 0 -1px 0 rgba(0,0,0,.3)`,
+          color: "white",
+          p: 1,
         }}
       >
-        {state.loading ? null : children}
+        <Stack direction="row" alignItems="center">
+          {back && (
+            <IconButton
+              color="inherit"
+              aria-label="back"
+              sx={{ mr: 2 }}
+              component={Link}
+              to={back}
+            >
+              <ArrowBack />
+            </IconButton>
+          )}
+          <Typography variant="h6" component="h1" sx={{ flexGrow: 1 }}>
+            {title}
+          </Typography>
+          <IconButton
+            id="menu-button"
+            color="inherit"
+            aria-controls={isMenuOpen ? "menu" : undefined}
+            aria-haspopup="true"
+            aria-expanded={isMenuOpen ? "true" : undefined}
+            aria-label="menu"
+            onClick={(e) => {
+              setMenuOpen(!menuOpen);
+            }}
+          >
+            <MenuIcon />
+          </IconButton>
+        </Stack>
       </Box>
+      <Drawer anchor="right" open={menuOpen} onClose={() => setMenuOpen(false)}>
+        <Box
+          sx={{ width: 250 }}
+          role="presentation"
+          onClick={() => setMenuOpen(false)}
+          onKeyDown={() => setMenuOpen(false)}
+        >
+          <List>
+            {menu.map((item, i) => (
+              <ListItem key={i} disablePadding>
+                <ListItemButton component={Link} to={item.to}>
+                  <ListItemText primary={item.text} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+      </Drawer>
+      {state.loading ? null : children}
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={state.loading}

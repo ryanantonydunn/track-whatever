@@ -119,7 +119,7 @@ export const CompareView: React.FC = () => {
             }}
           />
         </Stack>
-        <Paper sx={{ position: "relative", minHeight: 40 }}>
+        <Paper sx={{ position: "relative" }}>
           <Box sx={{ position: "absolute", top: 2, right: 2, zIndex: 10 }}>
             {expandMore.icon}
           </Box>

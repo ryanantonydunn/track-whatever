@@ -20,16 +20,12 @@ const router = createBrowserRouter([
     element: <PageList />,
   },
   {
-    path: "/edit-pages",
+    path: "/pages",
     element: <PageListEdit />,
   },
   {
-    path: "/edit-page/:pageId",
-    element: <PageEdit />,
-  },
-  {
     path: "/page/:pageId",
-    element: <PageView />,
+    element: <PageEdit />,
   },
   {
     path: "/trackers",
