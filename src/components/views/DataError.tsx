@@ -1,5 +1,5 @@
 import { Button, Container, Typography } from "@mui/material";
-import { useConfirmDialog } from "../base/ConfirmDialog";
+import { useConfirmDialog } from "../modals/ConfirmDialog";
 import { useStore } from "../../data/provider";
 
 type TDataError = {

@@ -22,7 +22,7 @@ import { useGetTracker } from "../../data/hooks";
 import { useStore } from "../../data/provider";
 import { TInput } from "../../types";
 import { primaryGradient } from "../../utils/gradient";
-import { useConfirmDialog } from "../base/ConfirmDialog";
+import { useConfirmDialog } from "../modals/ConfirmDialog";
 import { InputValue } from "../base/InputValue";
 import { Layout } from "../base/Layout";
 import { useInputEdit } from "../modals/InputEdit";

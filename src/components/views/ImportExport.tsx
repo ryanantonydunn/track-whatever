@@ -1,6 +1,6 @@
 import { Button, Container } from "@mui/material";
 import React from "react";
-import { useConfirmDialog } from "../base/ConfirmDialog";
+import { useConfirmDialog } from "../modals/ConfirmDialog";
 import { Layout } from "../base/Layout";
 import { dataDownload } from "../../data/actions/data-download";
 import { dataImport } from "../../data/actions/data-import";

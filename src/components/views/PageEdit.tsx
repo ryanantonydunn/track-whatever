@@ -26,7 +26,7 @@ import { usePageUpdate } from "../../data/actions/page-update";
 import { usePage, useTracker } from "../../data/hooks";
 import { TPageItem } from "../../types";
 import { reorderArray } from "../../utils/reorder-array";
-import { useConfirmDialog } from "../base/ConfirmDialog";
+import { useConfirmDialog } from "../modals/ConfirmDialog";
 import { Layout } from "../base/Layout";
 import { usePageItemAdd } from "../modals/PageItemAdd";
 import { useTrackerEdit } from "../modals/TrackerEdit";

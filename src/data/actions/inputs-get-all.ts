@@ -4,7 +4,7 @@ import { db } from "../database";
 import { useStore } from "../provider";
 import { Actions } from "../reducer";
 
-const LIMIT = 2;
+const LIMIT = 50;
 
 type TQuery = {
   selector: {

@@ -14,7 +14,7 @@ import {
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { usePages } from "../../data/hooks";
-import { useConfirmDialog } from "../base/ConfirmDialog";
+import { useConfirmDialog } from "../modals/ConfirmDialog";
 import { Layout } from "../base/Layout";
 import { usePageAdd } from "../modals/PageAdd";
 import { usePageDelete } from "../../data/actions/page-delete";

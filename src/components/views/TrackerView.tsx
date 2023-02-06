@@ -18,7 +18,7 @@ import {
 import { endOfMonth, format, startOfMonth } from "date-fns";
 import React from "react";
 import { Link, useParams } from "react-router-dom";
-import { useConfirmDialog } from "../base/ConfirmDialog";
+import { useConfirmDialog } from "../modals/ConfirmDialog";
 import { Layout } from "../base/Layout";
 import { Error404 } from "./404";
 import { useInputEdit } from "../modals/InputEdit";

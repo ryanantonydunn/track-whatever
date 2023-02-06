@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
-import { useConfirmDialog } from "../base/ConfirmDialog";
+import { useConfirmDialog } from "../modals/ConfirmDialog";
 import { Layout } from "../base/Layout";
 import { useTrackerAdd } from "../modals/TrackerAdd";
 import { useTrackerEdit } from "../modals/TrackerEdit";
