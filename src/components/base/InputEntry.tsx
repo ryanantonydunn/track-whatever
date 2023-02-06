@@ -80,6 +80,8 @@ export const InputEntry: React.FC<TInputEntry> = ({
       );
     case "slider":
       if (!tracker.slider) return null;
+      const sliderValue =
+        typeof localValue === "number" ? localValue : tracker.slider.min;
       return (
         <Box
           sx={{
@@ -108,7 +110,7 @@ export const InputEntry: React.FC<TInputEntry> = ({
               id={`slider-${tracker._id}`}
               aria-labelledby={`${tracker.title}-label`}
               valueLabelDisplay="auto"
-              defaultValue={tracker.slider.min || 0}
+              value={sliderValue}
               step={tracker.slider.increment || 1}
               min={tracker.slider.min || 0}
               max={tracker.slider.max || 10}
