@@ -18,6 +18,13 @@ async function setupIndex() {
         fields: ["date", "trackerId"],
       },
     });
+
+    // test query
+    // const test = await db.inputs.find({
+    //   selector: {},
+    //   sort: [{ date: "desc" }],
+    //   limit: 50,
+    // });
   } catch (err) {
     console.error(err);
   }

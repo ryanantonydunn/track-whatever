@@ -27,7 +27,7 @@ import { useInputAdd } from "../modals/InputAdd";
 import { useInputDelete } from "../../data/actions/input-delete";
 import { useStore } from "../../data/provider";
 import { useTracker } from "../../data/hooks";
-import { useLoadInputs } from "../../data/actions/inputs-get";
+import { useInputsGetAll } from "../../data/actions/inputs-get-all";
 import { DatePicker } from "@mui/x-date-pickers";
 
 type TParams = {
@@ -47,13 +47,9 @@ export const TrackerView: React.FC = () => {
   const [dateTo, setDateTo] = React.useState(endOfMonth(new Date()));
 
   // load the inputs
-  const { load, loading } = useLoadInputs();
+  const { load, loading } = useInputsGetAll();
   React.useEffect(() => {
-    load({
-      trackerIds: [trackerId || ""],
-      dateFrom,
-      dateTo,
-    });
+    load(1);
   }, [load, trackerId, dateFrom, dateTo]);
 
   if (!tracker || !trackerId) return <Error404 />;

@@ -1,6 +1,6 @@
 import { downloadTextFile } from "../../utils/download-file";
 import { configGet } from "./config-get";
-import { inputsGetAll } from "./inputs-get";
+import { inputsGetAbsolutelyAllOfThem } from "./inputs-get-all";
 import { pagesGet } from "./pages-get";
 import { trackersGet } from "./trackers-get";
 
@@ -9,7 +9,7 @@ export async function dataDownload(): Promise<void> {
     const config = await configGet();
     const pages = await pagesGet();
     const trackers = await trackersGet();
-    const inputs = await inputsGetAll();
+    const inputs = await inputsGetAbsolutelyAllOfThem();
     const fileName = `track-${new Date().toISOString()}.json`;
 
     if (!config || !pages || !trackers || !inputs) {

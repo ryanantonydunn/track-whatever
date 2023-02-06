@@ -1,9 +1,10 @@
+import { Add, ArrowLeft, ArrowRight, MoreVert } from "@mui/icons-material";
 import {
-  Box,
   Fab,
   IconButton,
   Menu,
   MenuItem,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -14,18 +15,18 @@ import {
 } from "@mui/material";
 import { format, isSameDay } from "date-fns";
 import React from "react";
-import { useLoadInputs } from "../../data/actions/inputs-get";
+import { Link } from "react-router-dom";
+import { useInputDelete } from "../../data/actions/input-delete";
+import { useInputsGetAll } from "../../data/actions/inputs-get-all";
 import { useGetTracker } from "../../data/hooks";
 import { useStore } from "../../data/provider";
-import { InputValue } from "../base/InputValue";
-import { useConfirmDialog } from "../base/ConfirmDialog";
-import { Layout } from "../base/Layout";
-import { Add, MoreVert } from "@mui/icons-material";
-import { Link } from "react-router-dom";
-import { usePageChoose } from "../modals/PageChoose";
 import { TInput } from "../../types";
-import { useInputDelete } from "../../data/actions/input-delete";
+import { primaryGradient } from "../../utils/gradient";
+import { useConfirmDialog } from "../base/ConfirmDialog";
+import { InputValue } from "../base/InputValue";
+import { Layout } from "../base/Layout";
 import { useInputEdit } from "../modals/InputEdit";
+import { usePageChoose } from "../modals/PageChoose";
 
 type TInputsByDay = { date: string; inputs: TInput[] }[];
 
@@ -47,12 +48,10 @@ export const DataView: React.FC = () => {
   const inputEdit = useInputEdit();
 
   // load the inputs
-  const { load, loading } = useLoadInputs();
+  const { load, next, previous, hasNext, hasPrevious, pageNumber, loading } =
+    useInputsGetAll();
   React.useEffect(() => {
-    load({
-      limit: 50,
-      skip: 0,
-    });
+    load(1);
   }, [load]);
 
   // sort inputs by day
@@ -81,74 +80,100 @@ export const DataView: React.FC = () => {
 
   return (
     <Layout title="Track Whatever">
-      <Box sx={{ borderBottom: "1px solid grey.300", paddingBottom: 4 }}>
-        <TableContainer sx={{ mt: 2 }}>
-          {loading ? null : state.inputs.length ? (
-            <Table size="small" aria-label="tracker inputs">
-              <TableHead>
-                <TableRow>
-                  <TableCell>
-                    <b>Date</b>
-                  </TableCell>
-                  <TableCell>
-                    <b>Tracker</b>
-                  </TableCell>
-                  <TableCell>
-                    <b>Entry</b>
-                  </TableCell>
-                  <TableCell>&nbsp;</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {inputsByDay.map((byDay) => (
-                  <React.Fragment key={byDay.date}>
-                    <TableRow>
-                      <TableCell colSpan={4} sx={{ textAlign: "center" }}>
-                        <Typography sx={{ fontSize: 12, fontWeight: "bold" }}>
-                          {format(new Date(byDay.date), "d MMM yyyy")}
-                        </Typography>
+      <TableContainer sx={{ mt: 2 }}>
+        {loading ? null : state.inputs.length ? (
+          <Table size="small" aria-label="tracker inputs">
+            <TableHead>
+              <TableRow>
+                <TableCell>
+                  <b>Date</b>
+                </TableCell>
+                <TableCell>
+                  <b>Tracker</b>
+                </TableCell>
+                <TableCell>
+                  <b>Entry</b>
+                </TableCell>
+                <TableCell>&nbsp;</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {inputsByDay.map((byDay) => (
+                <React.Fragment key={byDay.date}>
+                  <TableRow>
+                    <TableCell colSpan={4} sx={{ textAlign: "center" }}>
+                      <Typography sx={{ fontSize: 12, fontWeight: "bold" }}>
+                        {format(new Date(byDay.date), "d MMM yyyy")}
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                  {byDay.inputs.map((input) => (
+                    <TableRow key={input._id}>
+                      <TableCell>
+                        {format(new Date(input.date), "HH:mm")}
+                      </TableCell>
+                      <TableCell>
+                        {getTracker(input.trackerId)?.title}
+                      </TableCell>
+                      <TableCell>
+                        <InputValue input={input} />
+                      </TableCell>
+                      <TableCell>
+                        <IconButton
+                          size="small"
+                          aria-label="actions"
+                          onClick={(e) => {
+                            setInputMenuEl(e.currentTarget);
+                            setInputMenuInput(input);
+                          }}
+                        >
+                          <MoreVert fontSize="small" />
+                        </IconButton>
                       </TableCell>
                     </TableRow>
-                    {byDay.inputs.map((input) => (
-                      <TableRow key={input._id}>
-                        <TableCell>
-                          {format(new Date(input.date), "HH:mm")}
-                        </TableCell>
-                        <TableCell>
-                          {getTracker(input.trackerId)?.title}
-                        </TableCell>
-                        <TableCell>
-                          <InputValue input={input} />
-                        </TableCell>
-                        <TableCell>
-                          <IconButton
-                            size="small"
-                            aria-label="actions"
-                            onClick={(e) => {
-                              setInputMenuEl(e.currentTarget);
-                              setInputMenuInput(input);
-                            }}
-                          >
-                            <MoreVert fontSize="small" />
-                          </IconButton>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </React.Fragment>
-                ))}
-              </TableBody>
-            </Table>
-          ) : (
-            <Typography align="center" sx={{ p: 2 }}>
-              No data entered yet
-            </Typography>
-          )}
-        </TableContainer>
-      </Box>
+                  ))}
+                </React.Fragment>
+              ))}
+            </TableBody>
+          </Table>
+        ) : (
+          <Typography align="center" sx={{ p: 2 }}>
+            No data entered yet
+          </Typography>
+        )}
+      </TableContainer>
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="center"
+        sx={{ p: 2 }}
+      >
+        <IconButton
+          size="small"
+          aria-label="Previous page"
+          disabled={!hasPrevious}
+          onClick={() => previous()}
+        >
+          <ArrowLeft />
+        </IconButton>
+        <Typography sx={{ mx: 2 }}>Page {pageNumber}</Typography>
+        <IconButton
+          size="small"
+          aria-label="Next page"
+          disabled={!hasNext}
+          onClick={() => next()}
+        >
+          <ArrowRight />
+        </IconButton>
+      </Stack>
       <Fab
         color="primary"
-        aria-label="add"
-        sx={{ position: "fixed", bottom: 14, right: 14 }}
+        sx={{
+          position: "fixed",
+          bottom: 14,
+          right: 14,
+          background: primaryGradient,
+        }}
         {...fabProps}
       >
         <Add />

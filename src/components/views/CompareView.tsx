@@ -21,7 +21,6 @@ import {
 } from "@mui/material";
 import { endOfMonth, format, isSameDay, startOfMonth } from "date-fns";
 import React from "react";
-import { useLoadInputs } from "../../data/actions/inputs-get";
 import { useGetTracker } from "../../data/hooks";
 import { useStore } from "../../data/provider";
 import { TInput } from "../../types";
@@ -30,6 +29,7 @@ import { useExpandMore } from "../base/ExpandMore";
 import { InputValue } from "../base/InputValue";
 import { Layout } from "../base/Layout";
 import { DatePicker } from "@mui/x-date-pickers";
+import { useInputsGetByDate } from "../../data/actions/inputs-get-by-date";
 
 // type TParams = {
 //   compareId: string;
@@ -59,7 +59,7 @@ export const CompareView: React.FC = () => {
   const [dateTo, setDateTo] = React.useState(endOfMonth(new Date()));
 
   // load the inputs
-  const { load, loading } = useLoadInputs();
+  const { load, loading } = useInputsGetByDate();
   React.useEffect(() => {
     load({
       trackerIds,

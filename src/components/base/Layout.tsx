@@ -12,10 +12,10 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { lightBlue, lightGreen } from "@mui/material/colors";
 import React from "react";
 import { Link } from "react-router-dom";
 import { useStore } from "../../data/provider";
+import { primaryGradient } from "../../utils/gradient";
 
 type TLayout = {
   children: React.ReactNode;
@@ -51,10 +51,10 @@ export const Layout: React.FC<TLayout> = ({ children, title, back }) => {
   const [menuOpen, setMenuOpen] = React.useState(false);
 
   return (
-    <>
+    <Box sx={{ pb: 8 }}>
       <Box
         sx={{
-          background: `linear-gradient(to right, ${lightGreen["700"]}, ${lightBlue["700"]})`,
+          background: primaryGradient,
           boxShadow: `inset 0 -1px 0 rgba(0,0,0,.3)`,
           color: "white",
           p: 1,
@@ -116,6 +116,6 @@ export const Layout: React.FC<TLayout> = ({ children, title, back }) => {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
-    </>
+    </Box>
   );
 };

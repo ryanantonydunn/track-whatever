@@ -4,14 +4,6 @@ import { db } from "../database";
 import { useStore } from "../provider";
 import { Actions } from "../reducer";
 
-type TInputsGetArgs = {
-  limit?: number;
-  skip?: number;
-  dateFrom?: Date;
-  dateTo?: Date;
-  trackerIds?: string[];
-};
-
 type TQuery = {
   selector: {
     date?: {
@@ -21,12 +13,16 @@ type TQuery = {
     trackerId?: { $in: string[] };
   };
   sort?: { [propName: string]: "desc" | "asc" }[];
-  limit?: number;
-  skip?: number;
 };
 
-export async function inputsGet(
-  args: TInputsGetArgs
+type TQueryArgs = {
+  dateFrom?: Date;
+  dateTo?: Date;
+  trackerIds?: string[];
+};
+
+export async function inputsGetByDate(
+  args: TQueryArgs
 ): Promise<TInput[] | undefined> {
   try {
     const query: TQuery = {
@@ -44,8 +40,6 @@ export async function inputsGet(
         $in: args.trackerIds,
       };
     }
-    if (args.limit !== undefined) query.limit = args.limit;
-    if (args.skip !== undefined) query.skip = args.skip;
 
     const response = await db.inputs.find(query);
     if (response?.docs) {
@@ -56,20 +50,20 @@ export async function inputsGet(
   }
 }
 
-type TUseInputs = {
+type THook = {
   loading: boolean;
-  load: (args: TInputsGetArgs) => void;
+  load: (args: TQueryArgs) => void;
 };
 
-export const useLoadInputs = (): TUseInputs => {
+export const useInputsGetByDate = (): THook => {
   const { dispatch } = useStore();
   const [loading, setLoading] = React.useState(true);
 
   const load = React.useCallback(
-    async (args: TInputsGetArgs) => {
+    async (args: TQueryArgs) => {
       setLoading(true);
       dispatch({ type: Actions.SET_INPUTS, payload: [] });
-      const inputs = await inputsGet(args);
+      const inputs = await inputsGetByDate(args);
       if (inputs) {
         dispatch({ type: Actions.SET_INPUTS, payload: inputs });
       }
@@ -80,15 +74,3 @@ export const useLoadInputs = (): TUseInputs => {
 
   return { loading, load };
 };
-
-export async function inputsGetAll(): Promise<TInput[] | undefined> {
-  try {
-    const response = await db.inputs.allDocs<TInput>({
-      include_docs: true,
-    });
-    const inputs = response.rows.map((d) => d.doc).filter(Boolean) as TInput[];
-    return inputs;
-  } catch (err) {
-    console.error(err);
-  }
-}
