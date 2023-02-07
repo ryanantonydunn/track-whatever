@@ -1,17 +1,17 @@
-import { Button, Container } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import React from "react";
-import { useConfirmDialog } from "../modals/ConfirmDialog";
-import { Layout } from "../base/Layout";
 import { dataDownload } from "../../data/actions/data-download";
 import { dataImport } from "../../data/actions/data-import";
 import { dataReset } from "../../data/actions/data-reset";
+import { Layout } from "../base/Layout";
+import { useConfirmDialog } from "../modals/ConfirmDialog";
 
 export const ImportExport: React.FC = () => {
   const confirmDialog = useConfirmDialog();
 
   return (
     <Layout title="Import/Export Data" back="/">
-      <Container maxWidth="md">
+      <Box sx={{ p: 2 }}>
         <Button
           fullWidth
           variant="outlined"
@@ -66,7 +66,7 @@ export const ImportExport: React.FC = () => {
         >
           Reset data to default
         </Button>
-      </Container>
+      </Box>
       {confirmDialog.component}
     </Layout>
   );
