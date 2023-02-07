@@ -34,14 +34,10 @@ export const DataView: React.FC = () => {
   const { state } = useStore();
   const getTracker = useGetTracker();
   const pageChoose = usePageChoose();
-  const [inputMenuEl, setInputMenuEl] = React.useState<
-    undefined | HTMLElement
-  >();
-  const [inputMenuInput, setInputMenuInput] = React.useState<
-    undefined | TInput
-  >();
 
-  const closeMenu = () => setInputMenuEl(undefined);
+  const [menuEl, setMenuEl] = React.useState<undefined | HTMLElement>();
+  const [menuItem, setMenuItem] = React.useState<undefined | TInput>();
+  const closeMenu = () => setMenuEl(undefined);
 
   const confirmDialog = useConfirmDialog();
   const inputDelete = useInputDelete();
@@ -86,7 +82,7 @@ export const DataView: React.FC = () => {
             <TableHead>
               <TableRow>
                 <TableCell>
-                  <b>Date</b>
+                  <b>Time</b>
                 </TableCell>
                 <TableCell>
                   <b>Tracker</b>
@@ -123,8 +119,8 @@ export const DataView: React.FC = () => {
                           size="small"
                           aria-label="actions"
                           onClick={(e) => {
-                            setInputMenuEl(e.currentTarget);
-                            setInputMenuInput(input);
+                            setMenuEl(e.currentTarget);
+                            setMenuItem(input);
                           }}
                         >
                           <MoreVert fontSize="small" />
@@ -179,14 +175,14 @@ export const DataView: React.FC = () => {
       >
         <Add />
       </Fab>
-      <Menu anchorEl={inputMenuEl} open={!!inputMenuEl} onClose={closeMenu}>
+      <Menu anchorEl={menuEl} open={!!menuEl} onClose={closeMenu}>
         <MenuItem
           onClick={() => {
             closeMenu();
-            inputEdit.open({ inputId: inputMenuInput?._id || "" });
+            inputEdit.open({ inputId: menuItem?._id || "" });
           }}
         >
-          Edit
+          Edit Input
         </MenuItem>
         <MenuItem
           onClick={() => {
@@ -195,12 +191,12 @@ export const DataView: React.FC = () => {
               title: "Confirm delete entry",
               description: "Are you sure you want to delete this entry?",
               onConfirm: () => {
-                if (inputMenuInput) inputDelete(inputMenuInput);
+                if (menuItem) inputDelete(menuItem);
               },
             });
           }}
         >
-          Delete
+          Delete Input
         </MenuItem>
       </Menu>
       {inputEdit.component}

@@ -27,11 +27,17 @@ export const TrackerList: React.FC = () => {
 
   const { state } = useStore();
 
-  const [menuEl, setMenuEl] = React.useState<undefined | HTMLElement>();
-  const [menuItem, setMenuItem] = React.useState<undefined | TTracker>();
-  const closeMenu = () => setMenuEl(undefined);
+  // tracker menu
+  const [menuElTracker, setMenuElTracker] = React.useState<
+    undefined | HTMLElement
+  >();
+  const [menuItemTracker, setMenuItemTracker] = React.useState<
+    undefined | TTracker
+  >();
+  const closeMenuTracker = () => setMenuElTracker(undefined);
   return (
     <Layout title="Manage Trackers" back="/">
+      <Box sx={{ pt: 1 }} />
       {state.trackers.length ? (
         state.trackers.map((tracker) => (
           <Stack
@@ -58,8 +64,8 @@ export const TrackerList: React.FC = () => {
                 size="small"
                 aria-label="actions"
                 onClick={(e) => {
-                  setMenuEl(e.currentTarget);
-                  setMenuItem(tracker);
+                  setMenuElTracker(e.currentTarget);
+                  setMenuItemTracker(tracker);
                 }}
               >
                 <MoreVert fontSize="small" />
@@ -87,29 +93,33 @@ export const TrackerList: React.FC = () => {
       >
         <Add />
       </Fab>
-      <Menu anchorEl={menuEl} open={!!menuEl} onClose={closeMenu}>
+      <Menu
+        anchorEl={menuElTracker}
+        open={!!menuElTracker}
+        onClose={closeMenuTracker}
+      >
         <MenuItem
           onClick={() => {
-            closeMenu();
-            trackerEdit.open({ trackerId: menuItem?._id || "" });
+            closeMenuTracker();
+            trackerEdit.open({ trackerId: menuItemTracker?._id || "" });
           }}
         >
-          Edit
+          Edit Tracker
         </MenuItem>
         <MenuItem
           onClick={() => {
-            closeMenu();
+            closeMenuTracker();
             confirmDialog.open({
               title: "Confirm delete tracker",
               description:
                 "Are you sure you want to remove this tracker, this will remove all associated input data.",
               onConfirm: () => {
-                if (menuItem) trackerDelete(menuItem);
+                if (menuItemTracker) trackerDelete(menuItemTracker);
               },
             });
           }}
         >
-          Delete
+          Delete Tracker
         </MenuItem>
       </Menu>
       {trackerEdit.component}

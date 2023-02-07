@@ -143,7 +143,7 @@ export const reducer = (state: TStore, action: TAction): TStore => {
     case Actions.CREATE_INPUT:
       return {
         ...state,
-        inputs: [...state.inputs, action.payload],
+        inputs: [action.payload, ...state.inputs],
       };
     case Actions.UPDATE_INPUT:
       return {
