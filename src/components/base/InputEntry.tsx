@@ -90,7 +90,7 @@ export const InputEntry: React.FC<TInputEntry> = ({
       const sliderValue =
         typeof localValue === "number" ? localValue : tracker.slider.min;
       mainComponent = (
-        <Box sx={{ px: 2 }}>
+        <Box sx={{ px: 2, pt: 1 }}>
           <InputLabel shrink id={`${tracker.title}-label`}>
             {tracker.title}
           </InputLabel>

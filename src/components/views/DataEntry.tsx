@@ -1,8 +1,8 @@
+import { MoreVert } from "@mui/icons-material";
 import {
   Box,
   Button,
   IconButton,
-  List,
   Menu,
   MenuItem,
   Stack,
@@ -22,7 +22,6 @@ import { createBlankInput } from "../../utils/create-blank-data";
 import { InputEntry } from "../base/InputEntry";
 import { Layout } from "../base/Layout";
 import { usePageItemAdd } from "../modals/PageItemAdd";
-import { MoreVert } from "@mui/icons-material";
 
 type TParams = {
   pageId: string;
@@ -116,35 +115,33 @@ export const DataEntry: React.FC = () => {
           <MoreVert fontSize="small" />
         </IconButton>
       </Stack>
-      <List>
-        {page.items.length ? (
-          page.items.map((item) => {
-            if (item.type === "tracker") {
-              const tracker = getTracker(item._id);
-              if (!tracker) return null;
-              return (
-                <Box
-                  key={tracker._id}
-                  sx={{
-                    borderBottom: `1px solid rgba(224, 224, 224, 1);`,
-                  }}
-                >
-                  <InputEntry
-                    trackerId={tracker._id}
-                    value={currentInputs[tracker._id]?.value}
-                    setValue={setValue}
-                  />
-                </Box>
-              );
-            }
-            return null;
-          })
-        ) : (
-          <Typography align="center" sx={{ p: 2 }}>
-            No items added yet, add a new one below
-          </Typography>
-        )}
-      </List>
+      {page.items.length ? (
+        page.items.map((item) => {
+          if (item.type === "tracker") {
+            const tracker = getTracker(item._id);
+            if (!tracker) return null;
+            return (
+              <Box
+                key={tracker._id}
+                sx={{
+                  borderBottom: `1px solid rgba(224, 224, 224, 1);`,
+                }}
+              >
+                <InputEntry
+                  trackerId={tracker._id}
+                  value={currentInputs[tracker._id]?.value}
+                  setValue={setValue}
+                />
+              </Box>
+            );
+          }
+          return null;
+        })
+      ) : (
+        <Typography align="center" sx={{ p: 2 }}>
+          No items added yet, add a new one below
+        </Typography>
+      )}
       <Box
         display="flex"
         flexDirection="row"
