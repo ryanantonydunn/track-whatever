@@ -60,7 +60,7 @@ export function usePageItemAdd(): TPageItemAdd {
         }}
         aria-labelledby="page-add-title"
       >
-        <DialogTitle id="page-add-title">Add a new page item</DialogTitle>
+        <DialogTitle id="page-add-title">Add tracker to page</DialogTitle>
         <DialogContent sx={{ p: 0 }}>
           {menu === "type" && (
             <List>

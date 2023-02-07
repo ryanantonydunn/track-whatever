@@ -1,10 +1,11 @@
 import {
   Box,
   Button,
-  Container,
+  IconButton,
   List,
-  ListItem,
-  Paper,
+  Menu,
+  MenuItem,
+  Stack,
   TextField,
   Typography,
 } from "@mui/material";
@@ -21,6 +22,7 @@ import { createBlankInput } from "../../utils/create-blank-data";
 import { InputEntry } from "../base/InputEntry";
 import { Layout } from "../base/Layout";
 import { usePageItemAdd } from "../modals/PageItemAdd";
+import { MoreVert } from "@mui/icons-material";
 
 type TParams = {
   pageId: string;
@@ -39,6 +41,10 @@ export const DataEntry: React.FC = () => {
   const inputDelete = useInputDelete();
   const inputUpdate = useInputUpdate();
   const inputCreate = useInputCreate();
+
+  // menu
+  const [menuEl, setMenuEl] = React.useState<undefined | HTMLElement>();
+  const closeMenu = () => setMenuEl(undefined);
 
   // keep a record of which inputs have been created by this page for easy updating
   const currentInputs = Object.fromEntries(
@@ -83,85 +89,93 @@ export const DataEntry: React.FC = () => {
 
   return (
     <Layout title={page.title} back="/">
-      <Container maxWidth="md">
-        <Box sx={{ p: 2 }}>
-          <DateTimePicker
-            renderInput={(props) => <TextField {...props} />}
-            label="Set time"
-            value={inputTime}
-            onChange={(newValue) => {
-              setInputTime(newValue || new Date());
-            }}
-          />
-        </Box>
-        <Paper>
-          <List>
-            {page.items.length ? (
-              page.items.map((item) => {
-                if (item.type === "tracker") {
-                  const tracker = getTracker(item._id);
-                  if (!tracker) return null;
-                  return (
-                    <ListItem key={tracker._id}>
-                      <InputEntry
-                        trackerId={tracker._id}
-                        value={currentInputs[tracker._id]?.value}
-                        setValue={setValue}
-                      />
-                    </ListItem>
-                  );
-                }
-                return null;
-              })
-            ) : (
-              <Typography align="center" sx={{ p: 2 }}>
-                No items added yet, add a new one below
-              </Typography>
-            )}
-          </List>
-        </Paper>
-        <Box
-          display="flex"
-          flexDirection="row"
-          justifyContent="flex-end"
-          sx={{ p: 2 }}
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        sx={{
+          borderBottom: `1px solid rgba(224, 224, 224, 1);`,
+          p: 2,
+        }}
+      >
+        <DateTimePicker
+          renderInput={(props) => <TextField {...props} />}
+          label="Set time"
+          value={inputTime}
+          onChange={(newValue) => {
+            setInputTime(newValue || new Date());
+          }}
+        />
+        <IconButton
+          size="small"
+          aria-label="actions"
+          onClick={(e) => {
+            setMenuEl(e.currentTarget);
+          }}
         >
-          <Button
-            variant="text"
-            size="small"
-            component={Link}
-            to={`/page/${page._id}`}
-            sx={{ mr: 2 }}
-          >
-            Edit This Page
-          </Button>
-          <Button
-            variant="text"
-            size="small"
-            onClick={() => {
-              pageItemAdd.open({ page });
-            }}
-          >
-            Add New Item
-          </Button>
-        </Box>
-        <Box
-          display="flex"
-          flexDirection="row"
-          justifyContent="flex-end"
-          sx={{ p: 2 }}
+          <MoreVert fontSize="small" />
+        </IconButton>
+      </Stack>
+      <List>
+        {page.items.length ? (
+          page.items.map((item) => {
+            if (item.type === "tracker") {
+              const tracker = getTracker(item._id);
+              if (!tracker) return null;
+              return (
+                <Box
+                  key={tracker._id}
+                  sx={{
+                    borderBottom: `1px solid rgba(224, 224, 224, 1);`,
+                  }}
+                >
+                  <InputEntry
+                    trackerId={tracker._id}
+                    value={currentInputs[tracker._id]?.value}
+                    setValue={setValue}
+                  />
+                </Box>
+              );
+            }
+            return null;
+          })
+        ) : (
+          <Typography align="center" sx={{ p: 2 }}>
+            No items added yet, add a new one below
+          </Typography>
+        )}
+      </List>
+      <Box
+        display="flex"
+        flexDirection="row"
+        justifyContent="flex-end"
+        sx={{ p: 2 }}
+      >
+        <Button
+          fullWidth
+          variant="outlined"
+          size="medium"
+          component={Link}
+          to={`/`}
         >
-          <Button
-            fullWidth
-            variant="contained"
-            size="large"
-            component={Link}
-            to={`/`}
-          >
-            Done
-          </Button>
-        </Box>
-      </Container>
+          Done
+        </Button>
+      </Box>
+      <Menu anchorEl={menuEl} open={!!menuEl} onClose={closeMenu}>
+        <MenuItem
+          onClick={() => {
+            pageItemAdd.open({ page });
+          }}
+        >
+          Add tracker to this page
+        </MenuItem>
+        <MenuItem component={Link} to={`/page/${page._id}`}>
+          Edit this page
+        </MenuItem>
+        <MenuItem component={Link} to={`/pages`}>
+          Manage pages
+        </MenuItem>
+      </Menu>
       {pageItemAdd.component}
     </Layout>
   );

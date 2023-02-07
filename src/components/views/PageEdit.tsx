@@ -116,6 +116,16 @@ export const PageEdit: React.FC = () => {
           fullWidth
           variant="outlined"
           size="small"
+          sx={{ mb: 2 }}
+          component={Link}
+          to={`/entry/${page._id}`}
+        >
+          Enter inputs
+        </Button>
+        <Button
+          fullWidth
+          variant="outlined"
+          size="small"
           color="error"
           onClick={() => {
             confirmDialog.open({
