@@ -1,24 +1,23 @@
-import { Delete, Edit, FormatListNumbered } from "@mui/icons-material";
+import { Add, MoreVert } from "@mui/icons-material";
 import {
   Box,
-  Button,
-  Container,
+  Fab,
   IconButton,
-  List,
-  ListItem,
-  ListItemSecondaryAction,
-  ListItemText,
-  Paper,
+  Menu,
+  MenuItem,
+  Stack,
   Typography,
 } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
-import { useConfirmDialog } from "../modals/ConfirmDialog";
+import { useTrackerDelete } from "../../data/actions/tracker-delete";
+import { useStore } from "../../data/provider";
+import { TTracker } from "../../types";
+import { primaryGradient } from "../../utils/gradient";
 import { Layout } from "../base/Layout";
+import { useConfirmDialog } from "../modals/ConfirmDialog";
 import { useTrackerAdd } from "../modals/TrackerAdd";
 import { useTrackerEdit } from "../modals/TrackerEdit";
-import { useStore } from "../../data/provider";
-import { useTrackerDelete } from "../../data/actions/tracker-delete";
 
 export const TrackerList: React.FC = () => {
   const confirmDialog = useConfirmDialog();
@@ -28,73 +27,91 @@ export const TrackerList: React.FC = () => {
 
   const { state } = useStore();
 
+  const [menuEl, setMenuEl] = React.useState<undefined | HTMLElement>();
+  const [menuItem, setMenuItem] = React.useState<undefined | TTracker>();
+  const closeMenu = () => setMenuEl(undefined);
   return (
-    <Layout title="Trackers" back="/">
-      <Container maxWidth="md">
-        <Paper>
-          <List>
-            {state.trackers.length ? (
-              state.trackers.map((tracker) => (
-                <ListItem disablePadding key={tracker._id}>
-                  <ListItemText sx={{ p: 1, pl: 3 }}>
-                    {tracker.title}
-                  </ListItemText>
-                  <ListItemSecondaryAction>
-                    <IconButton
-                      size="medium"
-                      aria-label="view inputs"
-                      component={Link}
-                      to={`/tracker/${tracker._id}`}
-                    >
-                      <FormatListNumbered />
-                    </IconButton>
-                    <IconButton
-                      size="medium"
-                      aria-label="edit tracker"
-                      onClick={() => {
-                        trackerEdit.open({ trackerId: tracker._id });
-                      }}
-                    >
-                      <Edit />
-                    </IconButton>
-                    <IconButton
-                      size="medium"
-                      aria-label="delete tracker"
-                      onClick={() => {
-                        confirmDialog.open({
-                          title: "Confirm delete tracker",
-                          description:
-                            "Are you sure you want to remove this tracker, this will remove all associated input data.",
-                          onConfirm: async () => {
-                            await trackerDelete(tracker);
-                          },
-                        });
-                      }}
-                    >
-                      <Delete />
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              ))
-            ) : (
-              <Typography align="center" sx={{ p: 2 }}>
-                No trackers to edit
-              </Typography>
-            )}
-          </List>
-        </Paper>
-        <Box display="flex" justifyContent="flex-end" sx={{ p: 2 }}>
-          <Button
-            variant="text"
-            size="small"
-            onClick={() => {
-              trackerAdd.open();
-            }}
+    <Layout title="Manage Trackers" back="/">
+      {state.trackers.length ? (
+        state.trackers.map((tracker) => (
+          <Stack
+            key={tracker._id}
+            direction="row"
+            alignItems="center"
+            sx={{ borderBottom: `1px solid rgba(224, 224, 224, 1);` }}
           >
-            Add New Tracker
-          </Button>
-        </Box>
-      </Container>
+            <Typography
+              component={Link}
+              to={`/tracker/${tracker._id}`}
+              sx={{
+                p: 1,
+                pl: 3,
+                flex: 1,
+                color: "black",
+                textDecoration: "none",
+              }}
+            >
+              {tracker.title}
+            </Typography>
+            <Box sx={{ p: 1 }}>
+              <IconButton
+                size="small"
+                aria-label="actions"
+                onClick={(e) => {
+                  setMenuEl(e.currentTarget);
+                  setMenuItem(tracker);
+                }}
+              >
+                <MoreVert fontSize="small" />
+              </IconButton>
+            </Box>
+          </Stack>
+        ))
+      ) : (
+        <Typography align="center" sx={{ p: 2 }}>
+          No trackers to edit
+        </Typography>
+      )}
+      <Fab
+        color="primary"
+        sx={{
+          position: "fixed",
+          bottom: 14,
+          right: 14,
+          background: primaryGradient,
+        }}
+        onClick={() => {
+          trackerAdd.open();
+        }}
+        aria-label="add new tracker"
+      >
+        <Add />
+      </Fab>
+      <Menu anchorEl={menuEl} open={!!menuEl} onClose={closeMenu}>
+        <MenuItem
+          onClick={() => {
+            closeMenu();
+            trackerEdit.open({ trackerId: menuItem?._id || "" });
+          }}
+        >
+          Edit
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            closeMenu();
+            confirmDialog.open({
+              title: "Confirm delete tracker",
+              description:
+                "Are you sure you want to remove this tracker, this will remove all associated input data.",
+              onConfirm: () => {
+                if (menuItem) trackerDelete(menuItem);
+              },
+            });
+          }}
+        >
+          Delete
+        </MenuItem>
+      </Menu>
       {trackerEdit.component}
       {trackerAdd.component}
       {confirmDialog.component}

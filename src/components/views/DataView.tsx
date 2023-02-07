@@ -168,6 +168,7 @@ export const DataView: React.FC = () => {
       </Stack>
       <Fab
         color="primary"
+        aria-label="add entries"
         sx={{
           position: "fixed",
           bottom: 14,
