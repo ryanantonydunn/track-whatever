@@ -1,4 +1,3 @@
-import { TrendingUp } from "@mui/icons-material";
 import {
   Button,
   Dialog,
@@ -8,14 +7,13 @@ import {
   List,
   ListItem,
   ListItemButton,
-  ListItemIcon,
   ListItemText,
 } from "@mui/material";
 import React from "react";
+import { usePageUpdate } from "../../data/actions/page-update";
 import { TPage, TPageItemType } from "../../types";
 import { TrackerMenuList } from "../base/TrackerMenuList";
 import { useTrackerAdd } from "./TrackerAdd";
-import { usePageUpdate } from "../../data/actions/page-update";
 
 type TOpenArgs = {
   page: TPage;
@@ -76,17 +74,11 @@ export function usePageItemAdd(): TPageItemAdd {
                     });
                   }}
                 >
-                  <ListItemIcon>
-                    <TrendingUp />
-                  </ListItemIcon>
                   <ListItemText primary="New Tracker" />
                 </ListItemButton>
               </ListItem>
               <ListItem disablePadding>
                 <ListItemButton onClick={() => setMenu("existingTracker")}>
-                  <ListItemIcon>
-                    <TrendingUp />
-                  </ListItemIcon>
                   <ListItemText primary="Existing Tracker" />
                 </ListItemButton>
               </ListItem>

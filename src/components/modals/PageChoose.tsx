@@ -31,8 +31,8 @@ export function usePageChoose(): TPageChoose {
       aria-labelledby="page-choose-title"
     >
       <DialogTitle id="page-choose-title">Choose Page</DialogTitle>
-      <DialogContent>
-        <List sx={{ mt: 2 }}>
+      <DialogContent sx={{ p: 0 }}>
+        <List>
           {state.pages.map((page) => (
             <ListItem key={page._id} disablePadding>
               <ListItemButton component={Link} to={`/entry/${page._id}`}>

@@ -28,7 +28,7 @@ type TParams = {
 
 type TInputs = { [key: string]: string }; // { trackerId: inputId }
 
-export const PageView: React.FC = () => {
+export const DataEntry: React.FC = () => {
   const { state } = useStore();
   const { pageId } = useParams<TParams>();
   const page = usePage(pageId);
@@ -130,7 +130,7 @@ export const PageView: React.FC = () => {
             variant="text"
             size="small"
             component={Link}
-            to={`/edit-page/${page._id}`}
+            to={`/page/${page._id}`}
             sx={{ mr: 2 }}
           >
             Edit This Page

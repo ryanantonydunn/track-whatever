@@ -3,16 +3,16 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import ReactDOM from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { CompareView } from "./components/views/CompareView";
+import { DataEntry } from "./components/views/DataEntry";
 import { DataError } from "./components/views/DataError";
 import { DataView } from "./components/views/DataView";
 import { ImportExport } from "./components/views/ImportExport";
 import { PageEdit } from "./components/views/PageEdit";
-import { PageListEdit } from "./components/views/PageListEdit";
+import { PageList } from "./components/views/PageList";
 import { TrackerList } from "./components/views/TrackerList";
 import { TrackerView } from "./components/views/TrackerView";
 import { StoreProvider } from "./data/provider";
 import "./index.css";
-import { PageView } from "./components/views/PageView";
 
 const router = createBrowserRouter([
   {
@@ -21,11 +21,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/entry/:pageId",
-    element: <PageView />,
+    element: <DataEntry />,
   },
   {
     path: "/pages",
-    element: <PageListEdit />,
+    element: <PageList />,
   },
   {
     path: "/page/:pageId",

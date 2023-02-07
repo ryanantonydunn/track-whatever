@@ -115,7 +115,13 @@ export const TrackerView: React.FC = () => {
               {inputsByDay.map((byDay) => (
                 <React.Fragment key={byDay.date}>
                   <TableRow>
-                    <TableCell colSpan={4} sx={{ textAlign: "center" }}>
+                    <TableCell
+                      colSpan={4}
+                      sx={{
+                        textAlign: "center",
+                        backgroundColor: "rgba(0,0,0,0.05)",
+                      }}
+                    >
                       <Typography sx={{ fontSize: 12, fontWeight: "bold" }}>
                         {format(new Date(byDay.date), "d MMM yyyy")}
                       </Typography>
