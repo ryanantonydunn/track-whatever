@@ -1,5 +1,7 @@
 import { Add, ArrowLeft, ArrowRight, MoreVert } from "@mui/icons-material";
 import {
+  Box,
+  Button,
   Fab,
   IconButton,
   Menu,
@@ -49,6 +51,8 @@ export const DataView: React.FC = () => {
   React.useEffect(() => {
     load(1);
   }, [load]);
+
+  const hasPagination = hasNext || hasPrevious;
 
   // sort inputs by day
   const inputsByDay = React.useMemo(() => {
@@ -139,35 +143,47 @@ export const DataView: React.FC = () => {
             </TableBody>
           </Table>
         ) : (
-          <Typography align="center" sx={{ p: 2 }}>
-            No data entered yet
-          </Typography>
+          <Box sx={{ p: 2 }}>
+            <Typography align="center">No data entered yet</Typography>
+            <Button
+              fullWidth
+              variant="outlined"
+              size="large"
+              component={Link}
+              to="/trackers"
+              sx={{ mt: 4 }}
+            >
+              Set up your trackers
+            </Button>
+          </Box>
         )}
       </TableContainer>
-      <Stack
-        direction="row"
-        alignItems="center"
-        justifyContent="center"
-        sx={{ p: 2 }}
-      >
-        <IconButton
-          size="small"
-          aria-label="Previous page"
-          disabled={!hasPrevious}
-          onClick={() => previous()}
+      {hasPagination ? (
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="center"
+          sx={{ p: 2 }}
         >
-          <ArrowLeft />
-        </IconButton>
-        <Typography sx={{ mx: 2 }}>Page {pageNumber}</Typography>
-        <IconButton
-          size="small"
-          aria-label="Next page"
-          disabled={!hasNext}
-          onClick={() => next()}
-        >
-          <ArrowRight />
-        </IconButton>
-      </Stack>
+          <IconButton
+            size="small"
+            aria-label="Previous page"
+            disabled={!hasPrevious}
+            onClick={() => previous()}
+          >
+            <ArrowLeft />
+          </IconButton>
+          <Typography sx={{ mx: 2 }}>Page {pageNumber}</Typography>
+          <IconButton
+            size="small"
+            aria-label="Next page"
+            disabled={!hasNext}
+            onClick={() => next()}
+          >
+            <ArrowRight />
+          </IconButton>
+        </Stack>
+      ) : null}
       <Fab
         color="primary"
         aria-label="add entries"

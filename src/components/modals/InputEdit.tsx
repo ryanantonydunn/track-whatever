@@ -4,6 +4,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  TextField,
 } from "@mui/material";
 import React from "react";
 import { useGetInput } from "../../data/hooks";
@@ -12,6 +13,7 @@ import { InputEntry } from "../base/InputEntry";
 import { Box } from "@mui/system";
 import { useInputDelete } from "../../data/actions/input-delete";
 import { useInputUpdate } from "../../data/actions/input-update";
+import { DateTimePicker } from "@mui/x-date-pickers";
 
 type TOpenArgs = {
   inputId: string;
@@ -52,18 +54,31 @@ export function useInputEdit(): TInputEdit {
       <DialogTitle id="input-edit-title">Edit input</DialogTitle>
       <DialogContent>
         <Box sx={{ pt: 2 }}>
-          <InputEntry
-            trackerId={input.trackerId}
-            value={isRemoving ? undefined : input.value}
-            setValue={(trackerId, newValue) => {
-              if (newValue === undefined) {
-                setIsRemoving(true);
-              } else {
-                setIsRemoving(false);
-                setInput({ ...input, value: newValue });
-              }
+          <DateTimePicker
+            renderInput={(props) => <TextField {...props} />}
+            label="Set time"
+            value={new Date(input.date)}
+            onChange={(newValue) => {
+              setInput({
+                ...input,
+                date: (newValue || new Date()).toISOString(),
+              });
             }}
           />
+          <Box sx={{ mt: 2 }}>
+            <InputEntry
+              trackerId={input.trackerId}
+              value={isRemoving ? undefined : input.value}
+              setValue={(trackerId, newValue) => {
+                if (newValue === undefined) {
+                  setIsRemoving(true);
+                } else {
+                  setIsRemoving(false);
+                  setInput({ ...input, value: newValue });
+                }
+              }}
+            />
+          </Box>
         </Box>
       </DialogContent>
       <DialogActions sx={{ p: 2 }}>
