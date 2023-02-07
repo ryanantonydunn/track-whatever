@@ -1,14 +1,14 @@
 import {
   Box,
+  Button,
   Checkbox,
-  Collapse,
-  Container,
+  Drawer,
+  Fab,
   List,
   ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Paper,
   Stack,
   Table,
   TableBody,
@@ -19,21 +19,18 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers";
 import { endOfMonth, format, isSameDay, startOfMonth } from "date-fns";
 import React from "react";
+import { useInputsGetByDate } from "../../data/actions/inputs-get-by-date";
 import { useGetTracker } from "../../data/hooks";
 import { useStore } from "../../data/provider";
 import { TInput } from "../../types";
 import { useQuery } from "../../utils/query";
-import { useExpandMore } from "../base/ExpandMore";
 import { InputValue } from "../base/InputValue";
 import { Layout } from "../base/Layout";
-import { DatePicker } from "@mui/x-date-pickers";
-import { useInputsGetByDate } from "../../data/actions/inputs-get-by-date";
-
-// type TParams = {
-//   compareId: string;
-// };
+import { FilterAlt } from "@mui/icons-material";
+import { primaryGradient } from "../../utils/gradient";
 
 type TInputDisplayDay = {
   date: string;
@@ -42,14 +39,8 @@ type TInputDisplayDay = {
 
 export const CompareView: React.FC = () => {
   const query = useQuery();
-  // const { compareId } = useParams<TParams>();
-  const expandMore = useExpandMore({
-    iconLabelOpen: "Hide trackers",
-    iconLabelClosed: "Show trackers",
-    defaultOpen: true,
-  });
-  const compare = { title: "Compare Data" };
   const { state } = useStore();
+  const [filtersOpen, setFiltersOpen] = React.useState(true);
   const getTracker = useGetTracker();
   const [trackerIds, setTrackerIds] = React.useState<string[]>(() => {
     return query.get("trackers")?.split(",").filter(Boolean) || [];
@@ -96,9 +87,13 @@ export const CompareView: React.FC = () => {
   }, [state.inputs]);
 
   return (
-    <Layout title={compare.title} back="/">
-      <Container maxWidth="xl">
-        <Stack direction="row" alignItems="center" sx={{ py: 2 }}>
+    <Layout title="Compare Data" back="/">
+      <Drawer
+        anchor="right"
+        open={filtersOpen}
+        onClose={() => setFiltersOpen(false)}
+      >
+        <Stack direction="row" alignItems="center" sx={{ p: 2 }}>
           <DatePicker
             renderInput={(props) => <TextField {...props} />}
             label="Date from"
@@ -119,130 +114,158 @@ export const CompareView: React.FC = () => {
             }}
           />
         </Stack>
-        <Paper sx={{ position: "relative" }}>
-          <Box sx={{ position: "absolute", top: 2, right: 2, zIndex: 10 }}>
-            {expandMore.icon}
-          </Box>
-          <Typography sx={{ px: 2, py: 1, fontSize: 14 }} component="h3">
-            Trackers
-          </Typography>
-          <Collapse in={expandMore.open} timeout="auto" unmountOnExit>
-            <List sx={{ pt: 0 }}>
-              {state.trackers.length ? (
-                state.trackers.map((tracker) => {
-                  // const tracker = getTracker(trackerId);
-                  // if (!tracker) return null;
-                  return (
-                    <ListItem key={tracker._id} disablePadding>
-                      <ListItemButton
-                        onClick={() => {
-                          if (trackerIds.includes(tracker._id)) {
-                            setTrackerIds(
-                              trackerIds.filter((t) => t !== tracker._id)
-                            );
-                          } else {
-                            setTrackerIds([...trackerIds, tracker._id]);
-                          }
+        <Typography
+          sx={{
+            fontSize: 12,
+            p: 1,
+            fontWeight: "bold",
+            textAlign: "center",
+            backgroundColor: "rgba(0,0,0,0.05)",
+            borderTop: `1px solid rgba(224, 224, 224, 1);`,
+            borderBottom: `1px solid rgba(224, 224, 224, 1);`,
+          }}
+        >
+          Trackers
+        </Typography>
+        <List sx={{ pt: 0 }}>
+          {state.trackers.length ? (
+            state.trackers.map((tracker) => {
+              return (
+                <ListItem key={tracker._id} disablePadding>
+                  <ListItemButton
+                    onClick={() => {
+                      if (trackerIds.includes(tracker._id)) {
+                        setTrackerIds(
+                          trackerIds.filter((t) => t !== tracker._id)
+                        );
+                      } else {
+                        setTrackerIds([...trackerIds, tracker._id]);
+                      }
+                    }}
+                    sx={{ pt: 0, pb: 0 }}
+                  >
+                    <ListItemIcon>
+                      <Checkbox
+                        edge="start"
+                        checked={trackerIds.includes(tracker._id)}
+                        tabIndex={-1}
+                        disableRipple
+                        inputProps={{
+                          "aria-labelledby": `tracker-label-${tracker._id}`,
                         }}
-                        sx={{ pt: 0, pb: 0 }}
-                      >
-                        <ListItemIcon>
-                          <Checkbox
-                            edge="start"
-                            checked={trackerIds.includes(tracker._id)}
-                            tabIndex={-1}
-                            disableRipple
-                            inputProps={{
-                              "aria-labelledby": `tracker-label-${tracker._id}`,
-                            }}
-                            size="small"
-                          />
-                        </ListItemIcon>
-                        <ListItemText
-                          id={`tracker-label-${tracker._id}`}
-                          primary={tracker.title}
-                        />
-                      </ListItemButton>
-                    </ListItem>
-                  );
-                })
-              ) : (
-                <Typography align="center" sx={{ p: 2 }}>
-                  No trackers to compare
-                </Typography>
-              )}
-            </List>
-          </Collapse>
-        </Paper>
+                        size="small"
+                      />
+                    </ListItemIcon>
+                    <ListItemText
+                      id={`tracker-label-${tracker._id}`}
+                      primary={tracker.title}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              );
+            })
+          ) : (
+            <Typography align="center" sx={{ p: 2 }}>
+              No trackers to compare
+            </Typography>
+          )}
+        </List>
+        <Box sx={{ p: 2 }}>
+          <Button
+            fullWidth
+            variant="outlined"
+            size="small"
+            onClick={() => {
+              setFiltersOpen(false);
+            }}
+          >
+            Done
+          </Button>
+        </Box>
+      </Drawer>
 
-        <TableContainer component={Paper} sx={{ mt: 2 }}>
-          {loading ? null : inputDisplayByDay.length ? (
-            <Table size="small" aria-label="tracker inputs">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Date</TableCell>
+      <TableContainer sx={{ mt: 2 }}>
+        {loading ? null : inputDisplayByDay.length ? (
+          <Table size="small" aria-label="tracker inputs">
+            <TableHead>
+              <TableRow>
+                <TableCell>Date</TableCell>
+                {trackerIds.map((trackerId) => (
+                  <TableCell key={trackerId}>
+                    {getTracker(trackerId)?.title}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {inputDisplayByDay.map((inputDay) => (
+                <TableRow
+                  key={inputDay.date}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell>
+                    {format(new Date(inputDay.date), "d MMM yyyy")}
+                  </TableCell>
                   {trackerIds.map((trackerId) => (
-                    <TableCell key={trackerId}>
-                      {getTracker(trackerId)?.title}
+                    <TableCell
+                      key={`${inputDay.date}-${trackerId}`}
+                      sx={{ whiteSpace: "normal", wordWrap: "break-word" }}
+                    >
+                      {inputDay.inputs[trackerId]?.map((input) => {
+                        return (
+                          <Stack
+                            direction="row"
+                            alignItems="center"
+                            key={input._id}
+                            sx={{ mb: 1, mt: 1 }}
+                          >
+                            <Typography
+                              sx={{
+                                color: "grey.500",
+                                fontSize: "0.8em",
+                                mr: 2,
+                              }}
+                            >
+                              {format(new Date(input.date), "HH:mm")}
+                            </Typography>
+                            <Typography
+                              sx={{
+                                maxWidth: "400px",
+                                whiteSpace: "pre-wrap",
+                              }}
+                            >
+                              <InputValue input={input} />
+                            </Typography>
+                          </Stack>
+                        );
+                      })}
                     </TableCell>
                   ))}
                 </TableRow>
-              </TableHead>
-              <TableBody>
-                {inputDisplayByDay.map((inputDay) => (
-                  <TableRow
-                    key={inputDay.date}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell>
-                      {format(new Date(inputDay.date), "d MMM yyyy")}
-                    </TableCell>
-                    {trackerIds.map((trackerId) => (
-                      <TableCell
-                        key={`${inputDay.date}-${trackerId}`}
-                        sx={{ whiteSpace: "normal", wordWrap: "break-word" }}
-                      >
-                        {inputDay.inputs[trackerId]?.map((input) => {
-                          return (
-                            <Stack
-                              direction="row"
-                              alignItems="center"
-                              key={input._id}
-                              sx={{ mb: 1, mt: 1 }}
-                            >
-                              <Typography
-                                sx={{
-                                  color: "grey.500",
-                                  fontSize: "0.8em",
-                                  mr: 2,
-                                }}
-                              >
-                                {format(new Date(input.date), "HH:mm")}
-                              </Typography>
-                              <Typography
-                                sx={{
-                                  maxWidth: "400px",
-                                  whiteSpace: "pre-wrap",
-                                }}
-                              >
-                                <InputValue input={input} />
-                              </Typography>
-                            </Stack>
-                          );
-                        })}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          ) : (
-            <Typography align="center" sx={{ p: 2 }}>
-              {trackerIds.length ? "No inputs yet" : "No trackers selected"}
-            </Typography>
-          )}
-        </TableContainer>
-      </Container>
+              ))}
+            </TableBody>
+          </Table>
+        ) : (
+          <Typography align="center" sx={{ p: 2 }}>
+            {trackerIds.length ? "No inputs yet" : "No trackers selected"}
+          </Typography>
+        )}
+      </TableContainer>
+      <Fab
+        color="primary"
+        sx={{
+          position: "fixed",
+          bottom: 14,
+          right: 14,
+          background: primaryGradient,
+        }}
+        onClick={() => {
+          setFiltersOpen(true);
+        }}
+        aria-label="set filters"
+      >
+        <FilterAlt />
+      </Fab>
     </Layout>
   );
 };
