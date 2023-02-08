@@ -68,9 +68,7 @@ export function usePageItemAdd(): TPageItemAdd {
                 <ListItemButton
                   onClick={() => {
                     trackerAdd.open({
-                      onSave: (newTracker) => {
-                        save("tracker", newTracker._id);
-                      },
+                      pageId: args?.page._id || "",
                     });
                   }}
                 >

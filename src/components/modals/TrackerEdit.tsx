@@ -1,15 +1,18 @@
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  TextField,
+  Typography,
 } from "@mui/material";
 import React from "react";
-import { useGetTracker } from "../../data/hooks";
-import { TTracker } from "../../types";
-import { TrackerAddEditForm } from "./TrackerAddEditForm";
 import { useTrackerUpdate } from "../../data/actions/tracker-update";
+import { useGetTracker } from "../../data/hooks";
+import { TSliderValues, TTracker, inputTypes } from "../../types";
+import { SliderEdit } from "../base/SliderEdit";
 
 type TOpenArgs = {
   trackerId: string;
@@ -45,11 +48,33 @@ export function useTrackerEdit(): TTrackerAdd {
     >
       <DialogTitle id="tracker-edit-title">Edit tracker</DialogTitle>
       <DialogContent>
-        <TrackerAddEditForm
-          tracker={tracker}
-          setTracker={setTracker}
-          isEditing
-        />
+        <Box sx={{ p: 2 }}>
+          <TextField
+            autoFocus
+            fullWidth
+            label="Title"
+            value={tracker.title}
+            onChange={(e) => {
+              setTracker({
+                ...tracker,
+                title: e.currentTarget.value.slice(0, 100),
+              });
+            }}
+          />
+          <Typography sx={{ pt: 3 }}>
+            Type:{" "}
+            <b>{inputTypes.find((d) => d._id === tracker.inputType)?.title}</b>
+          </Typography>
+
+          {tracker.inputType === "slider" && (
+            <SliderEdit
+              values={tracker.slider}
+              setValues={(slider: TSliderValues) => {
+                setTracker({ ...tracker, slider });
+              }}
+            />
+          )}
+        </Box>
       </DialogContent>
       <DialogActions sx={{ p: 2 }}>
         <Button

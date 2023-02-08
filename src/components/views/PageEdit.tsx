@@ -22,6 +22,7 @@ import { useConfirmDialog } from "../modals/ConfirmDialog";
 import { usePageItemAdd } from "../modals/PageItemAdd";
 import { useTrackerEdit } from "../modals/TrackerEdit";
 import { usePageDelete } from "../../data/actions/page-delete";
+import { usePageItemRemove } from "../modals/PageItemRemove";
 
 type TParams = {
   pageId: string;
@@ -35,6 +36,7 @@ export const PageEdit: React.FC = () => {
   const confirmDialog = useConfirmDialog();
   const pageItemAdd = usePageItemAdd();
   const pageUpdate = usePageUpdate();
+  const pageItemRemove = usePageItemRemove();
   const [title, setTitle] = React.useState(page?.title || "");
   React.useEffect(() => {
     setTitle(page?.title || "");
@@ -175,36 +177,30 @@ export const PageEdit: React.FC = () => {
           </MenuItem>
         ) : null}
         {menuItemItem?.type === "tracker" ? (
-          <>
-            <MenuItem
-              component={Link}
-              to={`/tracker/${menuItemItem?._id || ""}`}
-            >
-              Go To Tracker
-            </MenuItem>
-            <MenuItem
-              onClick={() => {
-                closeMenuItem();
-                trackerEdit.open({ trackerId: menuItemItem?._id || "" });
-              }}
-            >
-              Edit Tracker
-            </MenuItem>
-          </>
+          <MenuItem component={Link} to={`/tracker/${menuItemItem?._id || ""}`}>
+            Go To Tracker
+          </MenuItem>
+        ) : null}
+        {menuItemItem?.type === "tracker" ? (
+          <MenuItem
+            onClick={() => {
+              closeMenuItem();
+              trackerEdit.open({ trackerId: menuItemItem?._id || "" });
+            }}
+          >
+            Edit Tracker
+          </MenuItem>
         ) : null}
         <MenuItem
           onClick={() => {
             closeMenuItem();
-            confirmDialog.open({
-              title: "Confirm remove item",
-              description:
-                "Are you sure you want to remove this item. This will not delete any trackers, you can add them to a different page later.",
-              onConfirm: () => {
-                const newItems = [...page.items];
-                newItems.splice(menuItemIndex, 1);
-                pageUpdate({ ...page, items: newItems });
-              },
-            });
+            if (page && menuItemItem && menuItemIndex !== undefined) {
+              pageItemRemove.open({
+                page,
+                itemIndex: menuItemIndex,
+                item: menuItemItem,
+              });
+            }
           }}
         >
           Remove Tracker
@@ -228,6 +224,7 @@ export const PageEdit: React.FC = () => {
       {pageItemAdd.component}
       {trackerEdit.component}
       {confirmDialog.component}
+      {pageItemRemove.component}
     </Layout>
   );
 };
