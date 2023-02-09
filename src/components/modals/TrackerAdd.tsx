@@ -39,6 +39,7 @@ export function useTrackerAdd(): TTrackerAdd {
   const [pageId, setPageId] = React.useState(state.pages[0]?._id);
 
   const open = (args?: TOpenArgs) => {
+    setTracker(createBlankTracker());
     setIsOpen(true);
     if (args?.pageId) {
       setPageId(args.pageId);
@@ -64,7 +65,6 @@ export function useTrackerAdd(): TTrackerAdd {
     // finish the process
     args?.onSave?.(tracker);
     setIsOpen(false);
-    setTracker(createBlankTracker());
   };
 
   const component = (
